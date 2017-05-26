@@ -1,0 +1,12 @@
+ REGION10  35Wheat_W     2 ANHY AMMONIA             25 Total       1    0.4000
+ REGION10  35Wheat_W    12 AMM NIT SOLUTION         28 Total       1    0.1500
+ REGION10  35Wheat_W    60 NITROGEN SOL 32%         47 Total       1    0.2000
+ REGION10  35Wheat_W    66 UREA                     51 Total       1    0.0600
+ REGION10  35Wheat_W   209 MONOAMM PHOS             64 Total       1    0.0381
+ REGION10  35Wheat_W   249 LIQ AMM POLY             76 Total       1    0.0289
+ REGION10  35Wheat_W     2 ANHY AMMONIA             25 Fpre+plt    2    0.4000
+ REGION10  35Wheat_W   209 MONOAMM PHOS             64 Fpre+plt    2    0.0381
+ REGION10  35Wheat_W    60 NITROGEN SOL 32%         47 S-Fall pl   3    0.2000
+ REGION10  35Wheat_W   249 LIQ AMM POLY             76 S-Fall pl   3    0.0289
+ REGION10  35Wheat_W    12 AMM NIT SOLUTION         28 S-pre&plt   4    0.1500
+ REGION10  35Wheat_W    66 UREA                     51 PostpltAu   5    0.0600

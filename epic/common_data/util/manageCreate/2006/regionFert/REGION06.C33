@@ -1,0 +1,10 @@
+ REGION06  12CornG       1 IDENTIFIED BY GRADE      22 Total       1    0.2500
+ REGION06  12CornG       2 ANHY AMMONIA             25 Total       1    0.0200
+ REGION06  12CornG      10 AMMONIUM NITRATE         27 Total       1    0.1800
+ REGION06  12CornG      60 NITROGEN SOL 32%         47 Total       1    0.1000
+ REGION06  12CornG      66 UREA                     51 Total       1    0.4000
+ REGION06  12CornG       1 IDENTIFIED BY GRADE      22 S-pre&plt   4    0.2500
+ REGION06  12CornG       2 ANHY AMMONIA             25 S-pre&plt   4    0.0200
+ REGION06  12CornG      10 AMMONIUM NITRATE         27 S-pre&plt   4    0.1800
+ REGION06  12CornG      66 UREA                     51 S-pre&plt   4    0.4000
+ REGION06  12CornG      60 NITROGEN SOL 32%         47 PostpltAu   5    0.1000

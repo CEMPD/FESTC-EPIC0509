@@ -1,0 +1,11 @@
+ REGION07  28SorghumG    2 ANHY AMMONIA             25 Total       1    0.8000
+ REGION07  28SorghumG   60 NITROGEN SOL 32%         47 Total       1    0.1000
+ REGION07  28SorghumG  203 DAP                      58 Total       1    0.0783
+ REGION07  28SorghumG  209 MONOAMM PHOS             64 Total       1    0.0308
+ REGION07  28SorghumG    2 ANHY AMMONIA             25 Fpre+plt    2    0.4000
+ REGION07  28SorghumG  203 DAP                      58 Fpre+plt    2    0.0498
+ REGION07  28SorghumG  209 MONOAMM PHOS             64 Fpre+plt    2    0.0154
+ REGION07  28SorghumG    2 ANHY AMMONIA             25 S-pre&plt   4    0.4000
+ REGION07  28SorghumG  203 DAP                      58 S-pre&plt   4    0.0285
+ REGION07  28SorghumG  209 MONOAMM PHOS             64 S-pre&plt   4    0.0154
+ REGION07  28SorghumG   60 NITROGEN SOL 32%         47 PostpltAu   5    0.1000

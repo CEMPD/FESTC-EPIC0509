@@ -1,0 +1,13 @@
+ REGION01  39Canola      1 IDENTIFIED BY GRADE      22 Total       1    0.2000
+ REGION01  39Canola     58 NITROGEN SOL 28%         45 Total       1    0.1000
+ REGION01  39Canola     60 NITROGEN SOL 32%         47 Total       1    0.3500
+ REGION01  39Canola     66 UREA                     51 Total       1    0.2500
+ REGION01  39Canola    203 DAP                      58 Total       1    0.1681
+ REGION01  39Canola    249 LIQ AMM POLY             76 Total       1    0.0140
+ REGION01  39Canola    203 DAP                      58 Fpre+plt    2    0.0747
+ REGION01  39Canola      1 IDENTIFIED BY GRADE      22 S-pre&plt   4    0.2000
+ REGION01  39Canola     58 NITROGEN SOL 28%         45 S-pre&plt   4    0.1000
+ REGION01  39Canola     60 NITROGEN SOL 32%         47 S-pre&plt   4    0.3500
+ REGION01  39Canola    203 DAP                      58 S-pre&plt   4    0.0934
+ REGION01  39Canola     66 UREA                     51 PostpltAu   5    0.2500
+ REGION01  39Canola    249 LIQ AMM POLY             76 PostpltAu   5    0.0140

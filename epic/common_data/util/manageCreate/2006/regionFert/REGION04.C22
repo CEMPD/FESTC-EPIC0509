@@ -1,0 +1,10 @@
+ REGION04   1Hay         1 IDENTIFIED BY GRADE      22 Total       1    0.1000
+ REGION04   1Hay        60 NITROGEN SOL 32%         47 Total       1    0.2000
+ REGION04   1Hay        66 UREA                     51 Total       1    0.4000
+ REGION04   1Hay       203 DAP                      58 Total       1    0.0227
+ REGION04   1Hay        60 NITROGEN SOL 32%         47 Fpre+plt    2    0.2000
+ REGION04   1Hay        66 UREA                     51 Fpre+plt    2    0.2000
+ REGION04   1Hay       203 DAP                      58 Fpre+plt    2    0.0114
+ REGION04   1Hay         1 IDENTIFIED BY GRADE      22 S-pre&plt   4    0.1000
+ REGION04   1Hay       203 DAP                      58 S-pre&plt   4    0.0114
+ REGION04   1Hay        66 UREA                     51 PostpltAu   5    0.2000

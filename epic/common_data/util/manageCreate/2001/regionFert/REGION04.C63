@@ -1,0 +1,18 @@
+ REGION04  42Peas        1 IDENTIFIED BY GRADE      22 Total       1    0.1000
+ REGION04  42Peas        2 ANHY AMMONIA             25 Total       1    0.2500
+ REGION04  42Peas       10 AMMONIUM NITRATE         27 Total       1    0.1000
+ REGION04  42Peas       58 NITROGEN SOL 28%         45 Total       1    0.2500
+ REGION04  42Peas       60 NITROGEN SOL 32%         47 Total       1    0.2500
+ REGION04  42Peas      203 DAP                      58 Total       1    0.0021
+ REGION04  42Peas      204 AMMONIUM POLY            59 Total       1    0.0027
+ REGION04  42Peas      209 MONOAMM PHOS             64 Total       1    0.0011
+ REGION04  42Peas      249 LIQ AMM POLY             76 Total       1    0.0096
+ REGION04  42Peas        1 IDENTIFIED BY GRADE      22 Fpreplt+p   2    0.1000
+ REGION04  42Peas        2 ANHY AMMONIA             25 Fpreplt+p   2    0.2500
+ REGION04  42Peas       10 AMMONIUM NITRATE         27 S-pre&plt   4    0.1000
+ REGION04  42Peas       58 NITROGEN SOL 28%         45 S-pre&plt   4    0.2500
+ REGION04  42Peas       60 NITROGEN SOL 32%         47 S-pre&plt   4    0.2500
+ REGION04  42Peas      203 DAP                      58 S-pre&plt   4    0.0021
+ REGION04  42Peas      204 AMMONIUM POLY            59 S-pre&plt   4    0.0027
+ REGION04  42Peas      209 MONOAMM PHOS             64 S-pre&plt   4    0.0011
+ REGION04  42Peas      249 LIQ AMM POLY             76 S-pre&plt   4    0.0096

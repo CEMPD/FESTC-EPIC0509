@@ -1,0 +1,10 @@
+ REGION03  12CornGrain   1 IDENTIFIED BY GRADE      22 Total       1    0.4000
+ REGION03  12CornGrain   2 ANHY AMMONIA             25 Total       1    0.1000
+ REGION03  12CornGrain  58 NITROGEN SOL 28%         45 Total       1    0.1000
+ REGION03  12CornGrain  60 NITROGEN SOL 32%         47 Total       1    0.2000
+ REGION03  12CornGrain 203 DAP                      58 Total       1    0.0375
+ REGION03  12CornGrain   1 IDENTIFIED BY GRADE      22 S-pre&plt   4    0.4000
+ REGION03  12CornGrain   2 ANHY AMMONIA             25 S-pre&plt   4    0.1000
+ REGION03  12CornGrain 203 DAP                      58 S-pre&plt   4    0.0375
+ REGION03  12CornGrain  58 NITROGEN SOL 28%         45 PostpltAu   5    0.1000
+ REGION03  12CornGrain  60 NITROGEN SOL 32%         47 PostpltAu   5    0.2000

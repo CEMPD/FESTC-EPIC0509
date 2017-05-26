@@ -1,0 +1,9 @@
+ REGION01  11CornGrain   1 IDENTIFIED BY GRADE      22 Total       1    0.0500
+ REGION01  11CornGrain  59 NITROGEN SOL 30%         46 Total       1    0.5000
+ REGION01  11CornGrain  60 NITROGEN SOL 32%         47 Total       1    0.1000
+ REGION01  11CornGrain  66 UREA                     51 Total       1    0.1000
+ REGION01  11CornGrain  66 UREA                     51 Fpreplt+p   2    0.1000
+ REGION01  11CornGrain   1 IDENTIFIED BY GRADE      22 S-pre&plt   4    0.0500
+ REGION01  11CornGrain  59 NITROGEN SOL 30%         46 S-pre&plt   4    0.2000
+ REGION01  11CornGrain  59 NITROGEN SOL 30%         46 PostpltAu   5    0.3000
+ REGION01  11CornGrain  60 NITROGEN SOL 32%         47 PostpltAu   5    0.1000

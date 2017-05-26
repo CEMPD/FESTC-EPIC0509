@@ -1,0 +1,9 @@
+ REGION04  24Rice        1 IDENTIFIED BY GRADE      22 Total       1    0.2500
+ REGION04  24Rice       60 NITROGEN SOL 32%         47 Total       1    0.3000
+ REGION04  24Rice       66 UREA                     51 Total       1    0.4000
+ REGION04  24Rice      249 LIQ AMM POLY             76 Total       1    0.0428
+ REGION04  24Rice      249 LIQ AMM POLY             76 Fpre+plt    2    0.0095
+ REGION04  24Rice        1 IDENTIFIED BY GRADE      22 S-pre&plt   4    0.2500
+ REGION04  24Rice      249 LIQ AMM POLY             76 S-pre&plt   4    0.0333
+ REGION04  24Rice       60 NITROGEN SOL 32%         47 PostpltAu   5    0.3000
+ REGION04  24Rice       66 UREA                     51 PostpltAu   5    0.4000

@@ -1,0 +1,7 @@
+# Version @(#)$Id: Makefile,v 1.19 2004/06/21 17:18:04 cseppan Exp $ 
+# Path    $Source: /afs/isis/depts/cep/emc/apps/archive/smoke/smoke/src/emutil/Makefile,v $
+# Date    $Date: 2004/06/21 17:18:04 $ 
+#
+
+pgf90 -Mextend -Mbounds -traceback -o Beld_nc2ioapi.exe Beld_nc2ioapi.F -I /nas01/depts/ie/cempd/apps/ioapi_31/Linux2_x86_64pg_gcc_nomp_pgi116_KD /nas01/depts/ie/cempd/apps/ioapi_31/Linux2_x86_64pg_gcc_nomp_pgi116_KD/libioapi.a /nas01/depts/ie/cempd/apps/netcdf/netcdf-3.6.3_pgi_11.1_killdevil/lib/libnetcdf.a
+

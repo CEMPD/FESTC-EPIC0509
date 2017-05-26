@@ -1,0 +1,45 @@
+# SWAT MAKEFILE FOR INTEL COMPILER on LINUX
+#
+F95=ifort
+FFLAGS= -O3 -cm -132 -zero -save -common-args -i-static
+
+LDFLAGS= $(FFLAGS) -static -static-intel
+
+EXE1=SOILMATCH1ST.exe
+EXE2=SOILMATCH2ND.exe
+EXE3=SOILMATCH3RD.exe
+EXE4=SOILMATCH4TH.exe
+EXE5=SOILMATCH5TH.exe
+EXE6=SOILMATCH6TH.exe
+
+SRC1=SOILMATCH1ST.FOR
+SRC2=SOILMATCH2ND.FOR
+SRC3=SOILMATCH3RD.FOR
+SRC4=SOILMATCH4TH.FOR
+SRC5=SOILMATCH5TH.FOR
+SRC6=SOILMATCH6TH.FOR
+
+OBJ1=$(SRC1:.f=.o)
+OBJ2=$(SRC2:.f=.o)
+OBJ3=$(SRC3:.f=.o)
+OBJ4=$(SRC4:.f=.o)
+OBJ5=$(SRC5:.f=.o)
+OBJ6=$(SRC6:.f=.o)
+
+all: $(EXE1) $(EXE2) $(EXE3) $(EXE4) $(EXE5) $(EXE6)
+
+clean:
+	rm -f *.o $(EXE1) $(EXE2) $(EXE3) $(EXE4) $(EXE5) $(EXE6)
+
+$(EXE1): $(OBJ1)
+	$(F95) $(LDFLAGS) $(OBJ1) -o $@
+$(EXE2): $(OBJ2)
+	$(F95) $(LDFLAGS) $(OBJ2) -o $@
+$(EXE3): $(OBJ3)
+	$(F95) $(LDFLAGS) $(OBJ3) -o $@
+$(EXE4): $(OBJ4)
+	$(F95) $(LDFLAGS) $(OBJ4) -o $@
+$(EXE5): $(OBJ5)
+	$(F95) $(LDFLAGS) $(OBJ5) -o $@
+$(EXE6): $(OBJ6)
+	$(F95) $(LDFLAGS) $(OBJ6) -o $@

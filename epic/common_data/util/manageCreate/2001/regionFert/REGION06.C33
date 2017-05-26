@@ -1,0 +1,11 @@
+ REGION06  12CornGrain   1 IDENTIFIED BY GRADE      22 Total       1    0.3500
+ REGION06  12CornGrain   2 ANHY AMMONIA             25 Total       1    0.1000
+ REGION06  12CornGrain  60 NITROGEN SOL 32%         47 Total       1    0.1000
+ REGION06  12CornGrain  66 UREA                     51 Total       1    0.4000
+ REGION06  12CornGrain 203 DAP                      58 Total       1    0.0187
+ REGION06  12CornGrain   1 IDENTIFIED BY GRADE      22 Fpreplt+p   2    0.0500
+ REGION06  12CornGrain   1 IDENTIFIED BY GRADE      22 S-pre&plt   4    0.3000
+ REGION06  12CornGrain  66 UREA                     51 S-pre&plt   4    0.4000
+ REGION06  12CornGrain 203 DAP                      58 S-pre&plt   4    0.0187
+ REGION06  12CornGrain   2 ANHY AMMONIA             25 PostpltAu   5    0.1000
+ REGION06  12CornGrain  60 NITROGEN SOL 32%         47 PostpltAu   5    0.1000

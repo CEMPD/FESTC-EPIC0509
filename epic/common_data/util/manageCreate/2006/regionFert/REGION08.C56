@@ -1,0 +1,15 @@
+ REGION08  35Wheat_W     2 ANHY AMMONIA             25 Total       1    0.4500
+ REGION08  35Wheat_W    10 AMMONIUM NITRATE         27 Total       1    0.2000
+ REGION08  35Wheat_W    24 AMMONIUM SULFATE         32 Total       1    0.0500
+ REGION08  35Wheat_W    58 NITROGEN SOL 28%         45 Total       1    0.1000
+ REGION08  35Wheat_W    66 UREA                     51 Total       1    0.1000
+ REGION08  35Wheat_W   203 DAP                      58 Total       1    0.0384
+ REGION08  35Wheat_W   249 LIQ AMM POLY             76 Total       1    0.0096
+ REGION08  35Wheat_W     2 ANHY AMMONIA             25 Fpre+plt    2    0.4500
+ REGION08  35Wheat_W    10 AMMONIUM NITRATE         27 Fpre+plt    2    0.0500
+ REGION08  35Wheat_W    66 UREA                     51 Fpre+plt    2    0.1000
+ REGION08  35Wheat_W   203 DAP                      58 Fpre+plt    2    0.0384
+ REGION08  35Wheat_W    10 AMMONIUM NITRATE         27 PostpltAu   5    0.1500
+ REGION08  35Wheat_W    24 AMMONIUM SULFATE         32 PostpltAu   5    0.0500
+ REGION08  35Wheat_W    58 NITROGEN SOL 28%         45 PostpltAu   5    0.1000
+ REGION08  35Wheat_W   249 LIQ AMM POLY             76 PostpltAu   5    0.0096

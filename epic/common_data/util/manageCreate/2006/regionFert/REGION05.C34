@@ -1,0 +1,7 @@
+ REGION05  13CornS       2 ANHY AMMONIA             25 Total       1    0.2000
+ REGION05  13CornS      58 NITROGEN SOL 28%         45 Total       1    0.1000
+ REGION05  13CornS     203 DAP                      58 Total       1    0.0441
+ REGION05  13CornS       2 ANHY AMMONIA             25 Fpre+plt    2    0.2000
+ REGION05  13CornS     203 DAP                      58 Fpre+plt    2    0.0126
+ REGION05  13CornS     203 DAP                      58 S-pre&plt   4    0.0315
+ REGION05  13CornS      58 NITROGEN SOL 28%         45 PostpltAu   5    0.1000

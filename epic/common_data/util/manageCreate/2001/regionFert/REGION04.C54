@@ -1,0 +1,16 @@
+ REGION04  33SWHEAT      1 IDENTIFIED BY GRADE      22 Total       1    0.0500
+ REGION04  33SWHEAT      2 ANHY AMMONIA             25 Total       1    0.3000
+ REGION04  33SWHEAT     58 NITROGEN SOL 28%         45 Total       1    0.2000
+ REGION04  33SWHEAT     60 NITROGEN SOL 32%         47 Total       1    0.1500
+ REGION04  33SWHEAT     66 UREA                     51 Total       1    0.2000
+ REGION04  33SWHEAT    203 DAP                      58 Total       1    0.0604
+ REGION04  33SWHEAT    249 LIQ AMM POLY             76 Total       1    0.0136
+ REGION04  33SWHEAT      2 ANHY AMMONIA             25 Fpreplt+p   2    0.3000
+ REGION04  33SWHEAT    203 DAP                      58 Fpreplt+p   2    0.0060
+ REGION04  33SWHEAT    249 LIQ AMM POLY             76 Fpreplt+p   2    0.0136
+ REGION04  33SWHEAT      1 IDENTIFIED BY GRADE      22 S-Fall pl   3    0.0500
+ REGION04  33SWHEAT     66 UREA                     51 S-pre&plt   4    0.2000
+ REGION04  33SWHEAT    203 DAP                      58 S-pre&plt   4    0.0483
+ REGION04  33SWHEAT     58 NITROGEN SOL 28%         45 PostpltAu   5    0.2000
+ REGION04  33SWHEAT     60 NITROGEN SOL 32%         47 PostpltAu   5    0.1500
+ REGION04  33SWHEAT    203 DAP                      58 PostpltAu   5    0.0060

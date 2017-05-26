@@ -1,0 +1,14 @@
+ REGION05  11CornG       2 ANHY AMMONIA             25 Total       1    0.4900
+ REGION05  11CornG      10 AMMONIUM NITRATE         27 Total       1    0.0200
+ REGION05  11CornG      58 NITROGEN SOL 28%         45 Total       1    0.1700
+ REGION05  11CornG      60 NITROGEN SOL 32%         47 Total       1    0.1100
+ REGION05  11CornG      66 UREA                     51 Total       1    0.0800
+ REGION05  11CornG     203 DAP                      58 Total       1    0.0650
+ REGION05  11CornG       2 ANHY AMMONIA             25 Fpre+plt    2    0.1800
+ REGION05  11CornG     203 DAP                      58 Fpre+plt    2    0.0150
+ REGION05  11CornG       2 ANHY AMMONIA             25 S-pre&plt   4    0.3100
+ REGION05  11CornG      10 AMMONIUM NITRATE         27 S-pre&plt   4    0.0200
+ REGION05  11CornG      66 UREA                     51 S-pre&plt   4    0.0800
+ REGION05  11CornG     203 DAP                      58 S-pre&plt   4    0.0500
+ REGION05  11CornG      58 NITROGEN SOL 28%         45 PostpltAu   5    0.1700
+ REGION05  11CornG      60 NITROGEN SOL 32%         47 PostpltAu   5    0.1100

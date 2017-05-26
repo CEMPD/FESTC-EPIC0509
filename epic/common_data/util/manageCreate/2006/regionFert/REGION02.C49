@@ -1,0 +1,12 @@
+ REGION02  28SorghumG    1 IDENTIFIED BY GRADE      22 Total       1    0.1000
+ REGION02  28SorghumG    2 ANHY AMMONIA             25 Total       1    0.1000
+ REGION02  28SorghumG   10 AMMONIUM NITRATE         27 Total       1    0.0500
+ REGION02  28SorghumG   60 NITROGEN SOL 32%         47 Total       1    0.3500
+ REGION02  28SorghumG   66 UREA                     51 Total       1    0.3500
+ REGION02  28SorghumG  203 DAP                      58 Total       1    0.0285
+ REGION02  28SorghumG    1 IDENTIFIED BY GRADE      22 S-pre&plt   4    0.1000
+ REGION02  28SorghumG    2 ANHY AMMONIA             25 S-pre&plt   4    0.1000
+ REGION02  28SorghumG   10 AMMONIUM NITRATE         27 S-pre&plt   4    0.0500
+ REGION02  28SorghumG   60 NITROGEN SOL 32%         47 S-pre&plt   4    0.3500
+ REGION02  28SorghumG   66 UREA                     51 PostpltAu   5    0.3500
+ REGION02  28SorghumG  203 DAP                      58 PostpltAu   5    0.0285

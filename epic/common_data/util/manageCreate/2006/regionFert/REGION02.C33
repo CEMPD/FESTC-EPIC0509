@@ -1,0 +1,15 @@
+ REGION02  12CornG       1 IDENTIFIED BY GRADE      22 Total       1    0.1000
+ REGION02  12CornG       2 ANHY AMMONIA             25 Total       1    0.2500
+ REGION02  12CornG      10 AMMONIUM NITRATE         27 Total       1    0.1500
+ REGION02  12CornG      59 NITROGEN SOL 30%         46 Total       1    0.2000
+ REGION02  12CornG      60 NITROGEN SOL 32%         47 Total       1    0.1000
+ REGION02  12CornG      66 UREA                     51 Total       1    0.1000
+ REGION02  12CornG     203 DAP                      58 Total       1    0.0812
+ REGION02  12CornG     203 DAP                      58 Fpre+plt    2    0.0437
+ REGION02  12CornG       1 IDENTIFIED BY GRADE      22 S-pre&plt   4    0.1000
+ REGION02  12CornG       2 ANHY AMMONIA             25 S-pre&plt   4    0.2500
+ REGION02  12CornG      10 AMMONIUM NITRATE         27 S-pre&plt   4    0.1500
+ REGION02  12CornG      66 UREA                     51 S-pre&plt   4    0.1000
+ REGION02  12CornG     203 DAP                      58 S-pre&plt   4    0.0375
+ REGION02  12CornG      59 NITROGEN SOL 30%         46 PostpltAu   5    0.2000
+ REGION02  12CornG      60 NITROGEN SOL 32%         47 PostpltAu   5    0.1000

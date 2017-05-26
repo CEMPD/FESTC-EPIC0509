@@ -1,0 +1,14 @@
+ REGION09  33Wheat_S     1 IDENTIFIED BY GRADE      22 Total       1    0.1500
+ REGION09  33Wheat_S    24 AMMONIUM SULFATE         32 Total       1    0.3500
+ REGION09  33Wheat_S    60 NITROGEN SOL 32%         47 Total       1    0.3000
+ REGION09  33Wheat_S   203 DAP                      58 Total       1    0.0362
+ REGION09  33Wheat_S   209 MONOAMM PHOS             64 Total       1    0.0261
+ REGION09  33Wheat_S   249 LIQ AMM POLY             76 Total       1    0.0182
+ REGION09  33Wheat_S     1 IDENTIFIED BY GRADE      22 S-pre&plt   4    0.1500
+ REGION09  33Wheat_S    24 AMMONIUM SULFATE         32 S-pre&plt   4    0.3500
+ REGION09  33Wheat_S   203 DAP                      58 S-pre&plt   4    0.0242
+ REGION09  33Wheat_S   209 MONOAMM PHOS             64 S-pre&plt   4    0.0131
+ REGION09  33Wheat_S    60 NITROGEN SOL 32%         47 PostpltAu   5    0.3000
+ REGION09  33Wheat_S   203 DAP                      58 PostpltAu   5    0.0121
+ REGION09  33Wheat_S   209 MONOAMM PHOS             64 PostpltAu   5    0.0131
+ REGION09  33Wheat_S   249 LIQ AMM POLY             76 PostpltAu   5    0.0182

@@ -1,0 +1,12 @@
+ REGION04  36Wheat_W     2 ANHY AMMONIA             25 Total       1    0.3000
+ REGION04  36Wheat_W    58 NITROGEN SOL 28%         45 Total       1    0.0500
+ REGION04  36Wheat_W    60 NITROGEN SOL 32%         47 Total       1    0.2500
+ REGION04  36Wheat_W    66 UREA                     51 Total       1    0.3500
+ REGION04  36Wheat_W   203 DAP                      58 Total       1    0.0384
+ REGION04  36Wheat_W   249 LIQ AMM POLY             76 Total       1    0.0481
+ REGION04  36Wheat_W     2 ANHY AMMONIA             25 Fpre+plt    2    0.3000
+ REGION04  36Wheat_W    66 UREA                     51 Fpre+plt    2    0.3500
+ REGION04  36Wheat_W   203 DAP                      58 Fpre+plt    2    0.0384
+ REGION04  36Wheat_W   249 LIQ AMM POLY             76 Fpre+plt    2    0.0481
+ REGION04  36Wheat_W    58 NITROGEN SOL 28%         45 S-Fall pl   3    0.0500
+ REGION04  36Wheat_W    60 NITROGEN SOL 32%         47 S-Fall pl   3    0.2500

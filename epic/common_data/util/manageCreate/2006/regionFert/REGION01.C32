@@ -1,0 +1,14 @@
+ REGION01  11CornG       1 IDENTIFIED BY GRADE      22 Total       1    0.2000
+ REGION01  11CornG      24 AMMONIUM SULFATE         32 Total       1    0.0500
+ REGION01  11CornG      59 NITROGEN SOL 30%         46 Total       1    0.2500
+ REGION01  11CornG      60 NITROGEN SOL 32%         47 Total       1    0.1000
+ REGION01  11CornG      66 UREA                     51 Total       1    0.2000
+ REGION01  11CornG     209 MONOAMM PHOS             64 Total       1    0.0068
+ REGION01  11CornG      59 NITROGEN SOL 30%         46 Fpre+plt    2    0.0500
+ REGION01  11CornG       1 IDENTIFIED BY GRADE      22 S-pre&plt   4    0.2000
+ REGION01  11CornG      24 AMMONIUM SULFATE         32 S-pre&plt   4    0.0500
+ REGION01  11CornG      59 NITROGEN SOL 30%         46 S-pre&plt   4    0.1000
+ REGION01  11CornG      66 UREA                     51 S-pre&plt   4    0.2000
+ REGION01  11CornG     209 MONOAMM PHOS             64 S-pre&plt   4    0.0068
+ REGION01  11CornG      59 NITROGEN SOL 30%         46 PostpltAu   5    0.1000
+ REGION01  11CornG      60 NITROGEN SOL 32%         47 PostpltAu   5    0.1000

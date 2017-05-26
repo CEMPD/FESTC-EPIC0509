@@ -1,0 +1,8 @@
+ REGION02  13CornSilag   1 IDENTIFIED BY GRADE      22 Total       1    0.4000
+ REGION02  13CornSilag   2 ANHY AMMONIA             25 Total       1    0.1000
+ REGION02  13CornSilag  59 NITROGEN SOL 30%         46 Total       1    0.3500
+ REGION02  13CornSilag 203 DAP                      58 Total       1    0.0946
+ REGION02  13CornSilag   2 ANHY AMMONIA             25 Fpreplt+p   2    0.1000
+ REGION02  13CornSilag   1 IDENTIFIED BY GRADE      22 S-pre&plt   4    0.4000
+ REGION02  13CornSilag  59 NITROGEN SOL 30%         46 PostpltAu   5    0.3500
+ REGION02  13CornSilag 203 DAP                      58 PostpltAu   5    0.0946

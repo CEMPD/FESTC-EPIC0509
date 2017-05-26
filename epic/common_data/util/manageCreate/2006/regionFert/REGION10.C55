@@ -1,0 +1,13 @@
+ REGION10  34Wheat_S     2 ANHY AMMONIA             25 Total       1    0.5000
+ REGION10  34Wheat_S    60 NITROGEN SOL 32%         47 Total       1    0.3000
+ REGION10  34Wheat_S   203 DAP                      58 Total       1    0.0121
+ REGION10  34Wheat_S   209 MONOAMM PHOS             64 Total       1    0.0359
+ REGION10  34Wheat_S   249 LIQ AMM POLY             76 Total       1    0.0182
+ REGION10  34Wheat_S     2 ANHY AMMONIA             25 Fpre+plt    2    0.3000
+ REGION10  34Wheat_S   209 MONOAMM PHOS             64 Fpre+plt    2    0.0131
+ REGION10  34Wheat_S     2 ANHY AMMONIA             25 S-pre&plt   4    0.2000
+ REGION10  34Wheat_S    60 NITROGEN SOL 32%         47 S-pre&plt   4    0.2000
+ REGION10  34Wheat_S   209 MONOAMM PHOS             64 S-pre&plt   4    0.0229
+ REGION10  34Wheat_S    60 NITROGEN SOL 32%         47 PostpltAu   5    0.1000
+ REGION10  34Wheat_S   203 DAP                      58 PostpltAu   5    0.0121
+ REGION10  34Wheat_S   249 LIQ AMM POLY             76 PostpltAu   5    0.0182

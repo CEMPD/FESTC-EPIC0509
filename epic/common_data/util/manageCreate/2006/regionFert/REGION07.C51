@@ -1,0 +1,8 @@
+ REGION07  30SorghumS    2 ANHY AMMONIA             25 Total       1    0.4000
+ REGION07  30SorghumS   60 NITROGEN SOL 32%         47 Total       1    0.1000
+ REGION07  30SorghumS  203 DAP                      58 Total       1    0.0630
+ REGION07  30SorghumS    2 ANHY AMMONIA             25 Fpre+plt    2    0.2000
+ REGION07  30SorghumS  203 DAP                      58 Fpre+plt    2    0.0315
+ REGION07  30SorghumS    2 ANHY AMMONIA             25 S-pre&plt   4    0.2000
+ REGION07  30SorghumS  203 DAP                      58 S-pre&plt   4    0.0315
+ REGION07  30SorghumS   60 NITROGEN SOL 32%         47 PostpltAu   5    0.1000

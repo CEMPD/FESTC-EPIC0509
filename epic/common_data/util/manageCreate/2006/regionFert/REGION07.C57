@@ -1,0 +1,12 @@
+ REGION07  36Wheat_W     2 ANHY AMMONIA             25 Total       1    0.5500
+ REGION07  36Wheat_W    10 AMMONIUM NITRATE         27 Total       1    0.0500
+ REGION07  36Wheat_W    58 NITROGEN SOL 28%         45 Total       1    0.2500
+ REGION07  36Wheat_W    60 NITROGEN SOL 32%         47 Total       1    0.1000
+ REGION07  36Wheat_W   203 DAP                      58 Total       1    0.0102
+ REGION07  36Wheat_W   209 MONOAMM PHOS             64 Total       1    0.0623
+ REGION07  36Wheat_W     2 ANHY AMMONIA             25 Fpre+plt    2    0.5500
+ REGION07  36Wheat_W   203 DAP                      58 Fpre+plt    2    0.0102
+ REGION07  36Wheat_W   209 MONOAMM PHOS             64 Fpre+plt    2    0.0623
+ REGION07  36Wheat_W    58 NITROGEN SOL 28%         45 S-pre&plt   4    0.2500
+ REGION07  36Wheat_W    10 AMMONIUM NITRATE         27 PostpltAu   5    0.0500
+ REGION07  36Wheat_W    60 NITROGEN SOL 32%         47 PostpltAu   5    0.1000

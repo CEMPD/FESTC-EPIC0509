@@ -1,0 +1,12 @@
+1. beld_nc2ioapi
+   Convert the BELD4 data set into IOAPI format for CMAQ-bidi NH3 modeling. 
+
+2. daily
+   Summarize extracted daily files for CMAQ to monthly reports. 
+
+3. swat
+   Extract variables from daily output NCD files for SWAT input.
+
+4. year
+   Summarize extracted netCDF yearly file by regions for N and yield varaibles.  
+

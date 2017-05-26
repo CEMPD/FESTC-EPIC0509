@@ -1,0 +1,10 @@
+ REGION09  41Peas        2 ANHY AMMONIA             25 Total       1    0.8000
+ REGION09  41Peas       66 UREA                     51 Total       1    0.1000
+ REGION09  41Peas      203 DAP                      58 Total       1    0.0670
+ REGION09  41Peas      209 MONOAMM PHOS             64 Total       1    0.0155
+ REGION09  41Peas      203 DAP                      58 Fpre+plt    2    0.0287
+ REGION09  41Peas        2 ANHY AMMONIA             25 S-pre&plt   4    0.8000
+ REGION09  41Peas      203 DAP                      58 S-pre&plt   4    0.0287
+ REGION09  41Peas      209 MONOAMM PHOS             64 S-pre&plt   4    0.0155
+ REGION09  41Peas       66 UREA                     51 PostpltAu   5    0.1000
+ REGION09  41Peas      203 DAP                      58 PostpltAu   5    0.0096

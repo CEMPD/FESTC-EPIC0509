@@ -1,0 +1,9 @@
+ REGION08  13CornS       2 ANHY AMMONIA             25 Total       1    0.3000
+ REGION08  13CornS      60 NITROGEN SOL 32%         47 Total       1    0.5000
+ REGION08  13CornS     203 DAP                      58 Total       1    0.0315
+ REGION08  13CornS     249 LIQ AMM POLY             76 Total       1    0.0095
+ REGION08  13CornS       2 ANHY AMMONIA             25 Fpre+plt    2    0.1000
+ REGION08  13CornS       2 ANHY AMMONIA             25 S-pre&plt   4    0.2000
+ REGION08  13CornS      60 NITROGEN SOL 32%         47 S-pre&plt   4    0.5000
+ REGION08  13CornS     203 DAP                      58 S-pre&plt   4    0.0315
+ REGION08  13CornS     249 LIQ AMM POLY             76 PostpltAu   5    0.0095

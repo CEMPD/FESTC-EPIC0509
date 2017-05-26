@@ -1,0 +1,15 @@
+ REGION04  31Soybeans    1 IDENTIFIED BY GRADE      22 Total       1    0.2000
+ REGION04  31Soybeans    2 ANHY AMMONIA             25 Total       1    0.5000
+ REGION04  31Soybeans   58 NITROGEN SOL 28%         45 Total       1    0.2500
+ REGION04  31Soybeans  203 DAP                      58 Total       1    0.0324
+ REGION04  31Soybeans  209 MONOAMM PHOS             64 Total       1    0.0117
+ REGION04  31Soybeans  249 LIQ AMM POLY             76 Total       1    0.0122
+ REGION04  31Soybeans    1 IDENTIFIED BY GRADE      22 Fpreplt+p   2    0.2000
+ REGION04  31Soybeans    2 ANHY AMMONIA             25 Fpreplt+p   2    0.2500
+ REGION04  31Soybeans  203 DAP                      58 Fpreplt+p   2    0.0216
+ REGION04  31Soybeans  209 MONOAMM PHOS             64 Fpreplt+p   2    0.0058
+ REGION04  31Soybeans    2 ANHY AMMONIA             25 S-pre&plt   4    0.2500
+ REGION04  31Soybeans   58 NITROGEN SOL 28%         45 S-pre&plt   4    0.2500
+ REGION04  31Soybeans  203 DAP                      58 S-pre&plt   4    0.0108
+ REGION04  31Soybeans  209 MONOAMM PHOS             64 S-pre&plt   4    0.0058
+ REGION04  31Soybeans  249 LIQ AMM POLY             76 S-pre&plt   4    0.0122

@@ -1,0 +1,7 @@
+ REGION05  13CornSilag   2 ANHY AMMONIA             25 Total       1    0.2000
+ REGION05  13CornSilag  58 NITROGEN SOL 28%         45 Total       1    0.1000
+ REGION05  13CornSilag 203 DAP                      58 Total       1    0.0441
+ REGION05  13CornSilag   2 ANHY AMMONIA             25 Fpreplt+p   2    0.2000
+ REGION05  13CornSilag 203 DAP                      58 Fpreplt+p   2    0.0189
+ REGION05  13CornSilag 203 DAP                      58 S-pre&plt   4    0.0252
+ REGION05  13CornSilag  58 NITROGEN SOL 28%         45 PostpltAu   5    0.1000

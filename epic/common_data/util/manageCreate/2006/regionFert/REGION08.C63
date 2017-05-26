@@ -1,0 +1,10 @@
+ REGION08  42Peas        2 ANHY AMMONIA             25 Total       1    0.2500
+ REGION08  42Peas       10 AMMONIUM NITRATE         27 Total       1    0.3000
+ REGION08  42Peas       66 UREA                     51 Total       1    0.3000
+ REGION08  42Peas      203 DAP                      58 Total       1    0.0287
+ REGION08  42Peas      249 LIQ AMM POLY             76 Total       1    0.0072
+ REGION08  42Peas      203 DAP                      58 Fpre+plt    2    0.0287
+ REGION08  42Peas        2 ANHY AMMONIA             25 S-pre&plt   4    0.2500
+ REGION08  42Peas       66 UREA                     51 S-pre&plt   4    0.3000
+ REGION08  42Peas       10 AMMONIUM NITRATE         27 PostpltAu   5    0.3000
+ REGION08  42Peas      249 LIQ AMM POLY             76 PostpltAu   5    0.0072

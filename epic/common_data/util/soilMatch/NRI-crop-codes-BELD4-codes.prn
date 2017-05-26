@@ -1,0 +1,39 @@
+NRI Code        NRI Description        BELD4 codBELD4 coBELD4 descriptionBELD4 coNRI CodeComments
+     141Grass-Hayland                         22        Hay                    22     141
+     141Grass-Hayland                                 23Hay_ir                 23     141
+     142Legume-Hayland                        24        Alfalfa                24     142
+     142Legume-Hayland                                25Alfalfa_ir             25     142
+     211Grass-Pastureland                     26        Other_grass            26     211
+     211Grass-Pastureland                             27Other_grass_ir         27     211
+     114Barley-Close Grown                    28        Barley                 28     114
+     114Barley-Close Grown                            29Barley_ir              29     114
+                                              30        BeansEdible            30     501Asigned
+                                                      31BeansEdible_ir         31     501Asigned
+      11Corn-Row Crops                        32        CornGrain              32      11
+      11Corn-Row Crops                                33CornGrain_ir           33      11
+                                              34        CornSilage             34      11Asigned
+                                                      35CornSilage_ir          35      11Asigned
+      14Cotton-Row Crops                      36        Cotton                 36      14
+      14Cotton-Row Crops                              37Cotton_ir              37      14
+     112Oats-Close Grown                      38        Oats                   38     112
+     112Oats-Close Grown                              39Oats_ir                39     112
+      15Peanuts-Row Crops                     40        Peanuts                40      15
+      15Peanuts-Row Crops                             41Peanuts_ir             41      15
+      18Potatoes-Row Crops                    42        Potatoes               42      18
+      18Potatoes-Row Crops                            43Potatoes_ir            43      18
+     113Rice-Close Grown                      44        Rice                   44     113
+     113Rice-Close Grown                              45Rice_ir                45     113
+                                              46        Rye                    46     501Asigned
+                                                      47Rye_ir                 47     501Asigned
+      12Sorghum-Row Crops                     48        SorghumGrain           48      12
+      12Sorghum-Row Crops                             49SorghumGrain_ir        49      12
+                                              50        SorghumSilage          50      12Asigned
+                                                      51SorghumSilage_ir       51      12Asigned
+      13Soybeans-Row Crops                    52        Soybeans               52      13
+      13Soybeans-Row Crops                            53Soybeans_ir            53      13
+                                              54        Wheat_Spring           54     111Asigned
+                                                      55Wheat_Spring_ir        55     111Asigned
+                                              56        Wheat_Winter           56     111Asigned
+                                                      57Wheat_Winter_ir        57     111Asigned
+                                              58        Other_Crop             58     500Asigned
+                                                      59Other_Crop_ir          59     500Asigned

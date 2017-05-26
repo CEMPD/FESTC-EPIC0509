@@ -1,0 +1,7 @@
+ REGION10  11CornGrain   2 ANHY AMMONIA             25 Total       1    0.6000
+ REGION10  11CornGrain  60 NITROGEN SOL 32%         47 Total       1    0.3000
+ REGION10  11CornGrain 203 DAP                      58 Total       1    0.0250
+ REGION10  11CornGrain   2 ANHY AMMONIA             25 Fpreplt+p   2    0.3000
+ REGION10  11CornGrain   2 ANHY AMMONIA             25 S-pre&plt   4    0.3000
+ REGION10  11CornGrain  60 NITROGEN SOL 32%         47 PostpltAu   5    0.3000
+ REGION10  11CornGrain 203 DAP                      58 PostpltAu   5    0.0250

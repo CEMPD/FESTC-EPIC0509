@@ -1,0 +1,12 @@
+ REGION02  38Oth_Crop    1 IDENTIFIED BY GRADE      22 Total       1    0.3000
+ REGION02  38Oth_Crop    2 ANHY AMMONIA             25 Total       1    0.1000
+ REGION02  38Oth_Crop   10 AMMONIUM NITRATE         27 Total       1    0.2000
+ REGION02  38Oth_Crop   60 NITROGEN SOL 32%         47 Total       1    0.1000
+ REGION02  38Oth_Crop   66 UREA                     51 Total       1    0.3000
+ REGION02  38Oth_Crop  203 DAP                      58 Total       1    0.0312
+ REGION02  38Oth_Crop  203 DAP                      58 Fpre+plt    2    0.0312
+ REGION02  38Oth_Crop    1 IDENTIFIED BY GRADE      22 S-pre&plt   4    0.3000
+ REGION02  38Oth_Crop    2 ANHY AMMONIA             25 S-pre&plt   4    0.1000
+ REGION02  38Oth_Crop   10 AMMONIUM NITRATE         27 S-pre&plt   4    0.2000
+ REGION02  38Oth_Crop   60 NITROGEN SOL 32%         47 PostpltAu   5    0.1000
+ REGION02  38Oth_Crop   66 UREA                     51 PostpltAu   5    0.3000

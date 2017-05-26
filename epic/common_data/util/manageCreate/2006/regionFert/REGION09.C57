@@ -1,0 +1,21 @@
+ REGION09  36Wheat_W     1 IDENTIFIED BY GRADE      22 Total       1    0.0400
+ REGION09  36Wheat_W     2 ANHY AMMONIA             25 Total       1    0.1500
+ REGION09  36Wheat_W    10 AMMONIUM NITRATE         27 Total       1    0.1000
+ REGION09  36Wheat_W    24 AMMONIUM SULFATE         32 Total       1    0.1000
+ REGION09  36Wheat_W    60 NITROGEN SOL 32%         47 Total       1    0.3000
+ REGION09  36Wheat_W    66 UREA                     51 Total       1    0.1000
+ REGION09  36Wheat_W   203 DAP                      58 Total       1    0.0128
+ REGION09  36Wheat_W   207 AMM PHOS SULFATE         62 Total       1    0.0131
+ REGION09  36Wheat_W   209 MONOAMM PHOS             64 Total       1    0.0208
+ REGION09  36Wheat_W   249 LIQ AMM POLY             76 Total       1    0.0433
+ REGION09  36Wheat_W     1 IDENTIFIED BY GRADE      22 Fpre+plt    2    0.0400
+ REGION09  36Wheat_W     2 ANHY AMMONIA             25 Fpre+plt    2    0.1500
+ REGION09  36Wheat_W    24 AMMONIUM SULFATE         32 Fpre+plt    2    0.0500
+ REGION09  36Wheat_W    60 NITROGEN SOL 32%         47 Fpre+plt    2    0.3000
+ REGION09  36Wheat_W   203 DAP                      58 Fpre+plt    2    0.0128
+ REGION09  36Wheat_W   209 MONOAMM PHOS             64 Fpre+plt    2    0.0208
+ REGION09  36Wheat_W   207 AMM PHOS SULFATE         62 S-Fall pl   3    0.0131
+ REGION09  36Wheat_W   249 LIQ AMM POLY             76 S-Fall pl   3    0.0433
+ REGION09  36Wheat_W    24 AMMONIUM SULFATE         32 S-pre&plt   4    0.0500
+ REGION09  36Wheat_W    10 AMMONIUM NITRATE         27 PostpltAu   5    0.1000
+ REGION09  36Wheat_W    66 UREA                     51 PostpltAu   5    0.1000

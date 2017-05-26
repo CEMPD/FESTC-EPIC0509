@@ -1,0 +1,12 @@
+ REGION04  11CornGrain   2 ANHY AMMONIA             25 Total       1    0.3000
+ REGION04  11CornGrain  58 NITROGEN SOL 28%         45 Total       1    0.1500
+ REGION04  11CornGrain  66 UREA                     51 Total       1    0.2000
+ REGION04  11CornGrain 203 DAP                      58 Total       1    0.0625
+ REGION04  11CornGrain   2 ANHY AMMONIA             25 Fpreplt+p   2    0.1500
+ REGION04  11CornGrain  58 NITROGEN SOL 28%         45 Fpreplt+p   2    0.0500
+ REGION04  11CornGrain  66 UREA                     51 Fpreplt+p   2    0.1500
+ REGION04  11CornGrain 203 DAP                      58 Fpreplt+p   2    0.0312
+ REGION04  11CornGrain   2 ANHY AMMONIA             25 S-pre&plt   4    0.1500
+ REGION04  11CornGrain 203 DAP                      58 S-pre&plt   4    0.0312
+ REGION04  11CornGrain  58 NITROGEN SOL 28%         45 PostpltAu   5    0.1000
+ REGION04  11CornGrain  66 UREA                     51 PostpltAu   5    0.0500

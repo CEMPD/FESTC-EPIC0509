@@ -1,0 +1,15 @@
+ REGION09  35WWHEAT      2 ANHY AMMONIA             25 Total       1    0.5000
+ REGION09  35WWHEAT     10 AMMONIUM NITRATE         27 Total       1    0.1000
+ REGION09  35WWHEAT     60 NITROGEN SOL 32%         47 Total       1    0.2000
+ REGION09  35WWHEAT     66 UREA                     51 Total       1    0.1000
+ REGION09  35WWHEAT    203 DAP                      58 Total       1    0.0320
+ REGION09  35WWHEAT    209 MONOAMM PHOS             64 Total       1    0.0208
+ REGION09  35WWHEAT    249 LIQ AMM POLY             76 Total       1    0.0433
+ REGION09  35WWHEAT      2 ANHY AMMONIA             25 Fpreplt+p   2    0.2500
+ REGION09  35WWHEAT     60 NITROGEN SOL 32%         47 Fpreplt+p   2    0.2000
+ REGION09  35WWHEAT    203 DAP                      58 Fpreplt+p   2    0.0320
+ REGION09  35WWHEAT    209 MONOAMM PHOS             64 S-Fall pl   3    0.0208
+ REGION09  35WWHEAT    249 LIQ AMM POLY             76 S-Fall pl   3    0.0433
+ REGION09  35WWHEAT      2 ANHY AMMONIA             25 S-pre&plt   4    0.2500
+ REGION09  35WWHEAT     10 AMMONIUM NITRATE         27 PostpltAu   5    0.1000
+ REGION09  35WWHEAT     66 UREA                     51 PostpltAu   5    0.1000

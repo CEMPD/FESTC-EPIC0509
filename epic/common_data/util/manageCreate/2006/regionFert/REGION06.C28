@@ -1,0 +1,10 @@
+ REGION06   7Barley      1 IDENTIFIED BY GRADE      22 Total       1    0.5000
+ REGION06   7Barley     58 NITROGEN SOL 28%         45 Total       1    0.2000
+ REGION06   7Barley     66 UREA                     51 Total       1    0.2000
+ REGION06   7Barley    203 DAP                      58 Total       1    0.1675
+ REGION06   7Barley    203 DAP                      58 Fpre+plt    2    0.0558
+ REGION06   7Barley      1 IDENTIFIED BY GRADE      22 S-pre&plt   4    0.4000
+ REGION06   7Barley     66 UREA                     51 S-pre&plt   4    0.2000
+ REGION06   7Barley    203 DAP                      58 S-pre&plt   4    0.1117
+ REGION06   7Barley      1 IDENTIFIED BY GRADE      22 PostpltAu   5    0.1000
+ REGION06   7Barley     58 NITROGEN SOL 28%         45 PostpltAu   5    0.2000

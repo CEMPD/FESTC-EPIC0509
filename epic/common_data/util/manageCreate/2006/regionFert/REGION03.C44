@@ -1,0 +1,9 @@
+ REGION03  23Rice       60 NITROGEN SOL 32%         47 Total       1    0.3000
+ REGION03  23Rice       66 UREA                     51 Total       1    0.6500
+ REGION03  23Rice      203 DAP                      58 Total       1    0.0127
+ REGION03  23Rice      249 LIQ AMM POLY             76 Total       1    0.0856
+ REGION03  23Rice      249 LIQ AMM POLY             76 Fpre+plt    2    0.0475
+ REGION03  23Rice       60 NITROGEN SOL 32%         47 S-pre&plt   4    0.3000
+ REGION03  23Rice      203 DAP                      58 S-pre&plt   4    0.0127
+ REGION03  23Rice      249 LIQ AMM POLY             76 S-pre&plt   4    0.0380
+ REGION03  23Rice       66 UREA                     51 PostpltAu   5    0.6500

@@ -1,0 +1,8 @@
+ REGION06  30SorghumS    1 IDENTIFIED BY GRADE      22 Total       1    0.1000
+ REGION06  30SorghumS   60 NITROGEN SOL 32%         47 Total       1    0.1500
+ REGION06  30SorghumS   66 UREA                     51 Total       1    0.5000
+ REGION06  30SorghumS  203 DAP                      58 Total       1    0.0441
+ REGION06  30SorghumS    1 IDENTIFIED BY GRADE      22 Fpreplt+p   2    0.1000
+ REGION06  30SorghumS   66 UREA                     51 S-pre&plt   4    0.5000
+ REGION06  30SorghumS  203 DAP                      58 S-pre&plt   4    0.0441
+ REGION06  30SorghumS   60 NITROGEN SOL 32%         47 PostpltAu   5    0.1500

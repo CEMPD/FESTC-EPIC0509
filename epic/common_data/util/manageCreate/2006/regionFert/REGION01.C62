@@ -1,0 +1,13 @@
+ REGION01  41Peas        1 IDENTIFIED BY GRADE      22 Total       1    0.2500
+ REGION01  41Peas       58 NITROGEN SOL 28%         45 Total       1    0.1000
+ REGION01  41Peas       60 NITROGEN SOL 32%         47 Total       1    0.4000
+ REGION01  41Peas       66 UREA                     51 Total       1    0.2000
+ REGION01  41Peas      203 DAP                      58 Total       1    0.0861
+ REGION01  41Peas      249 LIQ AMM POLY             76 Total       1    0.0072
+ REGION01  41Peas      203 DAP                      58 Fpre+plt    2    0.0383
+ REGION01  41Peas        1 IDENTIFIED BY GRADE      22 S-pre&plt   4    0.2500
+ REGION01  41Peas       58 NITROGEN SOL 28%         45 S-pre&plt   4    0.1000
+ REGION01  41Peas       60 NITROGEN SOL 32%         47 S-pre&plt   4    0.4000
+ REGION01  41Peas       66 UREA                     51 S-pre&plt   4    0.2000
+ REGION01  41Peas      203 DAP                      58 S-pre&plt   4    0.0478
+ REGION01  41Peas      249 LIQ AMM POLY             76 PostpltAu   5    0.0072

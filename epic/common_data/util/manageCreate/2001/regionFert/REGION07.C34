@@ -1,0 +1,9 @@
+ REGION07  13CornSilag   2 ANHY AMMONIA             25 Total       1    0.3500
+ REGION07  13CornSilag  60 NITROGEN SOL 32%         47 Total       1    0.1000
+ REGION07  13CornSilag 209 MONOAMM PHOS             64 Total       1    0.0341
+ REGION07  13CornSilag   2 ANHY AMMONIA             25 Fpreplt+p   2    0.2500
+ REGION07  13CornSilag 209 MONOAMM PHOS             64 Fpreplt+p   2    0.0034
+ REGION07  13CornSilag   2 ANHY AMMONIA             25 S-pre&plt   4    0.1000
+ REGION07  13CornSilag 209 MONOAMM PHOS             64 S-pre&plt   4    0.0239
+ REGION07  13CornSilag  60 NITROGEN SOL 32%         47 PostpltAu   5    0.1000
+ REGION07  13CornSilag 209 MONOAMM PHOS             64 PostpltAu   5    0.0068

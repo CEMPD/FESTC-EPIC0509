@@ -1,0 +1,9 @@
+ REGION02  13CornS       1 IDENTIFIED BY GRADE      22 Total       1    0.3000
+ REGION02  13CornS       2 ANHY AMMONIA             25 Total       1    0.3000
+ REGION02  13CornS      59 NITROGEN SOL 30%         46 Total       1    0.2000
+ REGION02  13CornS     203 DAP                      58 Total       1    0.1009
+ REGION02  13CornS     203 DAP                      58 Fpre+plt    2    0.0252
+ REGION02  13CornS       1 IDENTIFIED BY GRADE      22 S-pre&plt   4    0.3000
+ REGION02  13CornS       2 ANHY AMMONIA             25 S-pre&plt   4    0.3000
+ REGION02  13CornS      59 NITROGEN SOL 30%         46 PostpltAu   5    0.2000
+ REGION02  13CornS     203 DAP                      58 PostpltAu   5    0.0757

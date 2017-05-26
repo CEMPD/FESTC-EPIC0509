@@ -1,0 +1,8 @@
+ REGION02  12CornGrain   2 ANHY AMMONIA             25 Total       1    0.5000
+ REGION02  12CornGrain  59 NITROGEN SOL 30%         46 Total       1    0.3000
+ REGION02  12CornGrain  60 NITROGEN SOL 32%         47 Total       1    0.1000
+ REGION02  12CornGrain 203 DAP                      58 Total       1    0.0312
+ REGION02  12CornGrain 203 DAP                      58 Fpreplt+p   2    0.0312
+ REGION02  12CornGrain   2 ANHY AMMONIA             25 S-pre&plt   4    0.5000
+ REGION02  12CornGrain  59 NITROGEN SOL 30%         46 PostpltAu   5    0.3000
+ REGION02  12CornGrain  60 NITROGEN SOL 32%         47 PostpltAu   5    0.1000

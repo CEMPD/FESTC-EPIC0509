@@ -1,0 +1,13 @@
+ REGION01  32Soybeans    1 IDENTIFIED BY GRADE      22 Total       1    0.2000
+ REGION01  32Soybeans   60 NITROGEN SOL 32%         47 Total       1    0.4000
+ REGION01  32Soybeans   66 UREA                     51 Total       1    0.3000
+ REGION01  32Soybeans  203 DAP                      58 Total       1    0.0811
+ REGION01  32Soybeans  209 MONOAMM PHOS             64 Total       1    0.0088
+ REGION01  32Soybeans  249 LIQ AMM POLY             76 Total       1    0.0081
+ REGION01  32Soybeans  203 DAP                      58 Fpreplt+p   2    0.0270
+ REGION01  32Soybeans  209 MONOAMM PHOS             64 Fpreplt+p   2    0.0088
+ REGION01  32Soybeans    1 IDENTIFIED BY GRADE      22 S-pre&plt   4    0.2000
+ REGION01  32Soybeans   60 NITROGEN SOL 32%         47 S-pre&plt   4    0.4000
+ REGION01  32Soybeans   66 UREA                     51 S-pre&plt   4    0.3000
+ REGION01  32Soybeans  203 DAP                      58 S-pre&plt   4    0.0541
+ REGION01  32Soybeans  249 LIQ AMM POLY             76 PostpltAu   5    0.0081

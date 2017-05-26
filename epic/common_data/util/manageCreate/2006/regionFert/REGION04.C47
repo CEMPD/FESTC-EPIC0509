@@ -1,0 +1,14 @@
+ REGION04  26Rye        58 NITROGEN SOL 28%         45 Total       1    0.1000
+ REGION04  26Rye        66 UREA                     51 Total       1    0.8000
+ REGION04  26Rye       203 DAP                      58 Total       1    0.0780
+ REGION04  26Rye       209 MONOAMM PHOS             64 Total       1    0.0042
+ REGION04  26Rye       249 LIQ AMM POLY             76 Total       1    0.0528
+ REGION04  26Rye        66 UREA                     51 Fpre+plt    2    0.1500
+ REGION04  26Rye       203 DAP                      58 Fpre+plt    2    0.0078
+ REGION04  26Rye       209 MONOAMM PHOS             64 Fpre+plt    2    0.0042
+ REGION04  26Rye       249 LIQ AMM POLY             76 Fpre+plt    2    0.0117
+ REGION04  26Rye        66 UREA                     51 S-pre&plt   4    0.6500
+ REGION04  26Rye       203 DAP                      58 S-pre&plt   4    0.0624
+ REGION04  26Rye       249 LIQ AMM POLY             76 S-pre&plt   4    0.0411
+ REGION04  26Rye        58 NITROGEN SOL 28%         45 PostpltAu   5    0.1000
+ REGION04  26Rye       203 DAP                      58 PostpltAu   5    0.0078

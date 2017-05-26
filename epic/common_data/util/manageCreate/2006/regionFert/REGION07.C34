@@ -1,0 +1,9 @@
+ REGION07  13CornS       2 ANHY AMMONIA             25 Total       1    0.3000
+ REGION07  13CornS      60 NITROGEN SOL 32%         47 Total       1    0.1000
+ REGION07  13CornS      66 UREA                     51 Total       1    0.1500
+ REGION07  13CornS     209 MONOAMM PHOS             64 Total       1    0.0341
+ REGION07  13CornS       2 ANHY AMMONIA             25 Fpre+plt    2    0.3000
+ REGION07  13CornS     209 MONOAMM PHOS             64 Fpre+plt    2    0.0102
+ REGION07  13CornS     209 MONOAMM PHOS             64 S-pre&plt   4    0.0239
+ REGION07  13CornS      60 NITROGEN SOL 32%         47 PostpltAu   5    0.1000
+ REGION07  13CornS      66 UREA                     51 PostpltAu   5    0.1500

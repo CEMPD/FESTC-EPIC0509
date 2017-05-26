@@ -1,0 +1,13 @@
+ REGION04  14CornS       1 IDENTIFIED BY GRADE      22 Total       1    0.0500
+ REGION04  14CornS       2 ANHY AMMONIA             25 Total       1    0.0500
+ REGION04  14CornS      66 UREA                     51 Total       1    0.2500
+ REGION04  14CornS     203 DAP                      58 Total       1    0.0252
+ REGION04  14CornS     209 MONOAMM PHOS             64 Total       1    0.0068
+ REGION04  14CornS     249 LIQ AMM POLY             76 Total       1    0.0095
+ REGION04  14CornS       2 ANHY AMMONIA             25 Fpre+plt    2    0.0500
+ REGION04  14CornS     203 DAP                      58 Fpre+plt    2    0.0126
+ REGION04  14CornS       1 IDENTIFIED BY GRADE      22 S-pre&plt   4    0.0500
+ REGION04  14CornS      66 UREA                     51 S-pre&plt   4    0.2500
+ REGION04  14CornS     203 DAP                      58 S-pre&plt   4    0.0126
+ REGION04  14CornS     209 MONOAMM PHOS             64 S-pre&plt   4    0.0068
+ REGION04  14CornS     249 LIQ AMM POLY             76 S-pre&plt   4    0.0095

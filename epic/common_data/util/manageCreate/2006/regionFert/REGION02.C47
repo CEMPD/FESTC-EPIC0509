@@ -1,0 +1,11 @@
+ REGION02  26Rye        10 AMMONIUM NITRATE         27 Total       1    0.1000
+ REGION02  26Rye        58 NITROGEN SOL 28%         45 Total       1    0.2500
+ REGION02  26Rye        60 NITROGEN SOL 32%         47 Total       1    0.2000
+ REGION02  26Rye        66 UREA                     51 Total       1    0.4500
+ REGION02  26Rye       203 DAP                      58 Total       1    0.0312
+ REGION02  26Rye        66 UREA                     51 Fpre+plt    2    0.2000
+ REGION02  26Rye        10 AMMONIUM NITRATE         27 S-pre&plt   4    0.1000
+ REGION02  26Rye        58 NITROGEN SOL 28%         45 PostpltAu   5    0.2500
+ REGION02  26Rye        60 NITROGEN SOL 32%         47 PostpltAu   5    0.2000
+ REGION02  26Rye        66 UREA                     51 PostpltAu   5    0.2500
+ REGION02  26Rye       203 DAP                      58 PostpltAu   5    0.0312

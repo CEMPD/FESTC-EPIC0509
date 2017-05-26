@@ -1,0 +1,9 @@
+ REGION04  30SorghumS    2 ANHY AMMONIA             25 Total       1    0.5000
+ REGION04  30SorghumS   66 UREA                     51 Total       1    0.2000
+ REGION04  30SorghumS  209 MONOAMM PHOS             64 Total       1    0.0375
+ REGION04  30SorghumS  249 LIQ AMM POLY             76 Total       1    0.0190
+ REGION04  30SorghumS  209 MONOAMM PHOS             64 Fpre+plt    2    0.0170
+ REGION04  30SorghumS    2 ANHY AMMONIA             25 S-pre&plt   4    0.5000
+ REGION04  30SorghumS  209 MONOAMM PHOS             64 S-pre&plt   4    0.0204
+ REGION04  30SorghumS  249 LIQ AMM POLY             76 S-pre&plt   4    0.0190
+ REGION04  30SorghumS   66 UREA                     51 PostpltAu   5    0.2000
