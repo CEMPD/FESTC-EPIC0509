@@ -9,4 +9,7 @@ Releases are also available for:
 FEST-C version 1.3
 FEST-C version 2.0
 
-To grab a release 
+To clone code from the CEMPD/FEST-C Git repository, specify the branch (i.e. version number) and issue the following command from within a working directory on your server. 
+
+git clone -b 
+
