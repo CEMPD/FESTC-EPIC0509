@@ -6,7 +6,9 @@ FEST-C is a Java-based interface system that is used to simulate daily fertilize
 The FEST-C Git repository is available for release beginning with FEST-C version 1.2. 
 
 Releases will soon be available available for:
+
 FEST-C version 1.3
+
 FEST-C version 2.0
 
 To clone code from the CEMPD/FEST-C Git repository, specify the branch (i.e. version number) and issue the following command from within a working directory on your server. For example, to get FEST-C version 1.2:
