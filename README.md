@@ -5,7 +5,7 @@ FEST-C is a Java-based interface system that is used to simulate daily fertilize
 
 The FEST-C Git repository is available for release beginning with FEST-C version 1.2. 
 
-Releases are also available for:
+Releases will soon be available available for:
 FEST-C version 1.3
 FEST-C version 2.0
 
