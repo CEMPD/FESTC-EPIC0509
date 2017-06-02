@@ -13,4 +13,4 @@ To clone code from the CEMPD/FEST-C Git repository, specify the branch (i.e. ver
 
 git clone -b FESTCv1.2 https://github.com/CEMPD/FEST-C.git 
 
-FEST-C tutorial input data for each FEST-C release version are available from the CMAS Center Software Clearinghouse. From http://www.cmascenter.org, select Download -> Software -> FEST-C and choose the version to get the latest version with input data. 
+It is important to note that the cloned branch does not include common data required as input to run the model.  We recommend those not developing the code to go to the CMAS Center Software Clearinghouse to download the FEST-C version and user's guide.  From http://www.cmascenter.org, select Download -> Software -> FEST-C and choose the version to get the FEST-C version with input data. 
