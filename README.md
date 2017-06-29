@@ -24,17 +24,19 @@ EPIC modeling,
 
 Requirements: FESTCv1.3, [Spatial Allocator Raster Tools (SA 4.3)](https://github.com/CMASCenter/Spatial-Allocator)
 
-To clone code from the CEMPD/FEST-C Git repository, for the latest release, you can clone the repository without specifying a branch.  To clone an earlier release, specify the branch (i.e. version number) and issue the following command from within a working directory on your server. For example, to get FEST-C version 1.3:
+To clone code from the CEMPD/FEST-C Git repository, for the latest release, you can clone the repository without specifying a branch.  To clone an earlier release, specify the branch (i.e. version number) and issue the following command from within a working directory on your server.   
 
-git clone https://github.com/CEMPD/FEST-C.git
+For example, to get FEST-C version 1.3:  
+
+`git clone https://github.com/CEMPD/FEST-C.git`
 
 or
 
-git clone -b FESTCv1.3 https://github.com/CEMPD/FEST-C.git
+`git clone -b FESTCv1.3 https://github.com/CEMPD/FEST-C.git`
 
 To get FEST-C version 1.2:
 
-git clone -b FESTCv1.2 https://github.com/CEMPD/FEST-C.git
+`git clone -b FESTCv1.2 https://github.com/CEMPD/FEST-C.git`
 
 It is important to note that the github version of FESTC does not include common data required as input to run the model.  We recommend those not developing the code to go to the CMAS Center Software Clearinghouse to download the FEST-C version of interest and user's guide.  From http://www.cmascenter.org, select Download -> Software -> FEST-C and choose the version to get the FEST-C version with input data.
 
