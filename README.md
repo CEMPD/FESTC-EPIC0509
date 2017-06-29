@@ -21,13 +21,18 @@ Requirements: FESTCv1.3, [Spatial Allocator v4.3 Raster Tools](https://github.co
         12. Fixed a bug in the daily extraction for EPIC2CMAQ
 
 -  Update release: 02/03/2016
+
         1. Enhanced FEST-C  interface options for spinup and app simulations
         2. Modified daily and annual output to include wind erosion and phosphorus variables
         3. Added more utility tools to process EPIC output data
         4. Elevation bug fix
 
 -  Update release: 09/30/2015  
+
         1. Enhancement on N input and many others
+
 -  Update release: 09/12/2014  
-        2. Bug fix in scenario management
+
+        1. Bug fix in scenario management
+
 -  First release:  05/30/2014
