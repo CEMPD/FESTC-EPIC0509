@@ -1,0 +1,19 @@
+1. Compiling spinup EPIC model
+
+	> make -f Makefile.su clean
+	> make -f Makefile.su 
+
+2. Compiling application EPIC model
+
+	>make -f Makefile.app  clean
+	>make -f Makefile.app 
+
+3. Set permission to other users
+
+	>setfacl -m u:eni:rwx -R /work/MOD3APP/festc/epic/model/current
+        >setfacl -m u:lid:rwx -R /work/MOD3APP/festc/epic/model/current
+
+EPIC0509app.for, modified, Jul 2015: 
+Add 4413 format when reading KR(15), FOPSC, GRIDS_OPC.DAT file
+       READ(KR(15),4413,IOSTAT=NFL)LSTN,OPSCFILE
+       READ(KR(15),*,IOSTAT=NFL)LSTN,OPSCFILE

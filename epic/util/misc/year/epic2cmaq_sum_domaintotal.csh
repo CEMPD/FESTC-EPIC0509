@@ -14,15 +14,18 @@
 set BASE=/nas01/depts/ie/cempd/EPIC/epic/scenarios/
 echo $BASE
 
-set SCEN = "base_2002_HG_TD_MG_372"
+#set SCEN = "FML_2022_HI_HG_TD_MG_413_0acres_grass"
+#set SCEN = "base_2002_HG_TD_MG_372_0acres_grass"
+#set SCEN = "base_2022_HI_HG_TD_MG_372_0acres_grass"
+set SCEN = "base_2022_HI_HG_TD_MG_413_0acres_grass"
 
 #set EPIC output type: spinup or app
-setenv TYPE    spinup   
+setenv TYPE    app   #spinup   
 
 setenv INDIR   ${BASE}/${SCEN}/output4CMAQ/$TYPE/toCMAQ
 setenv SHAREDIR   ${BASE}/${SCEN}/share_data
 
-setenv OUTDIR  "./outputs"
+setenv OUTDIR  "./outputs_production"
 if ( ! -e $OUTDIR ) mkdir -p $OUTDIR
 
 setenv  YEARFILE   ${INDIR}/epic2cmaq_year.nc
@@ -33,9 +36,9 @@ setenv  BELDFILE   ${BASE}/${SCEN}/share_data/beld4_CMAQ12km_2001.nc
 #            TOC TNO3 DN2 YLDG T_YLDG YLDF T_YLDF YLN YLP FTN FTP IRGA WS
 #            NS IPLD  IGMD IHVD  "  # variables in epic2cmaq_year.nc
 
-#foreach spc ( T_YLDF T_YLDG )   
-
-foreach spc ( FNO3 T_YLDG)
+#foreach spc ( PRKN QNO3 SSFN DRNN YLN AVOL YON )
+#foreach spc ( FNO3 FNO FNH3 NFIX GMN NMN )
+foreach spc ( T_YLDG T_YLDF )
 
   setenv SPC  $spc
 

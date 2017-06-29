@@ -2,9 +2,9 @@
 #
 F95=ifort
 
-FFLAGS= -O3 -cm -132 -zero -save -common-args -i-static
+FFLAGS= -O3 -warn nousage -132 -zero -save -common-args 
 
-LDFLAGS= $(FFLAGS) -static -static-intel
+LDFLAGS= $(FFLAGS) -static-intel
 
 EXECR=SITE_FILE_CREATOR.exe
 SRCCR=SITE_FILE_CREATOR.FOR

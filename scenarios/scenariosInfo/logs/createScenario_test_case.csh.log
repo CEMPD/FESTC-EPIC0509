@@ -1,0 +1,60 @@
+Sender: LSF System <lsfadmin@c-195-34>
+Subject: Job 297564: </proj/ie/proj/EPIC/FESTCv1.3_Test/festc1_3/scenarios/scenariosInfo/logs/createScenario_test_case.csh> in cluster <killdevil> Done
+
+Job </proj/ie/proj/EPIC/FESTCv1.3_Test/festc1_3/scenarios/scenariosInfo/logs/createScenario_test_case.csh> was submitted from host <killdevil-login2> by user <jhbowden> in cluster <killdevil>.
+Job was executed on host(s) <c-195-34>, in queue <week>, as user <jhbowden> in cluster <killdevil>.
+</nas02/home/j/h/jhbowden> was used as the home directory.
+</proj/ie/proj/EPIC/FESTCv1.3_Test/festc1_3/scenarios/scenariosInfo/logs> was used as the working directory.
+Started at Tue Jun  6 16:21:59 2017
+Results reported on Tue Jun  6 16:22:00 2017
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+/proj/ie/proj/EPIC/FESTCv1.3_Test/festc1_3/scenarios/scenariosInfo/logs/createScenario_test_case.csh
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   0.06 sec.
+    Total Requested Memory :                     -
+    Delta Memory :                               -
+    Run time :                                   1 sec.
+    Turnaround time :                            6 sec.
+
+The output (if any) follows:
+
+Sender: LSF System <lsfadmin@c-195-29>
+Subject: Job 299134: </proj/ie/proj/EPIC/FESTCv1.3_Test/festc1_3/scenarios/scenariosInfo/logs/createScenario_test_case.csh> in cluster <killdevil> Done
+
+Job </proj/ie/proj/EPIC/FESTCv1.3_Test/festc1_3/scenarios/scenariosInfo/logs/createScenario_test_case.csh> was submitted from host <killdevil-login2> by user <jhbowden> in cluster <killdevil>.
+Job was executed on host(s) <c-195-29>, in queue <week>, as user <jhbowden> in cluster <killdevil>.
+</nas02/home/j/h/jhbowden> was used as the home directory.
+</proj/ie/proj/EPIC/FESTCv1.3_Test/festc1_3/scenarios/scenariosInfo/logs> was used as the working directory.
+Started at Tue Jun  6 16:28:31 2017
+Results reported on Tue Jun  6 16:28:35 2017
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+/proj/ie/proj/EPIC/FESTCv1.3_Test/festc1_3/scenarios/scenariosInfo/logs/createScenario_test_case.csh
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   0.04 sec.
+    Total Requested Memory :                     -
+    Delta Memory :                               -
+    Max Processes :                              1
+    Max Threads :                                1
+    Run time :                                   4 sec.
+    Turnaround time :                            12 sec.
+
+The output (if any) follows:
+

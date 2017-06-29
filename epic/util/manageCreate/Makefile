@@ -1,10 +1,12 @@
-F95  = ifort
+# MAKEFILE FOR INTEL COMPILER on LINUX
+#
 
-#FLGS =  -byteswapio -Bstatic_pgi
-FFLAGS = -O3 -cm -132 -zero -save -common-args -i-static 
-LDFLAGS=  $(FFLAGS) -static -static-intel
+F95=ifort
 
-LIBS = 
+FFLAGS= -O3 -warn nousage -132 -zero -save -common-args 
+
+LDFLAGS= $(FFLAGS) -static-intel 
+
 
 EXEAPP = ManGenFERT.exe
 SRCAPP = ManGenFERT.FOR
@@ -23,10 +25,10 @@ clean:
 	rm -f *.o $(EXEAPP) $(EXESU) $(EXETD)
 
 $(EXEAPP): $(OBJAPP)
-	$(F95) $(LDFLAGS) $(OBJAPP) $(LIBS) -o $@
+	$(F95) $(LDFLAGS) $(OBJAPP) -o $@
 
 $(EXESU): $(OBJSU)
-	$(F95) $(LDFLAGS) $(OBJSU) $(LIBS) -o $@
+	$(F95) $(LDFLAGS) $(OBJSU) -o $@
 
 $(EXETD): $(OBJTD)
-	$(F95) $(LDFLAGS) $(OBJTD) $(LIBS) -o $@
+	$(F95) $(LDFLAGS) $(OBJTD) -o $@

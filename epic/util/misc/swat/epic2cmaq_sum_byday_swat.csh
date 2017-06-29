@@ -1,4 +1,8 @@
 #!/bin/csh -f
+#BSUB -P  EPIC
+#BSUB -M  60
+#BSUB -oo swat_daily.log
+#BSUB -q  week
 #
 ###################################################################
 # Purpose: Prepare inputs for SWAT by summarized data by regions, 
@@ -17,10 +21,15 @@ echo $BASE
 
 #set EPIC output type: spinup or app
 setenv TYPE    app
+setenv YEAR  2002
 
-foreach SCEN ("base_2002_HG_TD_MG_372") #  "base_2022_HI_HG_TD_MG_413_0acres_grass" "FML_2022_HI_HG_TD_MG_413_0acres_grass")
+#foreach SCEN ("FML_2022_HI_HG_TD_MG_413_0acres_grass") #base_2002_HG_TD_MG_372_0acres_grass
+#foreach SCEN ( "base_2022_HI_HG_TD_MG_413_0acres_grass" "base_2002_HG_TD_MG_372_0acres_grass")
+foreach SCEN ( "base_2002_HG_TD_MG_372_0acres_grass")
 
-setenv YEARDIR   ${BASE}/${SCEN}/output4CMAQ/${TYPE}_old1/toCMAQ
+setenv CASE    $SCEN
+setenv YEARDIR   ${BASE}/${SCEN}/output4CMAQ/${TYPE}/toCMAQ
+#setenv YEARDIR   ${BASE}/${SCEN}/output4CMAQ/${TYPE}_old1/toCMAQ
 setenv DAYDIR   ${BASE}/${SCEN}/output4CMAQ/$TYPE/daily 
 
 setenv SHAREDIR   ${BASE}/${SCEN}/share_data
@@ -31,6 +40,7 @@ if ( ! -e $OUTDIR ) mkdir -p $OUTDIR
 setenv  YEARFILE   ${YEARDIR}/epic2cmaq_year.nc
 setenv  SITEFILE   ${SHAREDIR}/EPICSites_Info.csv
 setenv  BELDFILE   ${SHAREDIR}/beld4_CMAQ12km_2001.nc
+#setenv  BELDFILE   ${SHAREDIR}/beld4_camq12km_2022_2011v.nc
 
 
 # set regions to be used in summary any of "FIPS HUC8 REG10"
@@ -41,7 +51,7 @@ setenv  BELDFILE   ${SHAREDIR}/beld4_CMAQ12km_2001.nc
   # NCD file: Y,M,D,PRCP,QNO3,SSFN,PRKN,DN,DN2,AVOL,HMN,NFIX,MUSL,
   #           YP,QAP,YON,YW,Q,HUSC
 
-  #setenv CROPS  "CANOLA BEANS"
+  #setenv CROPS  "BARLEY"
 
   setenv CROPS "ALL"
 
@@ -51,6 +61,6 @@ setenv  BELDFILE   ${SHAREDIR}/beld4_CMAQ12km_2001.nc
 
   echo "Run daily for " ${SCEN}
 
-  R CMD BATCH epic2cmaq_sum_byday_swat.R
+#  R CMD BATCH epic2cmaq_sum_byday_swat.R
 #end  #for region
 end  #for scen
