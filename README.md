@@ -1,6 +1,6 @@
 # Generate fertilizer application input for CMAQ bi-directional NH3 modeling
 
-The Fertilizer Emission Scenario Tool for CMAQ (FEST-C) system is used to simulate daily fertilizer application information using the Environmental Policy Integrated Climate (EPIC) model for a defined CMAQ domain. This EPIC output information is a required input for CMAQ bi-directional NH3 modeling. The FEST-C contains two major components - a Java-based interface and EPIC modeling system. The FEST-C interface integrates the WRF/CMAQ with EPIC through the current release of the Spatial Allocator (SA v4.2) Raster Tools system. The interface contains 13 sub-interface tools which guide users through the EPIC simulations for CMAQ. The FEST-C system can be used in assessing not only the impacts of agricultural fertilization and management practices on the air quality (NH3) and climate (N2O), but also the impacts of meteorology/climate and air quality (N deposition) on crop yield, soil erosion and overall nitrogen, carbon and phosphorus biogeochemical status of the agricultural ecosystem. 
+The Fertilizer Emission Scenario Tool for CMAQ (FEST-C) system is used to simulate daily fertilizer application information using the Environmental Policy Integrated Climate (EPIC) model for a defined CMAQ domain. This EPIC output information is a required input for CMAQ bi-directional NH3 modeling. The FEST-C contains two major components - a Java-based interface and EPIC modeling system. The FEST-C interface integrates the WRF/CMAQ with EPIC through the current release of the Spatial Allocator (SA v4.3) Raster Tools system. The interface contains 13 sub-interface tools which guide users through the EPIC simulations for CMAQ. The FEST-C system can be used in assessing not only the impacts of agricultural fertilization and management practices on the air quality (NH3) and climate (N2O), but also the impacts of meteorology/climate and air quality (N deposition) on crop yield, soil erosion and overall nitrogen, carbon and phosphorus biogeochemical status of the agricultural ecosystem. 
 
 FEST-C works for domains at different resolutions and in any of the four WRF projection coordinate systems - longitude/latitude, Lambert Conformal Conic, Universal Polar Stereographic, and Mercator
 
@@ -22,7 +22,7 @@ EPIC modeling,
 -	Scenarios which contain a test case and to store users\' application scenarios, and
 -	Documentation of the EPIC Modeling System for CMAQ 12km Grids in the FEST-C.
 
-Requirements: FESTCv1.3, [Spatial Allocator v4.3 Raster Tools](https://github.com/CMASCenter/Spatial-Allocator)  
+Requirements: FESTCv1.3, [Spatial Allocator Raster Tools (SA 4.3)](https://github.com/CMASCenter/Spatial-Allocator)  
 
 
 ### UPDATES in Version 1.3 (06/30/2017)
