@@ -16,7 +16,8 @@
 
 # Define environment variables
 #
-setenv    EPIC_DIR   /nas01/depts/ie/cempd/EPIC/epic
+snGenFERT.FOR_fixedRAND_update20160815        ManGenSU.FOR_epicRAND_update201608_biofuel       soilDrain.exe
+etenv    EPIC_DIR   /nas01/depts/ie/cempd/EPIC/epic
 
 # from interface
 setenv    SCEN_DIR   $EPIC_DIR/scenarios/EPIC_112012_su_test

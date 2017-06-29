@@ -1,6 +1,6 @@
 #!/bin/csh -fx
 #BSUB -J daily2mon
-#BSUB -o daily2month.log
+#BSUB -o LOGS/daily2month.log
 #BSUB -P EPIC
 #BSUB -q day
 #
@@ -26,9 +26,8 @@ setenv TYPE   app        # spinup   app
 #set SCEN = "base_2002_HG_TD_MG_372"
 #set SCEN = "base_2022_HI_HG_TD_MG_413_0acres_grass"
 #set SCEN = "FML_2022_HI_HG_TD_MG_413_0acres_grass"
-#foreach SCEN ("base_2022_HI_HG_TD_MG_413_0acres_grass" ) #"FML_2022_HI_HG_TD_MG_413_0acres_grass")
-foreach SCEN ( "base_2002_HG_TD_MG_372_0acres_grass" ) #"base_2022_HI_HG_TD_MG_413_0acres_grass" "FML_2022_HI_HG_TD_MG_413_0acres_grass")
-#foreach SCEN ( "base_2002_HG_TD_MG_372" )
+#foreach SCEN ( "FML_2022_HI_HG_TD_MG_413_0acres_grass" )
+foreach SCEN ( "base_2002_HG_TD_MG_372_0acres_grass" "base_2022_HI_HG_TD_MG_413_0acres_grass" "FML_2022_HI_HG_TD_MG_413_0acres_grass")
 
 setenv  INDIR      ${BASE}/${SCEN}/output4CMAQ/${TYPE}/toCMAQ
 setenv  SHAREDIR   ${BASE}/${SCEN}/share_data
@@ -44,23 +43,25 @@ setenv  BELDFILE   ${SHAREDIR}/beld4_CMAQ12km_2001.nc
 # set regions to be used in summary any of "FIPS HUC8 REG10"
 if ( $SCEN == "base_2002_HG_TD_MG_372_0acres_grass") then
   if ($TYPE == "app") then
-    setenv PATTERN  "base_372_0acre_TD_grass__time"    # for base_2002_HG_TD_MG_372_0acres_grass
+    setenv PATTERN  "base_2002_372_time"    # for base_2002_HG_TD_MG_372_0acres_grass
   else 
     setenv PATTERN  "base_372_0acre_TD_grass_su__time" # for base_2002_HG_TD_MG_372_0acres_grass
   endif
 endif
+
 if ( $SCEN == "base_2022_HI_HG_TD_MG_413_0acres_grass" ) then
   if ($TYPE == "app") then
-    setenv PATTERN  "base2022epic_time"    # for base_2002_HG_TD_MG_372_0acres_grass
+    setenv PATTERN  "base_2022_413_time"    # for base_2002_HG_TD_MG_372_0acres_grass
   else 
     setenv PATTERN  "base2022epic_spinup__time" # for base_2002_HG_TD_MG_372_0acres_grass
   endif
 endif
+
 if ( $SCEN == "FML_2022_HI_HG_TD_MG_413_0acres_grass" ) then
   if ($TYPE == "app") then
-    setenv PATTERN  "FML2022epic_time"    # for base_2002_HG_TD_MG_372_0acres_grass
+    setenv PATTERN  "FML2022_app_time"    # for base_2002_HG_TD_MG_372_0acres_grass
   else
-    setenv PATTERN  "FML2022epic_spinup__time" # for base_2002_HG_TD_MG_372_0acres_grass
+    setenv PATTERN  "FML2022_epic_spinup__time" # for base_2002_HG_TD_MG_372_0acres_grass
   endif
 endif
 if ( $SCEN == "base_2002_HG_TD_MG_372" ) then
@@ -72,9 +73,9 @@ endif
 #setenv PATTERN   'base_2002_372_time'    # for base_2002_HG_TD_MG_372
 #setenv PATTERN   'FML2022epic_time'    # for base_2002_HG_TD_MG_372
 
-foreach reg ( HUC2) #items: HUC1 HUC2 STFIPS FIPS HUC8 REG10  
+foreach reg ( HUC2 ) #items: HUC1 HUC2 STFIPS FIPS HUC8 REG10  
   setenv REG  $reg
-  setenv OUTDIR  ./outputs_$reg
+  setenv OUTDIR  ./outputs_${reg}/${TYPE}
   if ( ! -e $OUTDIR ) mkdir -p $OUTDIR
 
   # set crops in the summary

@@ -1,0 +1,12 @@
+
+1. Calculate the domain total production and area by crop
+epic2cmaq_sum_domaintotal.csh
+
+2. Calculate production and area by crops 
+epic2cmaq_sum_year.csh
+creat three output files: area only, production only, and both. 
+
+For production: Crop 1-6 use T_YLDF,  Crop 7-42 use T_YLDG
+
+3. Added MRB to the last line
+epic2cmaq_sum_year_mrb*

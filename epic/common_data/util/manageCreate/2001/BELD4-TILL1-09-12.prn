@@ -1,11 +1,11 @@
                         Harv   Irr    PrePlt Post-1 Post-2 TilHarvPrePlt Post-1 Post-2 Harv
 R BELD4 name      Num   Equip# Equip# Equip# Equip# Equip# Equip# Days   Frac   Frac   Frac
- 1Hay               22    316    500    152                  152      2                 0.50
- 1Hay_ir            23    327    500    152                  152      2                 0.60
- 1Alfalfa           24    327    500    152                  152      2                 0.60
- 1Alfalfa_ir        25    327    500    152                  152      2                 0.60
- 1Other_grass       26    316    500    152                  152      2                 0.50
- 1Other_grass_ir    27    327    500    152                  152      2                 0.60
+ 1Hay               22    316    500    152                  152      2                 0.70
+ 1Hay_ir            23    327    500    152                  152      2                 0.70
+ 1Alfalfa           24    327    500    152                  152      2                 0.70
+ 1Alfalfa_ir        25    327    500    152                  152      2                 0.70
+ 1Other_grass       26    316    500    152                  152      2                 0.70
+ 1Other_grass_ir    27    327    500    152                  152      2                 0.70
  1Barley            28    292    500    152                  152      2                 1.00
  1Barley_ir         29    292    500    152                  152      2                 1.00
  1BeansEdible       30    287    500    152    158    158    152      2    0.3    0.4   1.00

@@ -9,6 +9,8 @@ if(! require(M3)) stop("Required package M3 could not be loaded")
 
 
 # get file names
+scen     <- Sys.getenv("CASE")
+year     <- Sys.getenv("YEAR")
 day_dir  <- Sys.getenv("DAYDIR")
 yearfile <- Sys.getenv("YEARFILE")
 sitefile <- Sys.getenv("SITEFILE")
@@ -24,7 +26,6 @@ print(paste(">>== output file: ", outname_csv))
 temcrops <- Sys.getenv("CROPS")
 temcrops <- toupper(temcrops)
 crops    <- (strsplit(temcrops, " +"))[[1]]
-
 
 allcrops <- c("HAY", "ALFALFA", "OTHER_GRASS", "BARLEY", "EBEANS", "CORNG", "CORNS", "COTTON", "OATS", "PEANUTS", "POTATOES", "RICE", "RYE", "SORGHUMG", "SORGHUMS", "SOYBEANS", "SWHEAT", "WWHEAT", "OTHER_CROP", "CANOLA", "BEANS")
 
@@ -66,12 +67,12 @@ frac.data <- get.M3.var(file = beldfile,
 #out.df <- data.frame(GRIDID=sitetable$GRIDID, HUC8=sitetable$HUC8)
 
 # Extract crop data from yearfile
-#FLODAY   	Q
+#FLODAY   	Q, QDRN, SSF
 #SEDDAY  	MUSL
 #ORGNDAY 	YON
 #ORGPDAY  	YP
-#NO3DAY  	QNO3
-#MINPDAY 	QAP
+#NO3DAY  	QNO3, SSFN, DRNN
+#MINPDAY 	QAP, SSFP?,DRNP?
 #NH3DAY  	
 #NO2DAY	
 
@@ -97,24 +98,37 @@ for ( i in tlays ) {
    }
 
    # check if file is empty
-   if ( file.info(dayfile)$size == 0 )  next
+   if ( file.info(dayfile)$size == 0 ) {
+     print(paste("Waring: ", dayfile, " has zero line. ")) 
+     next
+   }
 
    # check if there are any data in file
    daytable <- data.frame(read.csv(dayfile,header=TRUE, sep=",", skip=0, na.strings="NA"))
    if ( length(daytable$Y) == 0 )  next
 
-   #str(daytable)
+   str(daytable)
    # get grid ids, 11677030/1000; transfer date to Jdate
    daytable$GRIDID <- floor(daytable$RUN.NAME/1000)
-   indic <- daytable$Y == 2002 
+   if ( grepl('FML', scen)>0 )  daytable$GRIDID <- floor(daytable$RUN.NAME/10000)
+
+   indic <- daytable$Y == year 
    daytable <- daytable[indic,]
    daytable$DATE   <- paste(daytable$M,daytable$D,daytable$Y, sep="/")
    daytable$DATE   <- as.Date(daytable$DATE, "%m/%d/%Y")
    daytable$DATE   <- format(daytable$DATE, "%m/%d/%Y")
    #daytable$JDATE  <- as.numeric(format(daytable$DATE, "%j"))
-    
+   daytable$Floday <- daytable$Q+daytable$QDRN+daytable$SSF
+#  daytable$Q      <- NULL
+#  daytable$QDRN   <- NULL
+#  daytable$SSF    <- NULL
+   daytable$No3day <- daytable$QNO3+daytable$SSFN+daytable$DRNN
+#  daytable$QNO3   <- NULL
+#  daytable$SSFN   <- NULL
+#  daytable$DRNN   <- NULL
+   daytable$Minpday <- daytable$QAP+daytable$DRNP
 
-   day.df <- data.frame(GRIDID=daytable$GRIDID,DATE=daytable$DATE,Floday=daytable$Q,Sedday=daytable$MUSL,Orgnday=daytable$YON,Orgpday=daytable$YP,No3day=daytable$QNO3,Nh3day=0.0,No2day=0.0,Minpday=daytable$QAP,Cbodday=0.0,Disoxday=0.0,Chladay=0.0,Solpstday=0.0,Srbpstday=0.0,Bactpday=0.0,Bactlpday=0.0,Cmtl1day=0.0,Cmtl2day=0.0,Cmtl3day=0.0)
+   day.df <- data.frame(GRIDID=daytable$GRIDID,DATE=daytable$DATE,Floday=daytable$Floday,Sedday=daytable$MUSL,Orgnday=daytable$YON,Orgpday=daytable$YP,No3day=daytable$No3day,Nh3day=0.0,No2day=0.0,Minpday=daytable$Minpday,Cbodday=0.0,Disoxday=0.0,Chladay=0.0,Solpstday=0.0,Srbpstday=0.0,Bactpday=0.0,Bactlpday=0.0,Cmtl1day=0.0,Cmtl2day=0.0,Cmtl3day=0.0)
 
    str(day.df)
    # percent file
@@ -168,7 +182,7 @@ for ( huc in names(spt_huc8) ) {
     tt.df <-  spt_huc8[[huc]] 
     tt.df$HUC8 <- NULL
     str(tt.df)
-    write.table(tt.df, file = paste(outname_csv, huc,"_2002.csv", sep =""), col.names=T,row.names=F, append=F, quote=F, sep=",")
+    write.table(tt.df, file = paste(outname_csv, huc,"_",scen,".csv", sep =""), col.names=T,row.names=F, append=F, quote=F, sep=",")
 } 
 #lapply(names(spt_huc8), function(x){write.table(spt_huc8[[x]], file = paste(outname_csv, x,"_2002.csv", sep =""), col.names=T,row.names=F, append=F, quote=F, sep=",")})
 
@@ -179,6 +193,6 @@ com.df$HUC2<- floor(com.df$HUC8/1000000)
 com.df$HUC8 <- NULL
 
 com_huc2.df <- aggregate(. ~ HUC2, data=com.df, FUN=sum)
-write.table(com_huc2.df, file = paste(outname_csv, "_QA.csv", sep =""), col.names=T,row.names=F, append=F, quote=F, sep=",")
+write.table(com_huc2.df, file = paste(outname_csv, scen,"_QA.csv", sep =""), col.names=T,row.names=F, append=F, quote=F, sep=",")
 
 

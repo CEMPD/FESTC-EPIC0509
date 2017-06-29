@@ -2,12 +2,12 @@
 #
 F95=ifort
 
-FFLAGS= -O3 -cm -132 -zero -save -common-args -i-static -traceback
+FFLAGS= -O3 -warn nousage -132 -zero -save -common-args -traceback
 
-LDFLAGS= $(FFLAGS) -static -static-intel
+LDFLAGS= $(FFLAGS) -static-intel
 
-EXEAPP=EPIC0509app.exe
-EXESU=EPIC0509su.exe
+EXEAPP=EPICapp.exe
+EXESU=EPICsu.exe
 
 SRCAPP=EPIC0509app.for
 SRCSU=EPIC0509su.for

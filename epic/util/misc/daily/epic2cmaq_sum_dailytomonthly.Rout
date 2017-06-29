@@ -1,0 +1,1096 @@
+
+R version 2.15.1 (2012-06-22) -- "Roasted Marshmallows"
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> ## set necessary libraries
+> library(fields)
+Loading required package: spam
+Spam version 0.29-2 (2012-08-17) is loaded.
+Type 'help( Spam)' or 'demo( spam)' for a short introduction 
+and overview of this package.
+Help for individual functions is also obtained by adding the
+suffix '.spam' to the function name, e.g. 'help( chol.spam)'.
+
+Attaching package: 'spam'
+
+The following object(s) are masked from 'package:base':
+
+    backsolve, forwardsolve
+
+> library(ncdf)
+> library(rgdal)
+Loading required package: sp
+Geospatial Data Abstraction Library extensions to R successfully loaded
+Loaded GDAL runtime: GDAL 1.8.1, released 2011/07/09
+Path to GDAL shared files: /nas02/apps/gdal-1.8.1/share/gdal
+Loaded PROJ.4 runtime: Rel. 4.7.1, 23 September 2009, [PJ_VERSION: 470]
+Path to PROJ.4 shared files: (autodetected)
+> library(maps)
+> library(snow)
+> # Code by J. Swall with various functions for manipulating CMAQ files using ncdf and rgdal libraries.
+> source("./func_for_CMAQ_files_with_ncdf_rgdal.r")
+> 
+> 
+> C.names <- c("Hay", "Hay_ir", "Alfalfa", "Alfalfa_ir", "Other_Grass", 
++              "Other_Grass_ir", "Barley", "Barley_ir", "BeansEdible", 
++ 	     "BeansEdible_ir", "CornGrain", "CornGrain_ir", "CornSilage", 
++ 	     "CornSilage_ir", "Cotton", "Cotton_ir", "Oats", "Oats_ir", 
++ 	     "Peanuts", "Peanuts_ir", "Potatoes", "Potatoes_ir", "Rice", 
++ 	     "Rice_ir", "Rye", "Rye_ir", "SorghumGrain", "SorghumGrain_ir",
++              "SorghumSilage", "SorghumSilage_ir", "Soybeans", "Soybeans_ir",
++              "Wheat_Spring", "Wheat_Spring_ir", "Wheat_Winter", "Wheat_Winter_ir",
++              "Other_Crop", "Other_Crop_ir", "Canola", "Canola_ir", "Beans", 
++ 	     "Beans_ir")
+> 
+> 
+> S_func <- function(x) sum(x, na.rm = T)
+> 
+> # get file names
+> indir    <- Sys.getenv("INDIR")
+> outfile  <- Sys.getenv("OUTFILE")
+> B_dat    <- Sys.getenv("BELDFILE")
+> sitefile <- Sys.getenv("SITEFILE")
+> pat      <- Sys.getenv("PATTERN")
+> outname_csv <- Sys.getenv("OUTFILE")
+> print(paste(">>== site file:   ", sitefile))
+[1] ">>== site file:    /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/share_data/EPICSites_Info.csv"
+> 
+> # inputfiles 
+> B_dat   <- open.ncdf(paste(scendir,"/share_data/beld4_CMAQ12km_2001.nc",sep=""))
+> 
+> #Create daily file names
+> #crop fraction file
+> y.files   <- dir(paste(indir,"/",sep=""), pattern=pat )
+> 
+> mm     <- 00
+> mon.l1.tot <- NULL
+> mon.l2.tot <- NULL
+> 
+> #change 1:1 to 1:12 to run entire year
+> 
+> out.file.1 <- outfile
+> out.df <- NULL
+> for( i in 1:12 ){
++ 
++    print(paste("processing month: ", i))
++    if(i<10) {
++       yyyymm <- paste("time20020",i,sep="")
++    }else {
++       yyyymm <- paste("time2002",i,sep="")
++    }
++    files  <- y.files[grep(yyyymm,y.files)] 
++    N_f    <- length(files)
++ 
++    if(i<10){
++        mm <- paste("20020",i,sep="")
++    }else {
++        mm <- paste("2002" ,i,sep="")
++    }
++    out.file.1 <- paste(outfile,"_",mm,"_HUC2.csv",sep="")
++ 
++ 
++    for(l in 1:N_f) {
++ 
++       in.file.1 <- paste(paste(indir, "/",files[l],sep=""))
++       #in.file.1 <- paste(paste(scendir,"/output4CMAQ/app/toCMAQ/",sep=""),files[l],sep="")        
++       # monthly fertiliztion files   
++    
++       E_dat     <- open.ncdf(in.file.1)
++       print(paste("processing",in.file.1))   
++       
++ # Read in Beld 4 data
++ 
++ #The daily files are 3 dimensional, x,y,and variable by crop
++   
++       F1.tmp        <- get.var.ncdf(E_dat, varid = "L1_ANH3")
++       F2.tmp        <- get.var.ncdf(E_dat, varid = "L2_ANH3")
++       LAT           <- get.var.ncdf(B_dat, varid = "XLAT_M")
++       LONG          <- get.var.ncdf(B_dat, varid = "XLONG_M")
++       F3.tmp        <- get.var.ncdf(E_dat,varid="L1_ANO3")
++       F4.tmp       <- get.var.ncdf(E_dat,varid="L2_ANO3")
++       F5.tmp        <- get.var.ncdf(E_dat,varid="L1_AON")
++       F6.tmp        <- get.var.ncdf(E_dat,varid="L2_AON")
++       F7.tmp        <- get.var.ncdf(E_dat,varid="QNO3")
++       F8.tmp        <- get.var.ncdf(E_dat,varid="NFIX")
++       F9.tmp        <- get.var.ncdf(E_dat,varid="PRKN")
++       F10.tmp        <- get.var.ncdf(E_dat,varid="UN1")
++       F11.tmp        <- get.var.ncdf(E_dat,varid="SSFN")
++ #      F12.tmp       <-  get.var.ncdf(E_dat,varid="HUI")
++ 
++ #  print (ROWN)
++ 
++       F13.tmp         <- get.var.ncdf(E_dat,varid="UN1")
++ 
++ 
++ #These commands identify the missing data flags so all you are left with are valid obs
++ 
++       V1.app         <- which(F1.tmp > 0, arr.ind = T)
++       V2.app         <- which(F2.tmp > 0, arr.ind = T)
++       V3.app         <- which(F3.tmp > 0, arr.ind = T)
++       V4.app         <- which(F4.tmp > 0, arr.ind = T)
++       V5.app         <- which(F5.tmp > 0, arr.ind = T)
++       V6.app         <- which(F6.tmp > 0, arr.ind = T)
++       V7.app         <- which(F7.tmp > 0, arr.ind = T)
++       V8.app         <- which(F8.tmp > 0, arr.ind = T)
++       V9.app         <- which(F9.tmp > 0, arr.ind = T)
++       V10.app        <- which(F10.tmp > 0, arr.ind = T)
++       V11.app        <- which(F11.tmp > 0, arr.ind = T)
++ #      V12.app        <- which(F12.tmp >0, arr.ind=T) 
++       V13.app        <- which(F10.tmp > 0, arr.ind = T)
++ 
++ 
++ #If it is the first day of the month, set up an array populated with 0's
++ 
++       if(l == 1){
++          F1.app         <- array(0,dim(F1.tmp))
++          F2.app         <- array(0,dim(F2.tmp))
++          F3.app         <- array(0,dim(F3.tmp))
++          F4.app         <- array(0,dim(F4.tmp))
++          F5.app         <- array(0,dim(F5.tmp))
++          F6.app         <- array(0,dim(F6.tmp))
++          F7.app         <- array(0,dim(F7.tmp))
++          F8.app         <- array(0,dim(F8.tmp))
++          F9.app         <- array(0,dim(F9.tmp))
++          F10.app        <- array(0,dim(F10.tmp))
++          F11.app        <- array(0,dim(F11.tmp))
++ #         F12.app        <- array(0,dim(F12.tmp))
++          F13.app        <- array(0,dim(F13.tmp))
++          UNO  <-           array(0,dim(F13.tmp))
++ 
++       }
++ 
++ #Variable UN1 is cummulative so create a new array that is the difference between days in month.  The 
++ #array I have created is identical to F10.tmp and so I need to define the .app elements in it just like
++ #we do for F13.tmp.  Since the daily files are closed each day and month, it would be really difficult (for
++ #me) to carry differences out across months so I am sacrificing uptake on the first day of each month.  There
++ #are very few months of the year that the area weighted value would be somewhat significant.
++ 
++ 
++         if((length(V13.app)>0) & (l==1)) {
++    
++           UNO[V13.app]=F13.tmp[V13.app]
++           F13.tmp[V13.app]=0
++ #          F12.tmp[V12.app]=0
++         } else {
++           F13.tmp[V13.app]= F10.tmp[V10.app]-UNO[V13.app]
++           F13.tmp[V13.app][F13.tmp[V13.app] <= -10.0] <- 0.0
++           UNO[V13.app]=F10.tmp[V10.app]
++        }
++ 
++ #Uptake is reset to zero for a crop when it is harvested.  At that point,the difference could be negative.  To
++ #avoid adding in a negative number, whenever the differnece is negative, set the daily uptake to 0.  The line
++ #below subsets the F13.tmp array, the subsets it again by the boolean statement and performs the zero operation
++ #only on the members of the booleansubsetted array. 
++ 
++ 
++ #       F13.tmp[V13.app][F13.tmp[V13.app] < 0] <- 0.0
++        
++ #       if(F10.tmp[V10.app]==0) {
++ #           F13.tmp[V13.ap]=0
++ #        }
++ 
++ #        if((length(V10.app)>0) & (F10.tmp[V10.app][F10.tmp[V10.app]==0])) { 
++ #              F13.tmp[V13.app]=0  
++ #             } 
++ 
++ #If the data value is valid, then sum for the month
++ 
++       if(length(V1.app)>0)F1.app[V1.app]  <- F1.app[V1.app] + F1.tmp[V1.app]
++       if(length(V2.app)>0)F2.app[V2.app]  <- F2.app[V2.app] + F2.tmp[V2.app]
++       if(length(V3.app)>0)F3.app[V3.app]  <- F3.app[V3.app] + F3.tmp[V3.app]
++       if(length(V4.app)>0)F4.app[V4.app]  <- F4.app[V4.app] + F4.tmp[V4.app]
++       if(length(V5.app)>0)F5.app[V5.app]  <- F5.app[V5.app] + F5.tmp[V5.app]
++       if(length(V6.app)>0)F6.app[V6.app]  <- F6.app[V6.app] + F6.tmp[V6.app]
++       if(length(V7.app)>0)F7.app[V7.app]  <- F7.app[V7.app] + F7.tmp[V7.app]
++       if(length(V8.app)>0)F8.app[V8.app]  <- F8.app[V8.app] + F8.tmp[V8.app]
++       if(length(V9.app)>0)F9.app[V9.app]  <- F9.app[V9.app] + F9.tmp[V9.app]
++       if(length(V10.app)>0)F10.app[V10.app]  <- F10.app[V10.app] + F10.tmp[V10.app]
++       if(length(V11.app)>0)F11.app[V11.app]  <- F11.app[V11.app] + F11.tmp[V11.app]
++ #      if(length(V12.app)>0)F12.app[V12.app]  <- F12.app[V12.app] + F12.tmp[V12.app]
++ 
++       if(length(V13.app)>0)F13.app[V13.app]  <- F13.app[V13.app] + F13.tmp[V13.app]
++ 
++ #pull in the crop fraction variable.  This also is a 2D array (x,y,CROPF)
++       Cfrac         <- get.var.ncdf(B_dat, varid = "CROPF")/100
++       E_dat     <- close.ncdf(E_dat)
++       remove(E_dat)     
++    }
++   
++ #apply(monthly array;c(1,2,3) means apply the function over row(1),col(2),variable(3);sum is the function.  As currently written this expression computes a domain-wide sum, multiplies it by the grid cell crop fraction and then sums to a domain-wide NLCD class total.
++        
++ # Transfer from kg/ha to kg/km**2, 0.01km**2=1ha
++     gridarea = 144  #km^2
++     FF1=F1.app*Cfrac*100*gridarea
++     FF2=F2.app*Cfrac*100*gridarea
++     FF3=F3.app*Cfrac*100*gridarea
++     FF4=F4.app*Cfrac*100*gridarea
++     FF5=F5.app*Cfrac*100*gridarea
++     FF6=F6.app*Cfrac*100*gridarea
++     FF7=F7.app*Cfrac*100*gridarea
++     FF8=F8.app*Cfrac*100*gridarea
++     FF9=F9.app*Cfrac*100*gridarea
++     FF10=F10.app*Cfrac*100*gridarea
++     FF11=F11.app*Cfrac*100*gridarea
++ #    FF12=F12.app*Cfrac*100
++     FF13=F13.app*Cfrac*100*gridarea
++ 
++ 
++     L1_NH3  <- apply(FF1,c(1,2),sum)
++     L2_NH3  <- apply (FF2,c(1,2),sum)
++     L1_NO3  <- apply (FF3,c(1,2),sum)
++     L2_NO3  <- apply (FF4,c(1,2),sum)
++     L1_ON  <- apply (FF5,c(1,2),sum)
++     L2_ON  <- apply (FF6,c(1,2),sum)
++     TQNO3  <- apply (FF7,c(1,2),sum)
++     TNFIX  <- apply (FF8,c(1,2),sum)
++     TPRKN  <- apply (FF9,c(1,2),sum)
++     TUN1  <- apply (FF10,c(1,2),sum)
++     TSSFN <- apply (FF11,c(1,2),sum)
++ 
++     LTOT_ON=L1_ON+L2_ON
++     LTOT_IN=L1_NH3+L2_NH3+L1_NO3+L2_NO3 
++ 
++     TUN2 <- apply (FF13,c(1,2),sum)
++ #    HUI  <- apply (FF12,c(1,2),sum)
++ 
++ #}
++ 
++ 
++ #Create a matrix to hold the grid id's and then forcibly populate
++    nrow=299
++    ncol=459
++ #  grids <- nrow*ncol
++ 
++    GRIDID <- as.matrix(rep(0,times=nrow*ncol),nrow=nrow, ncol=ncol)
++    dim(GRIDID) <- c(ncol,nrow)
++ 
++  
++     for(j in 1:nrow) {
++     for(k in 1:ncol) {
++ 
++     GRIDID[k,j]=(((j-1)*ncol)+k)
++ 
++       }
++       }
++ 
++ #site file: GRIDID,XLONG,YLAT,ELEVATION,SLOPE_P,HUC8,REG10,STFIPS,CNTYFIPS,GRASS,CROPS,TOTAL,COUNTRY,CNTY_PRO
++   sitetable <- data.frame(read.csv(sitefile,header=TRUE, sep=",", skip=0, na.strings="NA", strip.white=TRUE))
++   sitetable$COUNTRY  <- NULL
++   sitetable$CNTY_PRO <- NULL
++ 
++ #The matrix command "unwinds" the multi-dimensional arrays.  It unwinds all rows& col1,all rows & col2, etc.
++ #to create and output array that is lat,long,l1,l2
++ 
++ out.array <- data.frame(GRIDID=matrix(GRIDID),ltot_on=matrix(LTOT_ON),ltot_in=matrix(LTOT_IN),tqno3=matrix(TQNO3),tnfix=matrix(TNFIX),tprkn=matrix(TPRKN),tun2=matrix(TUN2),tssfn=matrix(TSSFN))
++ site.tmp <- data.frame(GRIDID=sitetable$GRIDID, HUC2=floor(sitetable$HUC8/1000000))
++ 
++ out.array <- merge(out.array, site.tmp, by="GRIDID" )
++ out.array$GRIDID <- NULL
++ com.df <- aggregate(. ~ HUC2, data=out.array, FUN=sum)
++    
++ #Calculate MRB in kg/km^2
++ # number of each HUC2
++ # sum: MRB is made up of your HUC-2 numbers 5,6,7,8,10 and 11.
++ indic  <- com.df$HUC2 %in% c(5,6,7,8,10,11)
++ com.df <- com.df[indic,]
++ count.df  <- aggregate(cbind(count = tnfix) ~ HUC2, data = out.array, FUN = function(x){NROW(x)})
++ indic  <- count.df$HUC2 %in% c(5,6,7,8,10,11)
++ count.df <- count.df[indic,]
++ MRB_count <- sum(count.df$tnfix)
++ 
++ com.df$HUC2 <- NULL
++ com.df <- colSums(com.df)
++ com.df <- com.df*144
++ 
++ #print(paste("write output file: ", out.file.1, sep=""))
++ com.df$MONTH <- i
++ com.df$CELLS <- MRB_count
++ str(com.df)
++ tt.df <- out.df
++ str(out.df)
++ print(i>1)
++ if ( i == 1 ) out.df <- as.data.frame(com.df)
++ #if ( i > 1 )  out.df <- do.call("rbind", out.df, com.df)
++ if ( i > 1 )  out.df <- rbind(out.df, as.data.frame(com.df))
++ str(out.df)
++ 
++ print(length(out.df$ltot_on))
++ 
++ }
+[1] "processing month:  1"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020101.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020102.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020103.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020104.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020105.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020106.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020107.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020108.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020109.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020110.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020111.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020112.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020113.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020114.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020115.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020116.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020117.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020118.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020119.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020120.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020121.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020122.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020123.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020124.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020125.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020126.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020127.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020128.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020129.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020130.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020131.nc"
+List of 9
+ $ ltot_on: num 4.64e+10
+ $ ltot_in: num 8.02e+10
+ $ tqno3  : num 1.7e+09
+ $ tnfix  : num 2.29e+08
+ $ tprkn  : num 4.19e+09
+ $ tun2   : num -1.09e+10
+ $ tssfn  : num 1.11e+09
+ $ MONTH  : int 1
+ $ CELLS  : int 20287
+ NULL
+[1] FALSE
+'data.frame':	1 obs. of  9 variables:
+ $ ltot_on: num 4.64e+10
+ $ ltot_in: num 8.02e+10
+ $ tqno3  : num 1.7e+09
+ $ tnfix  : num 2.29e+08
+ $ tprkn  : num 4.19e+09
+ $ tun2   : num -1.09e+10
+ $ tssfn  : num 1.11e+09
+ $ MONTH  : int 1
+ $ CELLS  : int 20287
+[1] 1
+[1] "processing month:  2"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020201.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020202.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020203.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020204.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020205.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020206.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020207.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020208.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020209.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020210.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020211.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020212.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020213.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020214.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020215.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020216.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020217.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020218.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020219.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020220.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020221.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020222.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020223.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020224.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020225.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020226.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020227.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020228.nc"
+List of 9
+ $ ltot_on: num 2.04e+09
+ $ ltot_in: num 3.89e+10
+ $ tqno3  : num 2.41e+09
+ $ tnfix  : num 1.42e+09
+ $ tprkn  : num 4.07e+09
+ $ tun2   : num 6.1e+10
+ $ tssfn  : num 1.03e+09
+ $ MONTH  : int 2
+ $ CELLS  : int 20287
+'data.frame':	1 obs. of  9 variables:
+ $ ltot_on: num 4.64e+10
+ $ ltot_in: num 8.02e+10
+ $ tqno3  : num 1.7e+09
+ $ tnfix  : num 2.29e+08
+ $ tprkn  : num 4.19e+09
+ $ tun2   : num -1.09e+10
+ $ tssfn  : num 1.11e+09
+ $ MONTH  : int 1
+ $ CELLS  : int 20287
+[1] TRUE
+'data.frame':	2 obs. of  9 variables:
+ $ ltot_on: num  4.64e+10 2.04e+09
+ $ ltot_in: num  8.02e+10 3.89e+10
+ $ tqno3  : num  1.70e+09 2.41e+09
+ $ tnfix  : num  2.29e+08 1.42e+09
+ $ tprkn  : num  4.19e+09 4.07e+09
+ $ tun2   : num  -1.09e+10 6.10e+10
+ $ tssfn  : num  1.11e+09 1.03e+09
+ $ MONTH  : int  1 2
+ $ CELLS  : int  20287 20287
+[1] 2
+[1] "processing month:  3"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020301.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020302.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020303.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020304.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020305.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020306.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020307.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020308.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020309.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020310.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020311.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020312.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020313.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020314.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020315.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020316.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020317.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020318.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020319.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020320.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020321.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020322.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020323.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020324.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020325.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020326.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020327.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020328.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020329.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020330.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020331.nc"
+List of 9
+ $ ltot_on: num 1.75e+09
+ $ ltot_in: num 1.14e+11
+ $ tqno3  : num 7.4e+09
+ $ tnfix  : num 5.68e+09
+ $ tprkn  : num 9.9e+09
+ $ tun2   : num 1.79e+11
+ $ tssfn  : num 2.1e+09
+ $ MONTH  : int 3
+ $ CELLS  : int 20287
+'data.frame':	2 obs. of  9 variables:
+ $ ltot_on: num  4.64e+10 2.04e+09
+ $ ltot_in: num  8.02e+10 3.89e+10
+ $ tqno3  : num  1.70e+09 2.41e+09
+ $ tnfix  : num  2.29e+08 1.42e+09
+ $ tprkn  : num  4.19e+09 4.07e+09
+ $ tun2   : num  -1.09e+10 6.10e+10
+ $ tssfn  : num  1.11e+09 1.03e+09
+ $ MONTH  : int  1 2
+ $ CELLS  : int  20287 20287
+[1] TRUE
+'data.frame':	3 obs. of  9 variables:
+ $ ltot_on: num  4.64e+10 2.04e+09 1.75e+09
+ $ ltot_in: num  8.02e+10 3.89e+10 1.14e+11
+ $ tqno3  : num  1.70e+09 2.41e+09 7.40e+09
+ $ tnfix  : num  2.29e+08 1.42e+09 5.68e+09
+ $ tprkn  : num  4.19e+09 4.07e+09 9.90e+09
+ $ tun2   : num  -1.09e+10 6.10e+10 1.79e+11
+ $ tssfn  : num  1.11e+09 1.03e+09 2.10e+09
+ $ MONTH  : int  1 2 3
+ $ CELLS  : int  20287 20287 20287
+[1] 3
+[1] "processing month:  4"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020401.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020402.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020403.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020404.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020405.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020406.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020407.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020408.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020409.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020410.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020411.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020412.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020413.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020414.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020415.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020416.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020417.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020418.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020419.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020420.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020421.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020422.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020423.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020424.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020425.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020426.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020427.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020428.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020429.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020430.nc"
+List of 9
+ $ ltot_on: num 2.49e+10
+ $ ltot_in: num 3.08e+11
+ $ tqno3  : num 9.56e+09
+ $ tnfix  : num 3.24e+10
+ $ tprkn  : num 1.15e+10
+ $ tun2   : num 2.86e+11
+ $ tssfn  : num 2.65e+09
+ $ MONTH  : int 4
+ $ CELLS  : int 20287
+'data.frame':	3 obs. of  9 variables:
+ $ ltot_on: num  4.64e+10 2.04e+09 1.75e+09
+ $ ltot_in: num  8.02e+10 3.89e+10 1.14e+11
+ $ tqno3  : num  1.70e+09 2.41e+09 7.40e+09
+ $ tnfix  : num  2.29e+08 1.42e+09 5.68e+09
+ $ tprkn  : num  4.19e+09 4.07e+09 9.90e+09
+ $ tun2   : num  -1.09e+10 6.10e+10 1.79e+11
+ $ tssfn  : num  1.11e+09 1.03e+09 2.10e+09
+ $ MONTH  : int  1 2 3
+ $ CELLS  : int  20287 20287 20287
+[1] TRUE
+'data.frame':	4 obs. of  9 variables:
+ $ ltot_on: num  4.64e+10 2.04e+09 1.75e+09 2.49e+10
+ $ ltot_in: num  8.02e+10 3.89e+10 1.14e+11 3.08e+11
+ $ tqno3  : num  1.70e+09 2.41e+09 7.40e+09 9.56e+09
+ $ tnfix  : num  2.29e+08 1.42e+09 5.68e+09 3.24e+10
+ $ tprkn  : num  4.19e+09 4.07e+09 9.90e+09 1.15e+10
+ $ tun2   : num  -1.09e+10 6.10e+10 1.79e+11 2.86e+11
+ $ tssfn  : num  1.11e+09 1.03e+09 2.10e+09 2.65e+09
+ $ MONTH  : int  1 2 3 4
+ $ CELLS  : int  20287 20287 20287 20287
+[1] 4
+[1] "processing month:  5"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020501.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020502.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020503.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020504.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020505.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020506.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020507.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020508.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020509.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020510.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020511.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020512.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020513.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020514.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020515.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020516.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020517.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020518.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020519.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020520.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020521.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020522.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020523.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020524.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020525.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020526.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020527.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020528.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020529.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020530.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020531.nc"
+List of 9
+ $ ltot_on: num 2.43e+10
+ $ ltot_in: num 2e+11
+ $ tqno3  : num 8.04e+09
+ $ tnfix  : num 7.45e+10
+ $ tprkn  : num 1.03e+10
+ $ tun2   : num 4.04e+11
+ $ tssfn  : num 2.85e+09
+ $ MONTH  : int 5
+ $ CELLS  : int 20287
+'data.frame':	4 obs. of  9 variables:
+ $ ltot_on: num  4.64e+10 2.04e+09 1.75e+09 2.49e+10
+ $ ltot_in: num  8.02e+10 3.89e+10 1.14e+11 3.08e+11
+ $ tqno3  : num  1.70e+09 2.41e+09 7.40e+09 9.56e+09
+ $ tnfix  : num  2.29e+08 1.42e+09 5.68e+09 3.24e+10
+ $ tprkn  : num  4.19e+09 4.07e+09 9.90e+09 1.15e+10
+ $ tun2   : num  -1.09e+10 6.10e+10 1.79e+11 2.86e+11
+ $ tssfn  : num  1.11e+09 1.03e+09 2.10e+09 2.65e+09
+ $ MONTH  : int  1 2 3 4
+ $ CELLS  : int  20287 20287 20287 20287
+[1] TRUE
+'data.frame':	5 obs. of  9 variables:
+ $ ltot_on: num  4.64e+10 2.04e+09 1.75e+09 2.49e+10 2.43e+10
+ $ ltot_in: num  8.02e+10 3.89e+10 1.14e+11 3.08e+11 2.00e+11
+ $ tqno3  : num  1.70e+09 2.41e+09 7.40e+09 9.56e+09 8.04e+09
+ $ tnfix  : num  2.29e+08 1.42e+09 5.68e+09 3.24e+10 7.45e+10
+ $ tprkn  : num  4.19e+09 4.07e+09 9.90e+09 1.15e+10 1.03e+10
+ $ tun2   : num  -1.09e+10 6.10e+10 1.79e+11 2.86e+11 4.04e+11
+ $ tssfn  : num  1.11e+09 1.03e+09 2.10e+09 2.65e+09 2.85e+09
+ $ MONTH  : int  1 2 3 4 5
+ $ CELLS  : int  20287 20287 20287 20287 20287
+[1] 5
+[1] "processing month:  6"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020601.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020602.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020603.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020604.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020605.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020606.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020607.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020608.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020609.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020610.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020611.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020612.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020613.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020614.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020615.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020616.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020617.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020618.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020619.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020620.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020621.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020622.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020623.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020624.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020625.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020626.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020627.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020628.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020629.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020630.nc"
+List of 9
+ $ ltot_on: num 7.11e+08
+ $ ltot_in: num 3.47e+11
+ $ tqno3  : num 2.79e+09
+ $ tnfix  : num 1.88e+11
+ $ tprkn  : num 9.64e+09
+ $ tun2   : num 1.02e+12
+ $ tssfn  : num 1.91e+09
+ $ MONTH  : int 6
+ $ CELLS  : int 20287
+'data.frame':	5 obs. of  9 variables:
+ $ ltot_on: num  4.64e+10 2.04e+09 1.75e+09 2.49e+10 2.43e+10
+ $ ltot_in: num  8.02e+10 3.89e+10 1.14e+11 3.08e+11 2.00e+11
+ $ tqno3  : num  1.70e+09 2.41e+09 7.40e+09 9.56e+09 8.04e+09
+ $ tnfix  : num  2.29e+08 1.42e+09 5.68e+09 3.24e+10 7.45e+10
+ $ tprkn  : num  4.19e+09 4.07e+09 9.90e+09 1.15e+10 1.03e+10
+ $ tun2   : num  -1.09e+10 6.10e+10 1.79e+11 2.86e+11 4.04e+11
+ $ tssfn  : num  1.11e+09 1.03e+09 2.10e+09 2.65e+09 2.85e+09
+ $ MONTH  : int  1 2 3 4 5
+ $ CELLS  : int  20287 20287 20287 20287 20287
+[1] TRUE
+'data.frame':	6 obs. of  9 variables:
+ $ ltot_on: num  4.64e+10 2.04e+09 1.75e+09 2.49e+10 2.43e+10 ...
+ $ ltot_in: num  8.02e+10 3.89e+10 1.14e+11 3.08e+11 2.00e+11 ...
+ $ tqno3  : num  1.70e+09 2.41e+09 7.40e+09 9.56e+09 8.04e+09 ...
+ $ tnfix  : num  2.29e+08 1.42e+09 5.68e+09 3.24e+10 7.45e+10 ...
+ $ tprkn  : num  4.19e+09 4.07e+09 9.90e+09 1.15e+10 1.03e+10 ...
+ $ tun2   : num  -1.09e+10 6.10e+10 1.79e+11 2.86e+11 4.04e+11 ...
+ $ tssfn  : num  1.11e+09 1.03e+09 2.10e+09 2.65e+09 2.85e+09 ...
+ $ MONTH  : int  1 2 3 4 5 6
+ $ CELLS  : int  20287 20287 20287 20287 20287 20287
+[1] 6
+[1] "processing month:  7"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020701.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020702.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020703.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020704.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020705.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020706.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020707.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020708.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020709.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020710.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020711.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020712.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020713.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020714.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020715.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020716.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020717.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020718.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020719.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020720.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020721.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020722.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020723.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020724.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020725.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020726.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020727.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020728.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020729.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020730.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020731.nc"
+List of 9
+ $ ltot_on: num 265237
+ $ ltot_in: num 1.41e+11
+ $ tqno3  : num 5.79e+08
+ $ tnfix  : num 2.54e+11
+ $ tprkn  : num 1.31e+09
+ $ tun2   : num 7.37e+11
+ $ tssfn  : num 7.6e+07
+ $ MONTH  : int 7
+ $ CELLS  : int 20287
+'data.frame':	6 obs. of  9 variables:
+ $ ltot_on: num  4.64e+10 2.04e+09 1.75e+09 2.49e+10 2.43e+10 ...
+ $ ltot_in: num  8.02e+10 3.89e+10 1.14e+11 3.08e+11 2.00e+11 ...
+ $ tqno3  : num  1.70e+09 2.41e+09 7.40e+09 9.56e+09 8.04e+09 ...
+ $ tnfix  : num  2.29e+08 1.42e+09 5.68e+09 3.24e+10 7.45e+10 ...
+ $ tprkn  : num  4.19e+09 4.07e+09 9.90e+09 1.15e+10 1.03e+10 ...
+ $ tun2   : num  -1.09e+10 6.10e+10 1.79e+11 2.86e+11 4.04e+11 ...
+ $ tssfn  : num  1.11e+09 1.03e+09 2.10e+09 2.65e+09 2.85e+09 ...
+ $ MONTH  : int  1 2 3 4 5 6
+ $ CELLS  : int  20287 20287 20287 20287 20287 20287
+[1] TRUE
+'data.frame':	7 obs. of  9 variables:
+ $ ltot_on: num  4.64e+10 2.04e+09 1.75e+09 2.49e+10 2.43e+10 ...
+ $ ltot_in: num  8.02e+10 3.89e+10 1.14e+11 3.08e+11 2.00e+11 ...
+ $ tqno3  : num  1.70e+09 2.41e+09 7.40e+09 9.56e+09 8.04e+09 ...
+ $ tnfix  : num  2.29e+08 1.42e+09 5.68e+09 3.24e+10 7.45e+10 ...
+ $ tprkn  : num  4.19e+09 4.07e+09 9.90e+09 1.15e+10 1.03e+10 ...
+ $ tun2   : num  -1.09e+10 6.10e+10 1.79e+11 2.86e+11 4.04e+11 ...
+ $ tssfn  : num  1.11e+09 1.03e+09 2.10e+09 2.65e+09 2.85e+09 ...
+ $ MONTH  : int  1 2 3 4 5 6 7
+ $ CELLS  : int  20287 20287 20287 20287 20287 20287 20287
+[1] 7
+[1] "processing month:  8"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020801.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020802.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020803.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020804.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020805.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020806.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020807.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020808.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020809.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020810.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020811.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020812.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020813.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020814.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020815.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020816.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020817.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020818.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020819.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020820.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020821.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020822.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020823.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020824.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020825.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020826.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020827.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020828.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020829.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020830.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020831.nc"
+List of 9
+ $ ltot_on: num 5877
+ $ ltot_in: num 2.91e+08
+ $ tqno3  : num 2.75e+08
+ $ tnfix  : num 1.53e+11
+ $ tprkn  : num 9.19e+08
+ $ tun2   : num 2.64e+11
+ $ tssfn  : num 3.04e+08
+ $ MONTH  : int 8
+ $ CELLS  : int 20287
+'data.frame':	7 obs. of  9 variables:
+ $ ltot_on: num  4.64e+10 2.04e+09 1.75e+09 2.49e+10 2.43e+10 ...
+ $ ltot_in: num  8.02e+10 3.89e+10 1.14e+11 3.08e+11 2.00e+11 ...
+ $ tqno3  : num  1.70e+09 2.41e+09 7.40e+09 9.56e+09 8.04e+09 ...
+ $ tnfix  : num  2.29e+08 1.42e+09 5.68e+09 3.24e+10 7.45e+10 ...
+ $ tprkn  : num  4.19e+09 4.07e+09 9.90e+09 1.15e+10 1.03e+10 ...
+ $ tun2   : num  -1.09e+10 6.10e+10 1.79e+11 2.86e+11 4.04e+11 ...
+ $ tssfn  : num  1.11e+09 1.03e+09 2.10e+09 2.65e+09 2.85e+09 ...
+ $ MONTH  : int  1 2 3 4 5 6 7
+ $ CELLS  : int  20287 20287 20287 20287 20287 20287 20287
+[1] TRUE
+'data.frame':	8 obs. of  9 variables:
+ $ ltot_on: num  4.64e+10 2.04e+09 1.75e+09 2.49e+10 2.43e+10 ...
+ $ ltot_in: num  8.02e+10 3.89e+10 1.14e+11 3.08e+11 2.00e+11 ...
+ $ tqno3  : num  1.70e+09 2.41e+09 7.40e+09 9.56e+09 8.04e+09 ...
+ $ tnfix  : num  2.29e+08 1.42e+09 5.68e+09 3.24e+10 7.45e+10 ...
+ $ tprkn  : num  4.19e+09 4.07e+09 9.90e+09 1.15e+10 1.03e+10 ...
+ $ tun2   : num  -1.09e+10 6.10e+10 1.79e+11 2.86e+11 4.04e+11 ...
+ $ tssfn  : num  1.11e+09 1.03e+09 2.10e+09 2.65e+09 2.85e+09 ...
+ $ MONTH  : int  1 2 3 4 5 6 7 8
+ $ CELLS  : int  20287 20287 20287 20287 20287 20287 20287 20287
+[1] 8
+[1] "processing month:  9"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020901.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020902.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020903.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020904.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020905.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020906.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020907.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020908.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020909.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020910.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020911.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020912.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020913.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020914.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020915.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020916.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020917.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020918.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020919.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020920.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020921.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020922.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020923.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020924.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020925.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020926.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020927.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020928.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020929.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20020930.nc"
+List of 9
+ $ ltot_on: num 0
+ $ ltot_in: num 5.01e+08
+ $ tqno3  : num 2.8e+08
+ $ tnfix  : num 5.01e+10
+ $ tprkn  : num 6.27e+08
+ $ tun2   : num 9.93e+10
+ $ tssfn  : num 7.07e+08
+ $ MONTH  : int 9
+ $ CELLS  : int 20287
+'data.frame':	8 obs. of  9 variables:
+ $ ltot_on: num  4.64e+10 2.04e+09 1.75e+09 2.49e+10 2.43e+10 ...
+ $ ltot_in: num  8.02e+10 3.89e+10 1.14e+11 3.08e+11 2.00e+11 ...
+ $ tqno3  : num  1.70e+09 2.41e+09 7.40e+09 9.56e+09 8.04e+09 ...
+ $ tnfix  : num  2.29e+08 1.42e+09 5.68e+09 3.24e+10 7.45e+10 ...
+ $ tprkn  : num  4.19e+09 4.07e+09 9.90e+09 1.15e+10 1.03e+10 ...
+ $ tun2   : num  -1.09e+10 6.10e+10 1.79e+11 2.86e+11 4.04e+11 ...
+ $ tssfn  : num  1.11e+09 1.03e+09 2.10e+09 2.65e+09 2.85e+09 ...
+ $ MONTH  : int  1 2 3 4 5 6 7 8
+ $ CELLS  : int  20287 20287 20287 20287 20287 20287 20287 20287
+[1] TRUE
+'data.frame':	9 obs. of  9 variables:
+ $ ltot_on: num  4.64e+10 2.04e+09 1.75e+09 2.49e+10 2.43e+10 ...
+ $ ltot_in: num  8.02e+10 3.89e+10 1.14e+11 3.08e+11 2.00e+11 ...
+ $ tqno3  : num  1.70e+09 2.41e+09 7.40e+09 9.56e+09 8.04e+09 ...
+ $ tnfix  : num  2.29e+08 1.42e+09 5.68e+09 3.24e+10 7.45e+10 ...
+ $ tprkn  : num  4.19e+09 4.07e+09 9.90e+09 1.15e+10 1.03e+10 ...
+ $ tun2   : num  -1.09e+10 6.10e+10 1.79e+11 2.86e+11 4.04e+11 ...
+ $ tssfn  : num  1.11e+09 1.03e+09 2.10e+09 2.65e+09 2.85e+09 ...
+ $ MONTH  : int  1 2 3 4 5 6 7 8 9
+ $ CELLS  : int  20287 20287 20287 20287 20287 20287 20287 20287 20287
+[1] 9
+[1] "processing month:  10"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021001.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021002.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021003.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021004.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021005.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021006.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021007.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021008.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021009.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021010.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021011.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021012.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021013.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021014.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021015.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021016.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021017.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021018.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021019.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021020.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021021.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021022.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021023.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021024.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021025.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021026.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021027.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021028.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021029.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021030.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021031.nc"
+List of 9
+ $ ltot_on: num 0
+ $ ltot_in: num 2.93e+11
+ $ tqno3  : num 1.86e+09
+ $ tnfix  : num 3.26e+10
+ $ tprkn  : num 1.43e+09
+ $ tun2   : num 6.94e+10
+ $ tssfn  : num 6.41e+08
+ $ MONTH  : int 10
+ $ CELLS  : int 20287
+'data.frame':	9 obs. of  9 variables:
+ $ ltot_on: num  4.64e+10 2.04e+09 1.75e+09 2.49e+10 2.43e+10 ...
+ $ ltot_in: num  8.02e+10 3.89e+10 1.14e+11 3.08e+11 2.00e+11 ...
+ $ tqno3  : num  1.70e+09 2.41e+09 7.40e+09 9.56e+09 8.04e+09 ...
+ $ tnfix  : num  2.29e+08 1.42e+09 5.68e+09 3.24e+10 7.45e+10 ...
+ $ tprkn  : num  4.19e+09 4.07e+09 9.90e+09 1.15e+10 1.03e+10 ...
+ $ tun2   : num  -1.09e+10 6.10e+10 1.79e+11 2.86e+11 4.04e+11 ...
+ $ tssfn  : num  1.11e+09 1.03e+09 2.10e+09 2.65e+09 2.85e+09 ...
+ $ MONTH  : int  1 2 3 4 5 6 7 8 9
+ $ CELLS  : int  20287 20287 20287 20287 20287 20287 20287 20287 20287
+[1] TRUE
+'data.frame':	10 obs. of  9 variables:
+ $ ltot_on: num  4.64e+10 2.04e+09 1.75e+09 2.49e+10 2.43e+10 ...
+ $ ltot_in: num  8.02e+10 3.89e+10 1.14e+11 3.08e+11 2.00e+11 ...
+ $ tqno3  : num  1.70e+09 2.41e+09 7.40e+09 9.56e+09 8.04e+09 ...
+ $ tnfix  : num  2.29e+08 1.42e+09 5.68e+09 3.24e+10 7.45e+10 ...
+ $ tprkn  : num  4.19e+09 4.07e+09 9.90e+09 1.15e+10 1.03e+10 ...
+ $ tun2   : num  -1.09e+10 6.10e+10 1.79e+11 2.86e+11 4.04e+11 ...
+ $ tssfn  : num  1.11e+09 1.03e+09 2.10e+09 2.65e+09 2.85e+09 ...
+ $ MONTH  : int  1 2 3 4 5 6 7 8 9 10
+ $ CELLS  : int  20287 20287 20287 20287 20287 20287 20287 20287 20287 20287
+[1] 10
+[1] "processing month:  11"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021101.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021102.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021103.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021104.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021105.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021106.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021107.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021108.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021109.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021110.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021111.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021112.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021113.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021114.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021115.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021116.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021117.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021118.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021119.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021120.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021121.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021122.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021123.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021124.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021125.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021126.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021127.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021128.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021129.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021130.nc"
+List of 9
+ $ ltot_on: num 0
+ $ ltot_in: num 2.14e+09
+ $ tqno3  : num 5.02e+08
+ $ tnfix  : num 1.41e+10
+ $ tprkn  : num 1.04e+09
+ $ tun2   : num -1.54e+11
+ $ tssfn  : num 3.63e+08
+ $ MONTH  : int 11
+ $ CELLS  : int 20287
+'data.frame':	10 obs. of  9 variables:
+ $ ltot_on: num  4.64e+10 2.04e+09 1.75e+09 2.49e+10 2.43e+10 ...
+ $ ltot_in: num  8.02e+10 3.89e+10 1.14e+11 3.08e+11 2.00e+11 ...
+ $ tqno3  : num  1.70e+09 2.41e+09 7.40e+09 9.56e+09 8.04e+09 ...
+ $ tnfix  : num  2.29e+08 1.42e+09 5.68e+09 3.24e+10 7.45e+10 ...
+ $ tprkn  : num  4.19e+09 4.07e+09 9.90e+09 1.15e+10 1.03e+10 ...
+ $ tun2   : num  -1.09e+10 6.10e+10 1.79e+11 2.86e+11 4.04e+11 ...
+ $ tssfn  : num  1.11e+09 1.03e+09 2.10e+09 2.65e+09 2.85e+09 ...
+ $ MONTH  : int  1 2 3 4 5 6 7 8 9 10
+ $ CELLS  : int  20287 20287 20287 20287 20287 20287 20287 20287 20287 20287
+[1] TRUE
+'data.frame':	11 obs. of  9 variables:
+ $ ltot_on: num  4.64e+10 2.04e+09 1.75e+09 2.49e+10 2.43e+10 ...
+ $ ltot_in: num  8.02e+10 3.89e+10 1.14e+11 3.08e+11 2.00e+11 ...
+ $ tqno3  : num  1.70e+09 2.41e+09 7.40e+09 9.56e+09 8.04e+09 ...
+ $ tnfix  : num  2.29e+08 1.42e+09 5.68e+09 3.24e+10 7.45e+10 ...
+ $ tprkn  : num  4.19e+09 4.07e+09 9.90e+09 1.15e+10 1.03e+10 ...
+ $ tun2   : num  -1.09e+10 6.10e+10 1.79e+11 2.86e+11 4.04e+11 ...
+ $ tssfn  : num  1.11e+09 1.03e+09 2.10e+09 2.65e+09 2.85e+09 ...
+ $ MONTH  : int  1 2 3 4 5 6 7 8 9 10 ...
+ $ CELLS  : int  20287 20287 20287 20287 20287 20287 20287 20287 20287 20287 ...
+[1] 11
+[1] "processing month:  12"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021201.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021202.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021203.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021204.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021205.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021206.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021207.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021208.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021209.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021210.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021211.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021212.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021213.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021214.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021215.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021216.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021217.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021218.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021219.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021220.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021221.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021222.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021223.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021224.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021225.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021226.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021227.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021228.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021229.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021230.nc"
+[1] "processing /nas01/depts/ie/cempd/EPIC/epic/scenarios/base_2002_HG_TD_MG_372_0acres_grass/output4CMAQ/app/toCMAQ/base_372_0acre_TD_grass_time20021231.nc"
+List of 9
+ $ ltot_on: num 0
+ $ ltot_in: num 9.73e+09
+ $ tqno3  : num 1.3e+09
+ $ tnfix  : num 1.48e+09
+ $ tprkn  : num 1.97e+09
+ $ tun2   : num -3.63e+11
+ $ tssfn  : num 4.01e+08
+ $ MONTH  : int 12
+ $ CELLS  : int 20287
+'data.frame':	11 obs. of  9 variables:
+ $ ltot_on: num  4.64e+10 2.04e+09 1.75e+09 2.49e+10 2.43e+10 ...
+ $ ltot_in: num  8.02e+10 3.89e+10 1.14e+11 3.08e+11 2.00e+11 ...
+ $ tqno3  : num  1.70e+09 2.41e+09 7.40e+09 9.56e+09 8.04e+09 ...
+ $ tnfix  : num  2.29e+08 1.42e+09 5.68e+09 3.24e+10 7.45e+10 ...
+ $ tprkn  : num  4.19e+09 4.07e+09 9.90e+09 1.15e+10 1.03e+10 ...
+ $ tun2   : num  -1.09e+10 6.10e+10 1.79e+11 2.86e+11 4.04e+11 ...
+ $ tssfn  : num  1.11e+09 1.03e+09 2.10e+09 2.65e+09 2.85e+09 ...
+ $ MONTH  : int  1 2 3 4 5 6 7 8 9 10 ...
+ $ CELLS  : int  20287 20287 20287 20287 20287 20287 20287 20287 20287 20287 ...
+[1] TRUE
+'data.frame':	12 obs. of  9 variables:
+ $ ltot_on: num  4.64e+10 2.04e+09 1.75e+09 2.49e+10 2.43e+10 ...
+ $ ltot_in: num  8.02e+10 3.89e+10 1.14e+11 3.08e+11 2.00e+11 ...
+ $ tqno3  : num  1.70e+09 2.41e+09 7.40e+09 9.56e+09 8.04e+09 ...
+ $ tnfix  : num  2.29e+08 1.42e+09 5.68e+09 3.24e+10 7.45e+10 ...
+ $ tprkn  : num  4.19e+09 4.07e+09 9.90e+09 1.15e+10 1.03e+10 ...
+ $ tun2   : num  -1.09e+10 6.10e+10 1.79e+11 2.86e+11 4.04e+11 ...
+ $ tssfn  : num  1.11e+09 1.03e+09 2.10e+09 2.65e+09 2.85e+09 ...
+ $ MONTH  : int  1 2 3 4 5 6 7 8 9 10 ...
+ $ CELLS  : int  20287 20287 20287 20287 20287 20287 20287 20287 20287 20287 ...
+[1] 12
+There were 12 warnings (use warnings() to see them)
+> #out.df <- colSums(out.df)
+> write.csv( out.df, file = out.file.1 , row.names = FALSE )
+> 
+> proc.time()
+    user   system  elapsed 
+1908.112  119.948 2664.769 

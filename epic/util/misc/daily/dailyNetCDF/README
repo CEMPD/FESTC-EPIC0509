@@ -1,0 +1,7 @@
+
+1. Transfer NCD variables to daily sum ordered by grids
+epic2cmaq_addNCD_toDailyWETH.csh
+
+2. Read csv files created by step 1, add them to site weather deposition file. 
+addNCD_to_site_weather.csh
+

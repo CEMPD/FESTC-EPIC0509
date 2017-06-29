@@ -1,0 +1,66 @@
+    FEST-C Version 2.0 (US EPA)
+
+    Linux installation:
+    ===================
+	
+	Copy the Linux release file festc_2.0_linux_YYYYMMDD.tar.gz and uncompress it
+    into a directory using the following command:
+
+	cd /usr/local
+	tar -xzvf festc_2.0_linux_YYYYMMDD.tar.gz
+
+    The above command will create a subdirectory festc_2.0 and hold the whole fest-c package.
+
+    	cd festc_2.0
+        vi festc.sh
+
+    At the editing mode of vi, change the line:
+	FESTC_HOME=.
+    to
+	FESTC_HOME=/usr/local/festc_2.0
+
+
+    Run FEST-C from the Linux server:
+    =================================
+
+    	If you are connecting to the server from a Windows platform, please run Xming 
+    service first, then from a command line type the following to connect to the server:
+	
+	putty -X your_amber_login_name@amber.nesc.epa.gov
+   
+    If you are connecting from a Linux machine, please make sure sshd is running and 
+    then type the following to connect to amber:
+
+	ssh -X your_amber_login_name@amber.nesc.epa.gov
+
+    After you give your login credentials, at your home directory, create a subdirectory
+    festc:
+	
+	mkdir festc
+	cp -p /usr/local/festc_2.0/config.properties .
+	vi config.properties
+
+    At the editing mode of vi, modify the following properties with your local values 
+    and save it:
+
+    work.dir=/usr/local/username/EPIC/epic   # scenarios dir is under here
+    epic.dir=/usr/local/username/EPIC/epic   # programs, utilities, and common data
+    visual.program.home=/usr/local/bin
+    visual.program=verdi.sh -f
+    sa.home=/home/lid/sa_raster_102010/
+    queue.cmd=qsub
+    queue.name=workq
+    queue.option=-W group_list=mod3app
+ 
+    Then, make an alias for the fest-c path and command:
+
+	alias festc="/usr/local/festc_2.0/festc.sh"
+
+    You may save this line into your .bashrc file if you are running bash shell or 
+    .cshrc file if your command line is a csh shell so you don't need to type them everytime
+    you login to the server. Both .bashrc and .cshrc file are located in your home directory.
+
+    At the xterm command line, type the following command will get you the fest-c GUI:
+	
+	festc.sh &
+

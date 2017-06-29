@@ -11,24 +11,35 @@
 		</library>
 		<library type="resources" path="icons/" id="icons"/>
 
-		<library id="velocity" path="lib/velocity-dep-1.5.jar" type="code">
-			<export prefix="*"/>
+		<library id="velocity" path="lib/velocity-1.7.jar" type="code">
+			<export prefix="*" />
 		</library>
-		
+
 		<library id="reference" path="lib/reference.jar" type="code">
-			<export prefix="*"/>
+			<export prefix="*" />
 		</library>
-		
-		<library id="swingx" path="lib/swingx-2007_03_04.jar" type="code">
-			<export prefix="*"/>
+
+		<library id="swingx" path="./lib/swingx-all-1.6.5.jar" type="code">
+			<export prefix="*" />
 		</library>
-				
-		<library id="xstream" path="lib/xstream-1.2.1.jar" type="code">
-			<export prefix="*"/>
+
+		<library id="log4j-1.2" path="./lib/log4j-1.2-api-2.0-rc1.jar"
+			type="code">
+			<export prefix="*" />
 		</library>
-		
-		<library id="xpp3" path="lib/xpp3_min-1.1.3.4.O.jar" type="code">
-			<export prefix="*"/>
+
+		<library id="log4j-api" path="./lib/log4j-api-2.0-rc1.jar"
+			type="code">
+			<export prefix="*" />
+		</library>
+
+		<library id="log4j-core" path="./lib/log4j-core-2.0-rc1.jar"
+			type="code">
+			<export prefix="*" />
+		</library>
+
+		<library id="xstream" path="./lib/xstream-1.4.7.jar" type="code">
+			<export prefix="*" />
 		</library>
 	</runtime>
 
@@ -51,7 +62,7 @@
 				<parameter id="groupID" value="gov.epa.festc.core.tools_group"/>
 				<parameter id="location" value="west"/>
 				<parameter id="parent" value="gov.epa.festc.core.main_group"/>
-				<parameter id="fillPercentage" value="0.40"/>
+				<parameter id="fillPercentage" value="0.35"/>
 			</parameter>
 		</parameter>
 	</extension>

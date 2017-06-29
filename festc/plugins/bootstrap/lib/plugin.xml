@@ -1,10 +1,11 @@
 <?xml version="1.0" ?>
-<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 0.4" "http://jpf.sourceforge.net/plugin_1_0.dtd">
+<!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
 <plugin id="saf.core.runtime" version="1.0" class="saf.core.runtime.CorePlugin">
 	<runtime>
-    	<library id="core.jar" path="saf.core.runtime.jar" type="code">
+    <library id="core.jar" path="saf.core.runtime.jar" type="code">
           <export prefix="*"/>
-     	</library>
+     </library>
+
 	</runtime>
 	<extension-point id="IApplicationRunnable">
 		<parameter-def id="class"/>
