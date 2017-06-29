@@ -22,7 +22,11 @@ EPIC modeling,
 -	Scenarios which contain a test case and to store users\' application scenarios, and
 -	Documentation of the EPIC Modeling System for CMAQ 12km Grids in the FEST-C.
 
-Requirements: FESTCv1.3, [Spatial Allocator Raster Tools (SA 4.3)](https://github.com/CMASCenter/Spatial-Allocator)  
+Requirements: FESTCv1.3, [Spatial Allocator Raster Tools (SA 4.3)](https://github.com/CMASCenter/Spatial-Allocator)
+
+To clone code from the CEMPD/FEST-C Git repository, specify the branch (i.e. version number) and issue the following command from within a working directory on your server. For example, to get FEST-C version 1.3:
+
+git clone https://github.com/CEMPD/FEST-C.git
 
 It is important to note that the github version of FESTC does not include common data required as input to run the model.  We recommend those not developing the code to go to the CMAS Center Software Clearinghouse to download the FEST-C version of interest and user's guide.  From http://www.cmascenter.org, select Download -> Software -> FEST-C and choose the version to get the FEST-C version with input data.
 
