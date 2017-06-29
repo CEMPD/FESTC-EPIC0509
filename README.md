@@ -1,8 +1,8 @@
 # FEST-C version 1.3 Public Release June 2017
 
-FEST-C version 1.3 Public Release June 2017
 Fertilizer Emission Scenario Tool for CMAQ : Generate fertilizer application input for CMAQ bi-directional NH3 modeling
 Compiled in the 64-bit Linux environment
+Requirements: FESTCv1.3, [Spatial Allocator v4.3 Raster Tools](https://github.com/CMASCenter/Spatial-Allocator)
 
 
 -       Version 1.3 06/30/2017 Release updates
