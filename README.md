@@ -6,7 +6,7 @@ FEST-C works for domains at different resolutions and in any of the four WRF pro
 
 ## Features
 
-## Java-based FEST-C interface with 13 sub-interface tools to:
+## Java-based FEST-C interface with 14 sub-interface tools to:
 
 -	Build the input database of 21 crops for EPIC model simulations for a given CMAQ domain
 -	Simulate daily fertilizer application information based entirely on simulated plant demand in response to local soil and weather conditions using EPIC,
