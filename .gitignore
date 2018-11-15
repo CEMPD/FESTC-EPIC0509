@@ -5,3 +5,5 @@ epic/common_data/EPIC_model/dailyNDep_2004
 epic/common_data/EPIC_model/dailyNDep_2008
 epic/common_data/gisFiles
 epic/common_data/statWeath
+scenarios/test_case/share_data/SIT
+scenarios/test_case/share_data/dailyWETH

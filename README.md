@@ -22,9 +22,22 @@ EPIC modeling,
 -	Scenarios which contain a test case and to store users\' application scenarios, and
 -	Documentation of the EPIC Modeling System for CMAQ 12km Grids in the FEST-C.
 
-Requirements: FESTCv1.3, [Spatial Allocator Raster Tools (SA 4.3)](https://github.com/CMASCenter/Spatial-Allocator)  
+Requirements: FESTCv1.4, [Spatial Allocator Raster Tools (SA 4.3.2)](https://github.com/CMASCenter/Spatial-Allocator)  
 
 It is important to note that the github version of FESTC does not include common data required as input to run the model.  We recommend those not developing the code to go to the CMAS Center Software Clearinghouse to download the FEST-C version of interest and user's guide.  From http://www.cmascenter.org, select Download -> Software -> FEST-C and choose the version to get the FEST-C version with input data.
+
+### UPDATES in Version 1.4 (09/20/2018)
+1. Added "EPIC to SWAT" tool in the festc interface
+2. Added allSites info.txt output in the EPIC site info tool
+3. Fixed a bug related with directory browser.
+4. Warning messages if configuration file is not in right directory
+5. EPIC model updates with C-N processes and hydroloy processes
+6. EPIC input parameter updates
+7. Management programs and input data updates
+8. 5-year average N data update and the nearest grid cell search in EPIC
+9. Associated Spatial Allocator tool updates
+10. Added more R tools in analyzing and extracting EPIC and WRF/CMAQ data
+
 
 ### UPDATES in Version 1.3 (06/30/2017)
 
