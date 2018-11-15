@@ -1,9 +1,9 @@
 # SWAT MAKEFILE FOR INTEL COMPILER on LINUX
 #
 F95=ifort
-FFLAGS= -O3 -warn nousage -132 -zero -save -common-args
+FFLAGS= -O3 -cm -132 -zero -save -common-args -i-static
 
-LDFLAGS= $(FFLAGS) -static-intel
+LDFLAGS= $(FFLAGS) -static -static-intel
 
 EXE1=SOILMATCH1ST.exe
 EXE2=SOILMATCH2ND.exe

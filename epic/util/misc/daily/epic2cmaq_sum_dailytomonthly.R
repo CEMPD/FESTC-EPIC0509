@@ -37,10 +37,6 @@ B_dat   <- open.ncdf(paste(scendir,"/share_data/beld4_CMAQ12km_2001.nc",sep=""))
 #Create daily file names
 #crop fraction file
 y.files   <- dir(paste(indir,"/",sep=""), pattern=pat )
-#print(indir)
-#print(pat)
-#print(length(y.files))
-#print(y.files)
 
 mm     <- 00
 mon.l1.tot <- NULL
@@ -198,7 +194,7 @@ for( i in 1:12 ){
 #apply(monthly array;c(1,2,3) means apply the function over row(1),col(2),variable(3);sum is the function.  As currently written this expression computes a domain-wide sum, multiplies it by the grid cell crop fraction and then sums to a domain-wide NLCD class total.
        
 # Transfer from kg/ha to kg/km**2, 0.01km**2=1ha
-    gridarea = 144  #km^2 of a grid
+    gridarea = 144  #km^2
     FF1=F1.app*Cfrac*100*gridarea
     FF2=F2.app*Cfrac*100*gridarea
     FF3=F3.app*Cfrac*100*gridarea

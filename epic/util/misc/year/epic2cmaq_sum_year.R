@@ -13,8 +13,6 @@ yearfile <- Sys.getenv("YEARFILE")
 sitefile <- Sys.getenv("SITEFILE")
 beldfile <- Sys.getenv("BELDFILE")
 outname_csv <- Sys.getenv("OUTFILE")
-outnameb_csv <- Sys.getenv("OUTFILEb")
-outnamep_csv <- Sys.getenv("OUTFILEp")
 print(paste(">>== year file:   ", yearfile))
 print(paste(">>== output file: ", outname_csv))
 
@@ -85,17 +83,8 @@ frac.data <- get.M3.var(file = beldfile,
 
 out.df <- sitetable
 cnames <- c(region)
-anames <- c(region)
-bnames <- c(region)
-pnames <- c(region)
-
-for ( crop in crops ) {
-  bname <- paste(crop, "_RF",sep="")
-  bnames<- c(bnames, bname)
-  bname <- paste(crop, "_IR",sep="")
-  bnames<- c(bnames, bname)
-}
 out.df <- sitetable
+
 # Extract crop data from yearfile
 for ( i in tlays ) {
    print(i)
@@ -112,15 +101,15 @@ for ( i in tlays ) {
    }
    tem.df <- na.omit(tem.df)
    tem.df$AREA <- tem.df$PERC*0.01*garea*0.0001  #m**2 =ha/0.0001
-   #tem.df$AREAkm2 <- tem.df$AREA*0.01            #ha to km*2
 
    # transfter data to kg if not T_YLDF, unit for T_YLDF is 1000ton
-   if ( ! grepl('T_', spcname)>0 ) tem.df$CROP <- tem.df$AREA*tem.df$CROP
-   #tem.df$CROP <- tem.df$AREA*tem.df$CROP
-#  print(grepl('T_', spcname)) 
+   #if ( ! grep('T_', spcname)>0 ) tem.df$CROP <- tem.df$AREA*tem.df$CROP
+   tem.df$CROP <- tem.df$AREA*tem.df$CROP
+   print("value of spcname")
+   print(grepl('T_', spcname)) 
    if ( grepl('T_', spcname)>0 ) 
    {
-     #tem.df$CROP <- tem.df$CROP
+     tem.df$CROP <- tem.df$CROP
      cname <- paste("CROP", i, "tton",sep="")
      print(cname)
    } 
@@ -133,9 +122,7 @@ for ( i in tlays ) {
    out.df$CROP <- ifelse (is.na(out.df$CROP),0.0, out.df$CROP)
    out.df$AREA <- ifelse (is.na(out.df$AREA),0.0, out.df$AREA)
    cnames<- c(cnames, cname, aname)
-   anames<- c(anames, aname)
-   pnames<- c(pnames, cname)
-#  print(names(out.df))
+   print(names(out.df))
    names(out.df)[length(out.df)-1] <- cname
    names(out.df)[length(out.df)]   <- aname
 }
@@ -146,9 +133,9 @@ print(region)
 # exclude variables v1, v2, v3
 myvars <- names(out.df) %in% cnames 
 newout.df <- out.df[myvars]
-#str(newout.df)
-#print(region)
+str(newout.df)
 
+print(region)
 if ( region == "FIPS" ) com.df <- aggregate(. ~ FIPS, data=newout.df, FUN=sum)
 if ( region == "STFIPS" ) com.df <- aggregate(. ~ STFIPS, data=newout.df, FUN=sum)
 if ( region == "HUC8" ) com.df <- aggregate(. ~ HUC8, data=newout.df, FUN=sum)
@@ -157,28 +144,10 @@ if ( region == "HUC1" ) com.df <- aggregate(. ~ HUC1, data=newout.df, FUN=sum)
 if ( region == "REG10" ) com.df <- aggregate(. ~ REG10, data=newout.df, FUN=sum)
 if ( region == "GRIDID" ) com.df <- newout.df
 str(com.df)
-
-# extract area columns
-myvars <- names(com.df) %in% anames
-acom.df <- com.df[myvars]
-print(anames)
-print(names(acom.df))
-print(bnames)
-names(acom.df) <- bnames
-
-# extract crop columns
-myvars <- names(com.df) %in% pnames
-pcom.df <- com.df[myvars]
-names(pcom.df) <- pnames
-
-for ( i in 2:length(bnames) ) {
-  #print(acom.df[[i]])
-  acom.df[[i]] <- acom.df[[i]]*0.01
-}
-str(acom.df)
+#for ( i in tlays ) {
+#  com.df[,i+1] <- com.df[,i+1]/com.df[,i+2]
+#}
 
 print(outname_csv)
 write.table(com.df, file = outname_csv,col.names=T,row.names=F, append=F, sep=",")
-write.table(acom.df, file = outnameb_csv,col.names=T,row.names=F, append=F, sep=",")
-write.table(pcom.df, file = outnamep_csv,col.names=T,row.names=F, append=F, sep=",")
 

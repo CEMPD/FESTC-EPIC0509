@@ -3,66 +3,109 @@
     <gov.epa.festc.core.proj.Beld4DataGenFields>
         <cols>25</cols>
         <gridName>TESTGRIDS</gridName>
-        <message></message>
+        <message>Job messages: 
+
+Epic base: /proj/ie/proj/EPIC/epic
+SA home: /proj/ie/proj/staff/dyang/sa_v4.3_2
+Script file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/generateBeld4Data_TESTGRIDS_20181024131552.csh
+Output netcdf file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/share_data/beld4_TESTGRIDS_2006.txt
+Output ioapi file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/output4CMAQ/app/toCMAQ/beld4_TESTGRIDS_2006.ncf 
+Log file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/generateBeld4Data_TESTGRIDS_20181024131552.csh.log</message>
         <proj>+proj=lcc +a=6370000.0 +b=6370000.0 +lat_1=33 +lat_2=45 +lat_0=40 +lon_0=-97</proj>
         <rows>25</rows>
-        <scenarioDir>/nas01/depts/ie/cempd/apps/sallocator/festc1_2/epic/scenarios/test_case</scenarioDir>
+        <scenarioDir>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case</scenarioDir>
         <xcellSize>12000.0</xcellSize>
         <xmin>-84000.0</xmin>
         <ycellSize>12000.0</ycellSize>
         <ymin>204000.0</ymin>
         <modisDataSelected>true</modisDataSelected>
-        <NLCDfile>/nas01/depts/ie/cempd/apps/sallocator/sa_102013/data/nlcd_modis_files_2006.txt</NLCDfile>
-        <NLCDyear>2006</NLCDyear>
+        <NLCDfile>/proj/ie/proj/staff/dyang/sa_v4.3_2/data/nlcd_modis_files_2006_20141010.txt</NLCDfile>
         <nlcdDataSelected>true</nlcdDataSelected>
     </gov.epa.festc.core.proj.Beld4DataGenFields>
     <gov.epa.festc.core.proj.SiteInfoGenFields>
         <cols>25</cols>
         <gridName>TESTGRIDS</gridName>
-        <message></message>
+        <message>Job messages: 
+
+Epic base: /proj/ie/proj/staff/dyang/festc/festc1.4/epic
+SA home: /proj/ie/proj/staff/dyang/sa_v4.3_1
+OUTPUT_TEXT_FILE $SCEN_DIR/share_data/EPICSite_Info.csv
+OUTPUT_TEXT_FILE2 $SCEN_DIR/share_data/EPICSite_Crop.csv
+OUTPUT_TEXT_FILE3 $SCEN_DIR/share_data/allSite_Info.csv
+Script file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/generateSiteInfo_TESTGRIDS_20180829113401.csh
+Log file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/generateSiteInfo_TESTGRIDS_20180829113401.csh.log
+</message>
         <proj>+proj=lcc +a=6370000.0 +b=6370000.0 +lat_1=33 +lat_2=45 +lat_0=40 +lon_0=-97</proj>
         <rows>25</rows>
-        <scenarioDir>/nas01/depts/ie/cempd/apps/sallocator/festc1_0/epic/scenarios/test_case</scenarioDir>
+        <scenarioDir>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case</scenarioDir>
         <xcellSize>12000.0</xcellSize>
         <xmin>-84000.0</xmin>
         <ycellSize>12000.0</ycellSize>
         <ymin>204000.0</ymin>
-        <beld4ncf>/nas01/depts/ie/cempd/apps/sallocator/festc1_0/epic/scenarios/test_case</beld4ncf>
-        <minAcres>40.0</minAcres>
+        <beld4ncf>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/share_data/beld4_TESTGRIDS_2006.nc</beld4ncf>
+        <minAcres>0.0</minAcres>
     </gov.epa.festc.core.proj.SiteInfoGenFields>
     <gov.epa.festc.core.proj.Mcip2EpicFields>
         <cols>25</cols>
         <gridName>TESTGRIDS</gridName>
-        <message></message>
+        <message>Job messages: 
+Epic base: /proj/ie/apps/longleaf/sallocator/festc1.4/epic
+SA home: /proj/ie/proj/SA/sa_v4.3_012017
+Scen directory: /proj/ie/apps/longleaf/sallocator/sa_v4.4_062018/data
+Epic base: /proj/ie/apps/longleaf/sallocator/festc1.4/epic
+SA home: /proj/ie/proj/SA/sa_v4.3_012017
+Scen directory: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case
+Script file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/generateEPICsiteDailyWeatherfromMCIP_CAMQ_20180822143921.csh
+Log file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/generateEPICsiteDailyWeatherfromMCIP_CAMQ_20180822143921.csh.log
+</message>
         <proj>+proj=lcc +a=6370000.0 +b=6370000.0 +lat_1=33 +lat_2=45 +lat_0=40 +lon_0=-97</proj>
         <rows>25</rows>
-        <scenarioDir>/nas01/depts/ie/cempd/apps/sallocator/festc1_0/epic/scenarios/test_case</scenarioDir>
+        <scenarioDir>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case</scenarioDir>
         <xcellSize>12000.0</xcellSize>
         <xmin>-84000.0</xmin>
         <ycellSize>12000.0</ycellSize>
         <ymin>204000.0</ymin>
         <cmaqDepsDir></cmaqDepsDir>
-        <datadir></datadir>
-        <depSelection>CMAQ deposition directory</depSelection>
+        <datadir>/proj/ie/proj/staff/dyang/festc/festc1.4/mcip/temp/mcip_2006_terra</datadir>
+        <depSelection>Default</depSelection>
         <enddate>20061231</enddate>
         <startdate>20060101</startdate>
     </gov.epa.festc.core.proj.Mcip2EpicFields>
     <gov.epa.festc.core.proj.SiteFilesFields>
         <cols>0</cols>
-        <message></message>
+        <message>Job messages: 
+Epic base: /proj/ie/proj/staff/dyang/festc/festc1.4/epic
+Scen directory: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case
+Exectable1: $EPIC_DIR//util/siteCreate/SITE_FILE_CREATOR.exe
+Outputs: 1. SITELIST.DAT  ($SCEN_DIR/share_data)
+Outputs: 2. All sitefiles ($SCEN_DIR//share_data/SIT)
+Exectable2: $EPIC_DIR/util/siteCreate/SITEBELD4HUC8.exe
+Outputs: crop list files, $SCEN_DIR/$CROP ${CROP}-LIST.DAT....
+
+Script file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/generateEpicSiteFile_20180911110608.csh
+Log file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/generateEpicSiteFile_20180911110608.csh.log
+</message>
         <rows>0</rows>
-        <scenarioDir>/nas01/depts/ie/cempd/apps/sallocator/festc1_0/epic/scenarios/test_case</scenarioDir>
+        <scenarioDir>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case</scenarioDir>
         <xcellSize>0.0</xcellSize>
         <xmin>0.0</xmin>
         <ycellSize>0.0</ycellSize>
         <ymin>0.0</ymin>
-        <minAcres>40.0</minAcres>
+        <minAcres>0.0</minAcres>
     </gov.epa.festc.core.proj.SiteFilesFields>
     <gov.epa.festc.core.proj.SoilFilesFields>
         <cols>0</cols>
-        <message></message>
+        <message>Job messages: 
+Epic base: /proj/ie/proj/staff/dyang/festc/festc1.4/epic
+Scen directory: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case
+  Step 1 output: $SCEN_DIR/$CROP  SOILSKM1.LOC
+  Step 2 output: $SCEN_DIR/$CROP  SOILSKM2.LOC
+  ...   Final output : $SCEN_DIR/$CROP  *.LOC &gt; SOILLIST.DAT
+Script file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/runEpicSoilMatch_20180911110842.csh
+Log file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/runEpicSoilMatch_20180911110842.csh.log
+</message>
         <rows>0</rows>
-        <scenarioDir>/nas01/depts/ie/cempd/apps/sallocator/festc1_0/epic/scenarios/test_case</scenarioDir>
+        <scenarioDir>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case</scenarioDir>
         <xcellSize>0.0</xcellSize>
         <xmin>0.0</xmin>
         <ycellSize>0.0</ycellSize>
@@ -70,9 +113,16 @@
     </gov.epa.festc.core.proj.SoilFilesFields>
     <gov.epa.festc.core.proj.ManageSpinupFields>
         <cols>0</cols>
-        <message></message>
+        <message>Job messages: 
+
+Epic base: /proj/ie/proj/staff/dyang/festc/festc1.4/epic
+Scen directory: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case
+Fertlizer year: 2006
+Script file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/runEpicManSpinup_20180911112419.csh
+Log file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/runEpicManSpinup_20180911112419.csh.log
+</message>
         <rows>0</rows>
-        <scenarioDir>/nas01/depts/ie/cempd/apps/sallocator/festc1_0/epic/scenarios/test_case</scenarioDir>
+        <scenarioDir>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case</scenarioDir>
         <xcellSize>0.0</xcellSize>
         <xmin>0.0</xmin>
         <ycellSize>0.0</ycellSize>
@@ -83,7 +133,7 @@
         <cols>0</cols>
         <message></message>
         <rows>0</rows>
-        <scenarioDir>/nas01/depts/ie/cempd/apps/sallocator/festc1_0/epic/scenarios/test_case</scenarioDir>
+        <scenarioDir>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case</scenarioDir>
         <xcellSize>0.0</xcellSize>
         <xmin>0.0</xmin>
         <ycellSize>0.0</ycellSize>
@@ -91,34 +141,50 @@
     </gov.epa.festc.core.proj.ManFileModFields>
     <gov.epa.festc.core.proj.EpicSpinupFields>
         <cols>0</cols>
-        <message></message>
+        <message>Job messages: 
+Epic base: /proj/ie/proj/staff/dyang/festc/festc1.4/epic
+Scen directory: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case
+Script file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/runEpicSpinup_20180911112826.csh
+Log file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/runEpicSpinup_20180911112826.csh.log</message>
         <rows>0</rows>
-        <scenarioDir>/nas01/depts/ie/cempd/apps/sallocator/festc1_0/epic/scenarios/test_case</scenarioDir>
+        <scenarioDir>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case</scenarioDir>
         <xcellSize>0.0</xcellSize>
         <xmin>0.0</xmin>
         <ycellSize>0.0</ycellSize>
         <ymin>0.0</ymin>
         <CO2Fac>380.00</CO2Fac>
-        <runTiledrain>NO</runTiledrain>
+        <NDepDir>2002-2006 5-year CMAQ average</NDepDir>
+        <runTiledrain>YES</runTiledrain>
     </gov.epa.festc.core.proj.EpicSpinupFields>
     <gov.epa.festc.core.proj.EpicYearlyAverage2CMAQFields>
         <cols>25</cols>
         <gridName>TESTGRIDS</gridName>
-        <message></message>
+        <message>Job messages: 
+Epic base: /proj/ie/proj/staff/dyang/festc/festc1.4/epic
+SA home: /proj/ie/proj/staff/dyang/sa_v4.3_1
+Script file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/epicYearlyAverage2CMAQ_app20180829130744.csh
+Log file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/epicYearlyAverage2CMAQ_app20180829130744.csh.log
+</message>
         <proj>+proj=lcc +a=6370000.0 +b=6370000.0 +lat_1=33 +lat_2=45 +lat_0=40 +lon_0=-97</proj>
         <rows>25</rows>
-        <scenarioDir>/nas01/depts/ie/cempd/apps/sallocator/festc1_0/epic/scenarios/test_case</scenarioDir>
+        <scenarioDir>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case</scenarioDir>
         <xcellSize>12000.0</xcellSize>
         <xmin>-84000.0</xmin>
         <ycellSize>12000.0</ycellSize>
         <ymin>204000.0</ymin>
-        <beld4ncf>/nas01/depts/ie/cempd/apps/sallocator/festc1_0/epic/scenarios/test_case/share_data/beld4_TESTGRIDS_2006.nc</beld4ncf>
+        <beld4ncf>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/share_data/beld4_TESTGRIDS_2006.nc</beld4ncf>
     </gov.epa.festc.core.proj.EpicYearlyAverage2CMAQFields>
     <gov.epa.festc.core.proj.ManageAppFields>
         <cols>0</cols>
-        <message></message>
+        <message>Job messages: 
+
+Epic base: /proj/ie/proj/staff/dyang/festc/festc1.4/epic
+Fertlizer year: 2006
+Script file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/runEPICManApp_20180829124942.csh
+Log file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/runEPICManApp_20180829124942.csh.log
+</message>
         <rows>0</rows>
-        <scenarioDir>/nas01/depts/ie/cempd/apps/sallocator/festc1_0/epic/scenarios/test_case</scenarioDir>
+        <scenarioDir>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case</scenarioDir>
         <xcellSize>0.0</xcellSize>
         <xmin>0.0</xmin>
         <ycellSize>0.0</ycellSize>
@@ -127,31 +193,71 @@
     </gov.epa.festc.core.proj.ManageAppFields>
     <gov.epa.festc.core.proj.EpicAppFields>
         <cols>0</cols>
-        <message></message>
+        <message>Job messages: 
+Epic base: /proj/ie/proj/staff/dyang/festc/festc1.4/epic
+Scen directory: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case
+Script file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/runEpicApp_20180829125850.csh
+Log file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/runEpicApp_20180829125850.csh.log</message>
         <rows>0</rows>
-        <scenarioDir>/nas01/depts/ie/cempd/apps/sallocator/festc1_0/epic/scenarios/test_case</scenarioDir>
+        <scenarioDir>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case</scenarioDir>
         <xcellSize>0.0</xcellSize>
         <xmin>0.0</xmin>
         <ycellSize>0.0</ycellSize>
         <ymin>0.0</ymin>
-        <CO2Fac>380</CO2Fac>
-        <simYear>2006</simYear>
+        <CO2Fac>380.00</CO2Fac>
+        <NDepDir>CMAQ</NDepDir>
+        <runTiledrain>YES</runTiledrain>
     </gov.epa.festc.core.proj.EpicAppFields>
     <gov.epa.festc.core.proj.Epic2CMAQFields>
         <cols>25</cols>
         <gridName>TESTGRIDS</gridName>
-        <message></message>
+        <message>Job messages: 
+SA home: /proj/ie/proj/staff/dyang/sa_v4.3_1
+Script file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts//epic2CMAQ_app_20180829130835.csh
+Log file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts//epic2CMAQ_app_20180829130835.csh.log
+</message>
         <proj>+proj=lcc +a=6370000.0 +b=6370000.0 +lat_1=33 +lat_2=45 +lat_0=40 +lon_0=-97</proj>
         <rows>25</rows>
-        <scenarioDir>/nas01/depts/ie/cempd/apps/sallocator/festc1_0/epic/scenarios/test_case</scenarioDir>
+        <scenarioDir>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case</scenarioDir>
         <xcellSize>12000.0</xcellSize>
         <xmin>-84000.0</xmin>
         <ycellSize>12000.0</ycellSize>
         <ymin>204000.0</ymin>
         <enddate>20061231</enddate>
-        <outfileprefix></outfileprefix>
+        <outfileprefix>test</outfileprefix>
         <startdate>20060101</startdate>
     </gov.epa.festc.core.proj.Epic2CMAQFields>
+    <gov.epa.festc.core.proj.Epic2SWATFields>
+        <cols>0</cols>
+        <message>Job messages: 
+Epic base: /proj/ie/proj/staff/dyang/festc/festc1.4/epic
+Script file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/epic2swat_extract_dailyEpic_20180829131502.csh
+Log file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/epic2swat_extract_dailyEpic_20180829131502.csh.log
+Epic base: /proj/ie/proj/staff/dyang/festc/festc1.4/epic
+Script file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/epic2swat_extract_NDEP_20180829131506.csh
+Log file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/epic2swat_extract_NDEP_20180829131506.csh.log
+Epic base: /proj/ie/proj/staff/dyang/festc/festc1.4/epic
+Script file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/epic2swat_daily_metCMAQ_20180829131509.csh
+Log file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/epic2swat_daily_metCMAQ_20180829131509.csh.log
+Epic base: /proj/ie/proj/staff/dyang/festc/festc1.4/epic
+Script file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/extract_swatInputs_20180829132933.csh
+Log file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/extract_swatInputs_20180829132933.csh.log
+Epic base: /proj/ie/proj/staff/dyang/festc/festc1.4/epic
+Script file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/extract_swatInputs_20180829142437.csh
+Log file: /proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/scripts/extract_swatInputs_20180829142437.csh.log
+</message>
+        <rows>0</rows>
+        <scenarioDir>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case</scenarioDir>
+        <xcellSize>0.0</xcellSize>
+        <xmin>0.0</xmin>
+        <ycellSize>0.0</ycellSize>
+        <ymin>0.0</ymin>
+        <beld4ncf>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/share_data/beld4_TESTGRIDS_2006.nc</beld4ncf>
+        <hucSelection>HUC8</hucSelection>
+        <metdep>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/share_data/site_weather_dep_20060101_to_20061231.nc</metdep>
+        <NDepSelection>CMAQ</NDepSelection>
+        <ratioFile>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/share_data/subbasins-mapping_test_case.csv</ratioFile>
+    </gov.epa.festc.core.proj.Epic2SWATFields>
     <gov.epa.festc.core.proj.VisualizationFields>
         <cols>0</cols>
         <rows>0</rows>
@@ -159,11 +265,11 @@
         <xmin>0.0</xmin>
         <ycellSize>0.0</ycellSize>
         <ymin>0.0</ymin>
-        <beldDataDir></beldDataDir>
-        <beldDataSelected>false</beldDataSelected>
-        <epicDataDir></epicDataDir>
-        <epicDataSelected>true</epicDataSelected>
-        <mcipDataDir></mcipDataDir>
+        <beldDataDir>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/share_data/beld4_TESTGRIDS_2006.nc</beldDataDir>
+        <beldDataSelected>true</beldDataSelected>
+        <epicDataDir>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/output4CMAQ/app/toCMAQ/epic2cmaq_year.nc</epicDataDir>
+        <epicDataSelected>false</epicDataSelected>
+        <mcipDataDir>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/share_data/site_weather_dep_20060101_to_20061231.nc</mcipDataDir>
         <mcipDataSelected>false</mcipDataSelected>
     </gov.epa.festc.core.proj.VisualizationFields>
     <gov.epa.festc.core.proj.DomainFields>
@@ -171,10 +277,27 @@
         <gridName>TESTGRIDS</gridName>
         <proj>+proj=lcc +a=6370000.0 +b=6370000.0 +lat_1=33 +lat_2=45 +lat_0=40 +lon_0=-97</proj>
         <rows>25</rows>
-        <scenarioDir>/nas01/depts/ie/cempd/apps/sallocator/festc1_0/epic/scenarios/test_case</scenarioDir>
+        <scenarioDir>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case</scenarioDir>
         <xcellSize>12000.0</xcellSize>
         <xmin>-84000.0</xmin>
         <ycellSize>12000.0</ycellSize>
         <ymin>204000.0</ymin>
+        <nlcdYear>2006</nlcdYear>
+        <simYear>2006</simYear>
     </gov.epa.festc.core.proj.DomainFields>
+    <gov.epa.festc.core.proj.Epic2SWATFields>
+        <cols>0</cols>
+        <message></message>
+        <rows>0</rows>
+        <scenarioDir>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case</scenarioDir>
+        <xcellSize>0.0</xcellSize>
+        <xmin>0.0</xmin>
+        <ycellSize>0.0</ycellSize>
+        <ymin>0.0</ymin>
+        <beld4ncf>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/share_data/beld4_TESTGRIDS_2006.nc</beld4ncf>
+        <hucSelection>Domain</hucSelection>
+        <metdep>/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/test_case/share_data/site_weather_dep_20060101_to_20061231.nc</metdep>
+        <NDepSelection>CMAQ</NDepSelection>
+        <ratioFile></ratioFile>
+    </gov.epa.festc.core.proj.Epic2SWATFields>
 </ns2:project>

@@ -1,5 +1,5 @@
 #! /bin/sh
-FESTC_HOME=/proj/ie/proj/EPIC/FESTCv1.3_Test/festc1_3/festc
+FESTC_HOME=.
 cd $FESTC_HOME/plugins/bootstrap
 
 if [ "`uname -m`" = "ia64" ]; then

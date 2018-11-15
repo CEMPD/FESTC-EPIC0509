@@ -80,11 +80,9 @@ for ( i in tlays ) {
 #  if ( i == 11 )  write.table(tem.df, file = outname_grd,col.names=T,row.names=F, append=F, quote=F, sep=",")
    tem.df$AREA <- tem.df$PERC*0.01*garea*0.0001
 
-# grepl('T_', spcname)>0
-   if ( ! (grepl('T_', spcname)>0) ) tem.df$CROP <- tem.df$AREA*tem.df$CROP 
+   if ( ! (grepl('T_', spcname)) ) tem.df$CROP <- tem.df$AREA*tem.df$CROP 
    tem.df$PERC <- NULL
-
-   # do sum for whole domain
+   #str(tem.df)
    c <- colSums(tem.df[-1]) 
    str(c)
    crow <- c(CropNum=i, c)
@@ -92,8 +90,8 @@ for ( i in tlays ) {
    else           out.df <- rbind(out.df, crow)
 
    # transfter data to kg if not T_YLDF, unit for T_YLDF is 1000ton
-   if ( ! (grepl('T_', spcname)>0) ) unit <- "(kg)"
-   if ( grepl('T_', spcname)>0 )     unit <- "(1000ton)"
+   unit <- "(kg)"
+   if ( grepl('T_', spcname) ) unit <- "(1000ton)"
    cnames <- c("CropNum", paste(spcname,unit,spe=""), "AREA(ha)")
    
    names(out.df) <- cnames

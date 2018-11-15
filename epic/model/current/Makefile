@@ -2,9 +2,9 @@
 #
 F95=ifort
 
-FFLAGS= -O3 -warn nousage -132 -zero -save -common-args -traceback
+FFLAGS= -O3 -cm -132 -zero -save -common-args -i-static -traceback
 
-LDFLAGS= $(FFLAGS) -static-intel
+LDFLAGS= $(FFLAGS) -static -static-intel
 
 EXEAPP=EPICapp.exe
 EXESU=EPICsu.exe

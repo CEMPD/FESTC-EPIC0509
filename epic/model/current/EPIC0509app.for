@@ -39,14 +39,14 @@ C  UNC
 	INTEGER RECN,SLOPEL,SLOPEU,NSL,HYDDRAINED
         CHARACTER*11  CROPNAME_HI
         REAL*8        HI_TC, CO2FAC
-        REAL          PARM_9, PARM_10, ARMX_ori
+        REAL          PARM_9, PARM_10, ARMX_ori, PSTX_ori
         CHARACTER*8   CNYST
 C  UNC
 
       REAL*8 PPX
       INCLUDE 'EPCM0509_app.for'
       DIMENSION AYR(150),ASG(4),TITW5(2)
-      DIMENSION NXX(3,5),NYY(3,5),IG(12),IDIR(4),NY(3)
+      DIMENSION NXX(3,5),NYY(3,5),IG(12),NY(3)
       DIMENSION XZP(13,16),XTP(200),XYP(200),YTP(16),UAV0(12),AKX(3,3),
      1COCH(6),RFPT(4),CSTZ(2)
       DIMENSION PPX(13)
@@ -290,25 +290,17 @@ C          > 0 FOR ARMEN KEMANIAN CARBON/CLAY FUNCTION
 !          = 2 FOR READING FROM WORKING DIRECTORY + 3 OTHER DIRECTORIES
 ! 35  IPAT = 0 TURNS OFF AUTO P APPLICATION
 !          > 0 FOR AUTO P APPLICATION
+! 36  IPRK = 0 FOR HPERC
+!          = 1 FOR HPERC1 (4MM SLUG FLOW)
 C     LINE 1/2
       READ(KR(21),300)NBYR0,IYR0,IMO0,IDA0,IPD,NGN,IGN,IGS0,LPYR,IET,
      &ISCN,ITYP,ISTA,IHUS,NCOW0,NVCN,INFL0,MASP,LBP,NSTP,IGMX,IERT,ICG,
-     &LMS,ICF,ISW,IRW,ICO2,IDUM,ICOR,IDN,NUPC,IOX,IDI0,IPAT
+     &LMS,ICF,ISW,IRW,ICO2,IDUM,ICOR,IDN,NUPC,IOX,IDI0,IPAT,IPRK
+
 C   UNC
       NBYRVWB=NBYR0
 C   UNC
 
-
-      SELECT CASE(IDI0+1)
-		CASE(1)
-			IDIR=0
-		CASE(2)
-			IDIR=1
-		CASE(3)
-			DO I=1,4
-				IDIR(I)=I
-			END DO
-	END SELECT					 
        CALL OPENV(KR(6),FMLRN, INDIR, 'R')
        CALL OPENV(KR(2),FPARM, INDIR, 'R')
        CALL OPENV(KR(5),FPRNT, INDIR, 'R')
@@ -590,11 +582,12 @@ C     write(*,*) "value of RFN0: ", RFN0
       IF ( USEDEP==3 .or. USEDEP==1 ) RFN0 = 0.0
 
       ARMX_ori = ARMX
+      PSTX_ori = PSTX
       CO20 = CO2FAC
 C    END UNC
 
       BUS0=BUS(1)
-	ANG=ANG0/CLT
+      ANG=ANG0/CLT
 C     READ ECONOMIC DATA
 C  1  COIR = COST OF IRRIGATION WATER ($/M**3)
 C  2  COL  = COST OF LIME ($/T)
@@ -728,9 +721,9 @@ C       WRITE(*,679)ASTN,ISIT,IWP1,INPS,IOPS
       WRITE(KW(1),229)
       WRITE(KW(1),287)HED
       WRITE(KW(1),245)
-      DO 25 J=1,25
+      DO 25 J=1,30
    25 WRITE(KW(1),242)J,PARM(J),(VIRR(I,J),I=1,2),(SCRP(J,I),I=1,2)
-      DO 389 J=26,SIZE(PARM)
+      DO 389 J=31,SIZE(PARM)
   389 WRITE(KW(1),242)J,PARM(J)
       DO 
 C        READ(KR(23),*,IOSTAT=NFL)LSTN,SITEFILE
@@ -801,6 +794,11 @@ C  8  UPS  = UPLAND SLOPE STEEPNESS (M/M)
 C     LINE 5
       READ(KR(1),303)WSA,CHL,CHS,CHD,CHN,SN,UPSL,UPS,PEC
 	IF(PEC<1.E-10)PEC=PEC0
+      IF(NCOW0>0)THEN
+          RSTK=WSA/REAL(NCOW0)
+      ELSE
+          RSTK=0.
+      END IF
 
 C     READ MANAGEMENT INFORMATION
 C  1  IRR  = N0 FOR DRYLAND AREAS          | N = 0 APPLIES MINIMUM OF
@@ -828,16 +826,15 @@ C     set original PARM 9 and 10 back
       PARM(9) = PARM_9
       PARM(10) = PARM_10
 
-      IF (CROPNUM_N>=33 .AND. CROPNUM_N<=36)  THEN
-        IF ( .NOT.( (REG_N==10.AND.CROPNUM_N==35) .OR. ((REG_N==3.OR.REG_N==6.OR.REG_N==8).AND.CROPNUM_N==36)) ) THEN
+      IF ( (CROPNUM_N>=33 .AND. CROPNUM_N<=36) .OR. (CROPNUM_N>=7 .AND. CROPNUM_N<=8) 
+     1     .OR. (CROPNUM_N>=15 .AND. CROPNUM_N<=18) .OR. (CROPNUM_N>=25 .AND. CROPNUM_N<=26) )  THEN
 
           PARM(9) = 25.0
-          PARM(10) = 1.0
+          PARM(10) = 5.0
 
           IF ( CROPNUM_N==36 ) IRI = 14
           IF ( CROPNUM_N==34 .AND. (REG_N==7) ) IRI = 14
 
-        END IF
       END IF
 C     EPA PARM 9 and 10 and IRI change
 
@@ -861,12 +858,19 @@ C     DEFAULT TO AUTOMATIC IRRIGATION REMOVE COMMENT "C" LINE BELOW
 C     EPA LRan: to reduce high grass yield
 C     set original value back
       ARMX = ARMX_ori
+      PSTX = PSTX_ori
 
       IF(  CROPNUM_N == 2 .OR. CROPNUM_N == 4 .OR. CROPNUM_N == 6 )  THEN
           IRR = 12
           IRI = 14
           ARMX = 100.0
       END IF
+
+      IF ( (CROPNUM_N>=33 .AND. CROPNUM_N<=36) .OR. (CROPNUM_N>=7 .AND. CROPNUM_N<=8) 
+     1   .OR. (CROPNUM_N>=15 .AND. CROPNUM_N<=18) .OR. (CROPNUM_N>=25 .AND. CROPNUM_N<=26) )  THEN
+          PSTX = 5
+      END IF
+
 C     END of EPA 
 
 
@@ -1121,52 +1125,66 @@ C      OBSL=0
   492 BIG=0.
       V3=AUNIF(IDG(3))
       ADD=0.
-      DO 65 I=1,12
-      I1=I+1
-      XM=NC(I1)-NC(I)
-      JDA=(NC(I1)+NC(I))*.5
-      CALL WHLRMX
-      SRMX(I)=RAMX
-      THRL(I)=HRLT
-      IF(HRLT.GT.BIG)BIG=HRLT
-      XYP(I)=0.
-      XX=SDTMX(IW,I)-SDTMN(IW,I)
-      IF(XX.LT.10.)GO TO 54
-      SDTMX(IW,I)=(SDTMX(IW,I)-OBMX(IW,I))*.25
-      SDTMN(IW,I)=(OBMN(IW,I)-SDTMN(IW,I))*.25
-   54 IF(PRW(1,IW,I).GT.0.)GO TO 55
-      PRW(1,IW,I)=BTA*(UAVM(I)+.0001)/XM
-      PRW(2,IW,I)=1.-BTA+PRW(1,IW,I)
-      GO TO 56
-   55 UAVM(I)=XM*PRW(1,IW,I)/(1.-PRW(2,IW,I)+PRW(1,IW,I))
-   56 RST(1,IW,I)=RMO(IW,I)/(UAVM(I)+.01)
-      X2=SQRT(OBMX(IW,I)-OBMN(IW,I))
-      IF(OBSL(IW,I)<1.E-5)THEN
-          X1=AMAX1(.8,.21*X2)
-	  OBSL(IW,I)=X1*RAMX
-      END IF
-      TX=.5*(OBMX(IW,I)+OBMN(IW,I))
-      XL=2.501-2.2E-3*TX
-      RAMM=RAMX/XL
-      EO=PARM(38)*RAMM*(TX+17.8)*X2
-      ADD=ADD+EO	
-      IF(ICDP.EQ.0)GO TO 60
-      RST(1,IW,I)=RST(1,IW,I)*REXP
-      PCF(IW,I)=1.
-      GO TO 65
-   60 SUM=0.
-      RFVM=RST(1,IW,I)
-      RFSD=RST(2,IW,I)
-      RFSK=RST(3,IW,I)
-      R6=RFSK/6.
-      DO 61 J=1,1000
-      V4=AUNIF(IDG(3))
-      XX=ADSTN(V3,V4)
-      V3=V4
-      R1=WRAIN(R6,XX,RFSD,RFSK,RFVM)
-   61 SUM=SUM+R1
-      PCF(IW,I)=1010.*RST(1,IW,I)/SUM
-   65 CONTINUE
+      XYP=0.
+      DO I=1,12
+                I1=I+1
+                XM=NC(I1)-NC(I)
+                JDA=(NC(I1)+NC(I))*.5
+                CALL WHLRMX
+                SRMX(I)=RAMX
+                THRL(I)=HRLT
+                IF(HRLT.GT.BIG)BIG=HRLT
+                XX=SDTMX(IW,I)-SDTMN(IW,I)
+                IF(XX>10.)THEN
+                        SDTMX(IW,I)=(SDTMX(IW,I)-OBMX(IW,I))*.25
+                        SDTMN(IW,I)=(OBMN(IW,I)-SDTMN(IW,I))*.25
+            END IF
+            IF(PRW(1,IW,I)>0.)THEN
+                UAVM(I)=XM*PRW(1,IW,I)/(1.-PRW(2,IW,I)+PRW(1,IW,I))
+            ELSE
+                        PRW(1,IW,I)=BTA*(UAVM(I)+.0001)/XM
+                        PRW(2,IW,I)=1.-BTA+PRW(1,IW,I)
+            END IF
+            RST(1,IW,I)=RMO(IW,I)/(UAVM(I)+.01)
+                X2=SQRT(OBMX(IW,I)-OBMN(IW,I))
+                IF(OBSL(IW,I)<1.E-5)THEN
+                        X1=AMAX1(.8,.21*X2)
+                        OBSL(IW,I)=X1*RAMX
+                END IF
+                TX=.5*(OBMX(IW,I)+OBMN(IW,I))
+                XL=2.501-2.2E-3*TX
+                RAMM=RAMX/XL
+                EO=PARM(38)*RAMM*(TX+17.8)*X2
+                ADD=ADD+EO
+            XYP(3)=XYP(3)+RMO(IW,I)
+                IF(ICDP>0)THEN
+                        RST(1,IW,I)=RST(1,IW,I)*REXP
+                        PCF(IW,I)=1.
+                    CYCLE
+            END IF
+          SUM=0.
+                RFVM=RST(1,IW,I)
+                RFSD=RST(2,IW,I)
+                RFSK=RST(3,IW,I)
+                R6=RFSK/6.
+                DO J=1,1000
+                        V4=AUNIF(IDG(3))
+                        XX=ADSTN(V3,V4)
+                        V3=V4
+                        R1=WRAIN(R6,XX,RFSD,RFSK,RFVM)
+                        SUM=SUM+R1
+            END DO
+                PCF(IW,I)=1010.*RST(1,IW,I)/SUM
+        END DO
+        AAP=XYP(3)
+        IF(NCOW0<0)THEN
+                ADD=30.44*ADD
+                RTO=ADD/AAP
+                F=RTO/(RTO+EXP(SCRP(25,1)-SCRP(25,2)*RTO))
+                RSTK=10.*F+1.
+                GCOW=WSA/RSTK
+                NCOW=GCOW+.99
+        END IF
       XYP(1)=OBMX(IW,1)
       BIG=OBSL(IW,1)
       UPLM=RH(IW,1)
@@ -1188,7 +1206,7 @@ C      OBSL=0
       XM=NC(I+1)-NC(I)
       WFT(IW,I)=UAVM(I)/XM
       XYP(2)=XYP(2)+OBMN(IW,I)
-      XYP(3)=XYP(3)+RMO(IW,I)
+C      XYP(3)=XYP(3)+RMO(IW,I)
       XYP(4)=XYP(4)+UAVM(I)
       OBSL(IW,I)=RUNT*OBSL(IW,I)
       XYP(5)=XYP(5)+OBSL(IW,I)
@@ -1325,19 +1343,20 @@ C     LINE 1/2
       TC=TCC+TCS
   430 JDHU=400
       WDRM=HLMN
-      IF(HLMN.GT.11.)GO TO 437
-	CALL ADAJ(NC,JDHU,JT1,15,NYD)
-	WDRM=PARM(6)+HLMN
+      IF(HLMN<11.)THEN
+                CALL ADAJ(NC,JDHU,JT1,15,NYD)
+                WDRM=PARM(6)+HLMN
+        END IF
   437 AAP=XYP(3)
 C     UNC
-  	IF(NCOW0<0)THEN
-		ADD=30.44*ADD
-		RTO=ADD/AAP
-		F=RTO/(RTO+EXP(SCRP(25,1)-SCRP(25,2)*RTO))
-		RSTK=10.*F+1.
-		GCOW=WSA/RSTK
-		NCOW=GCOW+.99
-	END IF
+        IF(NCOW0<0)THEN
+                ADD=30.44*ADD
+                RTO=ADD/AAP
+                F=RTO/(RTO+EXP(SCRP(25,1)-SCRP(25,2)*RTO))
+                RSTK=10.*F+1.
+                GCOW=WSA/RSTK
+                NCOW=GCOW+.99
+        END IF
 C     UNC
 
       XYP(6)=115.*XYP(6)
@@ -1476,11 +1495,12 @@ C     LINES 4/19
       WRITE(KW(1),616)
       GO TO 698
   615 WRITE(KW(1),618)
-  698 IF(IDN.GT.0)GO TO 406
-      WRITE(KW(1),409)
-      GO TO 410
-  406 WRITE(KW(1),414)
-  410 IF(NUPC.GT.0)GO TO 828
+  698 IF(IDN>0)THEN
+          WRITE(KW(1),414)
+      ELSE
+          WRITE(KW(1),409)
+      END IF
+      IF(NUPC.GT.0)GO TO 828
       WRITE(KW(1),829)
       GO TO 830
   828 WRITE(KW(1),831)
@@ -1491,6 +1511,11 @@ C     LINES 4/19
   834 WRITE(KW(1),837)
   837 FORMAT(T10,'O2=F(C/CLA)')
   836 WRITE(KW(1),233)APM,SNO0,RFN0,CNO3I,CSLT
+      IF(IPRK==0)THEN
+          WRITE(KW(1),'(T10,A)')'PERCOLATION--HPERC'
+      ELSE
+          WRITE(KW(1),'(T10,A)')'PERCOLATION--HPERC1 (4mm SLUG FLOW)'
+      END IF
       IF(MASP.LE.0)GO TO 580
       WRITE(KW(1),502)
       GO TO 628
@@ -2142,7 +2167,7 @@ C     UNC
       SW=YTP(2)
       SWW=YTP(2)+SNO
       SLT0=TSLT
-      IF(XX.LT.1.)SMX=SMX*SQRT(XX)
+C      IF(XX.LT.1.)SMX=SMX*SQRT(XX)
 	SCI=AMAX1(3.,SMX*(1.-RZSW/PAW))
       CALL APAGE(1)
       IF(IWRT.GT.0)GO TO 521
@@ -2598,12 +2623,12 @@ C     PRINTOUT PESTICIDE SCHEDULE
 	WRITE(KW(1),715)TIL(NDT),TLD(NDT)
 C     IF(IAUF.EQ.0)GO TO 689
       JX(4)=261
-      JX(5)=12
+      JX(5)=0
       CALL TILTBL
       IAUF=NDT 
       IF(LMS.GT.0)GO TO 690
       JX(4)=267
-      JX(5)=12
+      JX(5)=0
       CALL TILTBL
       IAUL=NDT
 	WRITE(KW(1),714)TIL(NDT),TLD(NDT)
@@ -4076,7 +4101,7 @@ C     EPIC0509
 C     THIS SUBPROGRAM INITIALIZES VARIABLES
       INCLUDE 'EPCM0509_app.for'
       ICV=0
-C      IDFT(1)=IDF0
+      IDFT(1)=IDF0
 !    UNC-VWB-BARE ESTIMATE OF THE FRACTION OF BARE SOIL FOR WIND EROSION CALCULATIONS add FBARE=0
       FBARE=0
       IDRL=0
@@ -4984,7 +5009,7 @@ C     92('CPNM,',4(A4,',',2X)))
      1'STATISTICAL WEATHER,',' STATISTICAL WIND,  ',
      2' SOIL FILE NAME,     ',
      3'OPERATION FILE NAME,',' LATITUDE,','LONGITUDE,',
-     44X,'Y  ,M  ,D  ,',29(A4,','3X),
+     44X,'Y  ,M  ,D  ,',29(A8,','3X),
      53X,'HUSC,',2X,
      7'HU BASE 0, HU FRAC.,',
      8'L-1 DEP,','L-1 BD, ','L-1 SW, ','L-1 NO3,','L-1 NH3,','L-1 ON, ',
@@ -5156,18 +5181,16 @@ C    UNC
       IF ( USEDEP  == 3 ) THEN
 C         REWIND KR(31)
 C         WRITE(*,*)  "READ 31: ", IYR,MO,KDA
-C         CALL WREADNDEP
-          READ(KR(31),999,END=508) I3,I2,I1,I0,WOX,WRD,WOG
-C         WRITE(*,*) "KR(31): ", I3,I2,I1,I0,WOX,WRD,WOG
-
-          WNO3(LD1)=WNO3(LD1)+.001*(WOX)
-          WNH3(LD1)=WNH3(LD1)+.001*(WRD)
+          READ(KR(31),999,END=508) I3,I2,I1,I0,DOX,DRD,WOX,WRD,WOG
+C         WRITE(*,*) "KR(31): ", I3,I2,I1,I0,DOX,DRD,WOX,WRD,WOG
+          WNO3(LD1)=WNO3(LD1)+.001*(DOX+WOX)
+          WNH3(LD1)=WNH3(LD1)+.001*(DRD+WRD)
           WHSN(LD1)=WHSN(LD1)+.001*(WOG)
 C         WRITE(*,*) "LD1:", LD1,WNO3(LD1),WNH3(LD1),WHSN(LD1)
 C         REWIND KR(31)
       ENDIF
  
-  999 FORMAT(I6,3I4,3F7.2)
+  999 FORMAT(I6,3I4,5F7.2)
 
 C     write(*,*) "NGN: ", NGN, IGSD 
 C     write(*,*) "NGN: ", IY, IGSD, IDA, NSTP
@@ -5176,19 +5199,6 @@ C     write(*,*) "NGN: ", IY, IGSD, IDA, NSTP
       IF(IY.NE.IGSD)GO TO 504
       IF(IDA.GT.NSTP)GO TO 508
 
-C   OLD WEATHER READ INPUT
-C     READ DAILY WEATHER IF NOT GENERATED
-C  1  RA   = SOLAR RADIAION(MJ/M2 OR LY)(BLANK TO GENERATE
-C  2  TMX  = MAX TEMP(C)
-C  3  TMN  = MIN TEMP(C)
-C  4  RFV  = RAINFALL(MM)(999. TO GENERATE OCCURRENCE & AMOUNT;
-C            -1. TO GENERATE AMOUNT GIVEN OCCURRENCE)
-C  5  RHD  = RELATIVE HUMIDITY (FRACTION)(BLANK TO GENERATE
-C  6  U10  = WIND VELOCITY (M/S)(BLANK TO GENERATE
-C  7  X1   = ATMOSPHERIC CO2 CONC (PPM)
-C  504 READ(KR(7),103,END=508)RA,TMX,TMN,RFV,RHD,U10,X1,REP
-
-C   NEW WEATHER READ INPUT FOR EPA AIR QUALITY VERSION
 C     READ DAILY WEATHER IF NOT GENERATED
 C  1  RA   = SOLAR RADIAION(MJ/M2 OR LY)(BLANK TO GENERATE
 C  2  TMX  = MAX TEMP(C)
@@ -5207,8 +5217,9 @@ C 13  REP  = PEAK RAINFALL RATE(mm/h)
 
   504   READ(KR(7),103,END=508)RA,TMX,TMN,RFV,RHD,U10,DOX,DRD,WOX,WRD,WOG,
      &X1,REP
-
+C     write(*,*) "KR(7): ", RA,TMX,TMN,RFV,RHD,U10,DOX,DRD,WOX,WRD,WOG,X1,REP
       IF (  USEDEP  == 1 ) THEN 
+C      WRITE(*,*)  "READ 7: ", IYR,MO,KDA
 	WNO3(LD1)=WNO3(LD1)+.001*(DOX+WOX)
 	WNH3(LD1)=WNH3(LD1)+.001*(DRD+WRD)
         WHSN(LD1)=WHSN(LD1)+.001*WOG
@@ -6503,20 +6514,27 @@ C    1(J).EQ.NDC(5).OR.IDC(J).EQ.NDC(9))GO TO 568
 	STGS=AMAX1(STGS,SF(5,J1,J))
 	SAGS=AMAX1(SAGS,SF(6,J1,J))
 	SSGS=AMAX1(SSGS,SF(7,J1,J))
-      IF(IY.NE.IPY)GO TO 78
-      IF(CSTF(J1,J).GT.0.)GO TO 77
-      CSTF(J1,J)=COST
-      CSOF(J1,J)=COST-CSFX
-      COST=0.
-      CSFX=0.
+      IF(IY==IPY)THEN
+                IF(CSTF(J1,J)<1.E-10)THEN
+                        CSTF(J1,J)=COST
+                        CSOF(J1,J)=COST-CSFX
+                        COST=0.
+                        CSFX=0.
+                END IF
+          IF(IDC(J)==NDC(7).OR.IDC(J)==NDC(8).OR.IDC(J)==NDC(10))THEN
+                        X1=.0001*PPL0(J)
+                ELSE
+                        X1=PPL0(J)
+                END IF
 C     PRINTOUT CROP ANNUAL
-   77 WRITE(KW(1),106)CPNM(J),YLD1(J1,J),YLD2(J1,J),DMF(J1,J),YLNF(J1,J)
+      WRITE(KW(1),106)CPNM(J),YLD1(J1,J),YLD2(J1,J),DMF(J1,J),YLNF(J1,J)
      1,YLPF(J1,J),YLKF(J1,J),FRTN(J1,J),FRTP(J1,J),FRTK(J1,J),VIR(J1,J),
      2VIL(J1,J),CAW(J1,J),XTP(3,J1,J),PPL0(J),TPSF(J1,J),CSTF(J1,J),CSOF
      3(J1,J),XTP(1,J1,J),XTP(2,J1,J),EK,REK,WK
       WRITE(KW(1),97)(SF(L,J1,J),L=1,7)
       TSMQ=0.
       TSMY=0.
+        END IF
    78 TDM(J)=TDM(J)+DMF(J1,J)
       TYL1(J)=TYL1(J)+YLD1(J1,J)
       TYL2(J)=TYL2(J)+YLD2(J1,J)
@@ -6554,13 +6572,10 @@ C 677 FORMAT(1X,'!!!!!',2I4,7F10.3)
       IF(K.LE.N2)GO TO 80
       VIRT=0.
       DARF=DARF+SMY(4)*SMY(4)
-      IF(SMY(4).GT.BARF)GO TO 544
-      IF(SMY(4).GT.SARF)GO TO 545
-      SARF=SMY(4)
-      GO TO 545
-  544 BARF=SMY(4)
+      IF(SMY(4)>BARF)BARF=SMY(4)
+      IF(SMY(4)<SARF)SARF=SMY(4)
 C     PRINTOUT ANNUAL FILE
-  545 X1=.001*TOC
+      X1=.001*TOC
 C    TENN CAPTURE TOTAL CARBON VALUE
       TOCVWB=X1
 C    TENN
@@ -7287,7 +7302,7 @@ C     TGX=MIN(X4,TX-TBSC(JJK))
       PSTS=MIN(0.,PSTS)
       IPST=0
    24 HUI(JJK)=HU(JJK)/XPHU
-      IF(HU(JJK)>XPHU)THEN
+      IF(HU(JJK)>=XPHU)THEN
 		WCYD=AMAX1(WCY(JJK),WCYD-EO*.002)
 		IF(IDC(JJK)==NDC(3).OR.IDC(JJK)==NDC(6))THEN
 	        HU(JJK)=0.
@@ -7323,7 +7338,7 @@ C     TGX=MIN(X4,TX-TBSC(JJK))
       X1=XX*X2*(1.+HR1)**PARM(70)
 	IF(IDC(JJK).NE.NDC(7).AND.IDC(JJK).NE.NDC(8).AND.IDC(JJK).NE.NDC
      1(10))X1=X1*SQRT(WS)*SHRL
-      SLAI(JJK)=SLAI(JJK)+X1
+      SLAI(JJK)=MIN(XLAI(JJK),SLAI(JJK)+X1)
    20 WLV(JJK)=F
 C     TGX=DST0-TBSC(JJK)
       IF(TGX.LE.0.)GO TO 4
@@ -7566,32 +7581,33 @@ C 56  FLT  = FRACTION LINT (COTTON LINT/PICKER YLD)
      1XMTU(JJK)
       Y1=PPLP(1,JJK)
       Y2=PPLP(2,JJK)
-      IF(Y2.GT.Y1)GO TO 76
-      X4=Y2
-      X5=Y1
-      HAM=.0001
-      GO TO 77
-   76 X4=Y1
-      X5=Y2
-      HAM=1.
-   77 X1=ASPLT(X4)*HAM
-      X2=ASPLT(X5)*HAM
+      IF(Y2>Y1)THEN
+                X4=Y1
+                X5=Y2
+      ELSE
+                X4=Y2
+                X5=Y1
+      END IF
+      X1=ASPLT(X4)
+      X2=ASPLT(X5)
 	CALL ASCRV(X4,X5,X1,X2)
       PPCF(1,JJK)=X4
       PPCF(2,JJK)=X5
-	IF(OPV(5).GT.0.)GO TO 2
-	G1=X2
-	DO 4 IT=1,10
-     	Z1=EXP(X4-X5*G1)
-	Z2=G1+Z1
-      FU=G1/Z2-.9
-      IF(ABS(FU).LT.1.E-5)GO TO 3
-	DFDU=Z1*(1.+X5*G1)/(Z2*Z2)
-	G1=G1-FU/DFDU
-    4 CONTINUE
-      WRITE(KW(1),5)
-    3 OPV(5)=G1
-    2 X3=OPV(5)*HAM
+        IF(OPV(5)>0.)THEN
+                X3=OPV(5)
+        ELSE
+                G1=X2
+                DO IT=1,10
+                        Z1=EXP(X4-X5*G1)
+                        Z2=G1+Z1
+                        FU=G1/Z2-.9
+                        IF(ABS(FU).LT.1.E-5)EXIT
+                        DFDU=Z1*(1.+X5*G1)/(Z2*Z2)
+                        G1=G1-FU/DFDU
+                END DO
+            IF(IT>10)WRITE(KW(1),5)
+            X3=G1
+      END IF
       PPLA(JJK,IHU(JJK))=DMLA(JJK)*X3/(X3+EXP(X4-X5*X3))
       POP(JJK,IHU(JJK))=X3
       IF(OPV(6).GT.0.)FMX=OPV(6)
@@ -8160,7 +8176,7 @@ C     EPIC0509
 C     THIS SUBPROGRAM PREDICTS DAILY SOIL LOSS CAUSED BY WATER EROSION
 C     AND ESTIMATES THE NUTRIENT ENRICHMENT RATIO.
       INCLUDE 'EPCM0509_app.for'
-!	DIMENSION XTP(3)      ! deleted by Jimmy 2017-01-04
+	DIMENSION XTP(3)      
 	CALL ERSC
       CALL EYCC
       CVX=CVF
@@ -8714,6 +8730,47 @@ C    1HCL(ISL),SUP,X3,SEP,SST
     6 RETURN
       END
 C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-*
+      SUBROUTINE HPERC1
+C     EPIC0509
+C     THIS SUBPROGRAM COMPUTES PERCOLATION AND LATERAL SUBSURFACE FLOW
+C     FROM A SOIL LAYER WHEN FIELD CAPACITY IS EXCEEDED.
+C     MODIFIED by EPA 2018-04-25 for 4MM SLUGS THROUGH AS A FUNCTION OF
+C     HYDRAULIC CONDUCTIVITY FOLLOWING EPIC1102
+      INCLUDE 'EPCM0509_app.for'
+      SEP=0.
+      SST=0.
+      ICW=0
+      !ST1=ST(ISL)
+      !ST2=ST(L2)
+      AVW=ST(ISL)-FC(ISL)
+      IF(AVW>0.)THEN
+          POFC=PO(ISL)-FC(ISL)
+          X1=24./POFC
+          DO WHILE(AVW>.01)
+              X5=MIN(AVW/POFC,1.)
+              X4=MAX(1.E-5,X5**PARM(82))
+              H=SATC(ISL)*X4
+              X2=X1*HCL(ISL)*X4
+              ZZ=X1*H
+              XZ=X2+ZZ
+              XX=MIN(4.,AVW)
+              IF(XZ>20.)THEN
+                  X3=XX
+              ELSE
+                  X3=XX*(1.-EXP(-XZ))
+              END IF
+              X6=X3/(1.+X2/ZZ)
+              SEP=SEP+X6
+              SST=SST+X3-X6
+              AVW=AVW-4.
+              IF(ISL/=IDR)SST=SST*RFTT
+              ICW=ICW+1
+              IF(ICW>50)EXIT
+          END DO
+      END IF
+      RETURN
+      END
+C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-*
       SUBROUTINE HPURK
 C     EPIC0509
 C     THIS SUBPROGRAM IS THE MASTER PERCOLATION COMPONENT.  IT
@@ -8724,19 +8781,25 @@ C     MANAGES THE ROUTING PROCESS
       DO 3 KK=1,NBSL
       ISL=LID(KK)
       ST(ISL)=ST(ISL)+SEP
-      IF(WTBL.GT.Z(ISL))GO TO 2
-      SSF(ISL)=0.
-      PKRZ(ISL)=0.
-      SEP=0.
-      GO TO 3
-    2 CALL HPERC
-      ST(ISL)=ST(ISL)-SEP-SST
-      SSF(ISL)=SST
-      IF(ISL.NE.IDR)GO TO 1
-      SMM(18,MO)=SMM(18,MO)+SST
-      VAR(18)=SST
-    1 PKRZ(ISL)=SEP
-      ADD=ADD+SST
+      IF(WTBL<=Z(ISL))THEN
+          SSF(ISL)=0.
+          PKRZ(ISL)=0.
+          SEP=0.
+      ELSE
+          IF(IPRK==0)THEN
+              CALL HPERC
+          ELSE
+              CALL HPERC1
+          END IF
+          ST(ISL)=ST(ISL)-SEP-SST
+          SSF(ISL)=SST
+          IF(ISL==IDR)THEN
+              SMM(18,MO)=SMM(18,MO)+SST
+              VAR(18)=SST
+          END IF
+          PKRZ(ISL)=SEP
+          ADD=ADD+SST
+      END IF
     3 CONTINUE
       SST=ADD
       K=NBSL
@@ -8981,35 +9044,31 @@ C     SIMULATION.
      3E13.6,2X,'QIN =',E13.6,2X/5X,'FSW =',E13.6)
       END
 C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-*
-      SUBROUTINE HSWU
+      SUBROUTINE HSWU(CPWU,RGS)
 C     EPIC0509
 C     THIS SUBPROGRAM DISTRIBUTES PLANT EVAPORATION THROUGH THE ROOT
 C     ZONE AND CALCULATES ACTUAL PLANT WATER USE BASED ON SOIL WATER
 C     AVAILABILITY.
       INCLUDE 'EPCM0509_app.for'
       BLM=S15(ISL)
-      IF(Z(ISL).LE..5)BLM=PARM(5)*S15(ISL)
-      IF(ISL.NE.LD1)GO TO 2
-      RGS=1.
-      CU=1.
-      GO TO 3
-    2 CALL CRGBD(RGS)
-      CU=CU*RGS
-    3 SUM=EP(JJK)*(1.-EXP(-UB1*GX/RD(JJK)))/UOB
+      IF(Z(ISL)<=.5)BLM=PARM(5)*S15(ISL)
+      IF(ISL/=LD1)THEN
+          CALL CRGBD(RGS)
+          CPWU=CPWU*RGS
+      END IF
+      SUM=EP(JJK)*(1.-EXP(-UB1*GX/RD(JJK)))/UOB
       TOS=36.*ECND(ISL)
-      XX=ALOG10(S15(ISL))
-      WTN=AMAX1(5.,10.**(3.1761-1.6576*((ALOG10(ST(ISL))-XX)/(ALOG10(FC
-     1(ISL))-XX))))
+      XX=LOG10(S15(ISL))
+      WTN=MAX(5.,10.**(3.1761-1.6576*((LOG10(ST(ISL))-XX)/(LOG10(FC
+     &(ISL))-XX))))
       XX=TOS+WTN
-      IF(XX.GT.5000.)GO TO 4
-      F=1.-XX/(XX+EXP(SCRP(21,1)-SCRP(21,2)*XX))
-      U(ISL)=MIN(SUM-CU*SU-(1.-CU)*UX,ST(ISL)-BLM)*F*RGS
-      IF(U(ISL).LT.0.)U(ISL)=0.
-    4 UX=SUM
-C     WRITE(KW(1),1)IY,MO,KDA,ISL,ST(ISL),BLM,S15(ISL),FC(ISL),Z(ISL),
-C    1XNS,CU,F,WS,U(ISL)
+      IF(XX<5000.)THEN
+          F=1.-XX/(XX+EXP(SCRP(21,1)-SCRP(21,2)*XX))
+          U(ISL)=MIN(SUM-CPWU*SU-(1.-CPWU)*UX,ST(ISL)-BLM)*F*RGS
+          IF(U(ISL)<0.)U(ISL)=0.
+      END IF
+      UX=SUM
       RETURN
-C   1 FORMAT(1X,4I3,10F10.3)
       END
 C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-*
       SUBROUTINE HTR55
@@ -9060,6 +9119,8 @@ C     CALLS HSWU AND NUPPO FOR EACH SOIL LAYER.
       UX=0.
       SEP=0.
       TOT=0.
+        CPWU=1.
+        RGS=1.
       DO 9 J=1,NBSL
       ISL=LID(J)
       IF(Z(ISL).LT.1.)GO TO 5
@@ -9088,7 +9149,7 @@ C     CALLS HSWU AND NUPPO FOR EACH SOIL LAYER.
       IR=J
       GO TO 8
     7 GX=Z(ISL)
-    8 CALL HSWU
+    8 CALL HSWU(CPWU,RGS)
       SU=SU+U(ISL)
     9 CONTINUE
       IF(IR.EQ.0)IR=NBSL
@@ -9472,6 +9533,10 @@ C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-*
 C     EPIC0509
 C     THIS SUBPROGRAM SIMULATES MINERALIZATION AND IMMOBILIZATION OF N
 C     AND C USING EQUATIONS TAKEN FROM CENTURY.
+
+C     Updated the subprogram with new version from EPIC1102 from J. Williams
+C     2017-12-05,  EPA LR
+
       INCLUDE 'EPCM0509_app.for'
       XZ=WNO3(ISL)+WNH3(ISL)
 C     AD1=WBMN(ISL)+WHPN(ISL)+WHSN(ISL)+WLMN(ISL)+WLSN(ISL)+XZ
@@ -9605,7 +9670,7 @@ C     COMPARE SUPPLY AND DEMAND FOR N
       GO TO 16
    15 CPN5=PN9-THPNP
 C     EXCESS N PLACED TEMPORARILY IN SUM
-C   16 WNH3(ISL)=WNH3(ISL)+SUM
+C  16 WNH3(ISL)=WNH3(ISL)+SUM
    16 WMIN=AMAX1(1.E-5,WNO3(ISL)+SUM)
       DMDN=CPN1+CPN2+CPN3+CPN4+CPN5
       X3=1.
@@ -9629,20 +9694,20 @@ C     DMDN=DMDN*X3
       SGMN=SGMN+SUM
       RNMN(ISL)=SUM-DMDN
 C     UPDATE
-      IF(RNMN(ISL).GT.0.)GO TO 17
-	X1=WNO3(ISL)+RNMN(ISL)
-	IF(X1.GE.0.)GO TO 20
-	RNMN(ISL)=-WNO3(ISL)
-	WNO3(ISL)=1.E-10
-	GO TO 21
-   20 WNO3(ISL)=X1
-      GO TO 21
-C  UNC
-C    ORGANIC MATTER GOES DIRECT TO NO3-JRW-ELLEN
-   17	WNH3(ISL)=WNH3(ISL)+RNMN(ISL)
-C  17	WNO3(ISL)=WNO3(ISL)+RNMN(ISL)
-C  UNC
-   21 DF1=TLSNA
+      IF(RNMN(ISL)>0.)THEN
+          X1=PARM(79)*RNMN(ISL)
+          WNH3(ISL)=WNH3(ISL)+X1
+          WNO3(ISL)=WNO3(ISL)+RNMN(ISL)-X1
+      ELSE
+          X1=WNO3(ISL)+RNMN(ISL)
+          IF(X1>0.)THEN
+              WNO3(ISL)=X1
+          ELSE
+              RNMN(ISL)=-WNO3(ISL)
+              WNO3(ISL)=1.E-10    
+          END IF   
+      END IF    
+      DF1=TLSNA
       DF2=TLMNA
 	SNMN=SNMN+RNMN(ISL)
 	SMS(9,ISL)=SMS(9,ISL)+RNMN(ISL)
@@ -9888,16 +9953,31 @@ C     BTK=SUM
   125 FORMAT(1X,3I3,14E16.6)
       END
 C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-*
-      SUBROUTINE NDNIT
+      SUBROUTINE NDNIT (DZA)
 C     EPIC0509
 C     THIS SUBPROGRAM ESTIMATES DAILY LOSS OF NO3 BY DENITRIFICATION.
       INCLUDE 'EPCM0509_app.for'
-	X1=MIN(PARM(4),1.-EXP(-CDG*WOC(ISL)/WT(ISL)))
-      WDN=WNO3(ISL)*X1
-	IF(WDN.GT.WNO3(ISL))WDN=WNO3(ISL)
-      WNO3(ISL)=WNO3(ISL)-WDN
+      WDN=0.
+      DN2G=0.
+
+      AIRV=MAX(0.,(PO(ISL)-ST(ISL))/DZA)
+        X1=0.90+.001*CLA(ISL)
+        X2=(1.0001-AIRV)/X1
+        IF(X2>=.8)THEN
+            H2OF=1./(1.+X2**(-60))
+          X1=1.-EXP(-.001*PARM(4)*CDG*WOC(ISL)/WT(ISL))
+          WDN=WNO3(ISL)*X1*H2OF
+          IF(WDN>WNO3(ISL))WDN=WNO3(ISL)
+          WNO3(ISL)=WNO3(ISL)-WDN
+      ELSE
+          WDN=0.
+      END IF
+
+      DN2G=PARM(80)*WDN
+C      write(*,*) 'ISL=',ISL,' WNO3=',WNO3(ISL),' X1=',X1, ' WDN=',WDN,' DN2=',DN2G
       RETURN
       END
+
 C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-*
       SUBROUTINE NDNITAK(DZA)
 C     EPIC0509
@@ -9906,28 +9986,28 @@ C     DENITRIFICATION AND N2O LOSSES OF SOIL NO3.
 	INCLUDE 'EPCM0509_app.for'
 	WDN=0.
   	DN2G=0.
-		! compute water factor
-	WFP=ST(ISL)/PO(ISL)
-	AIRV = MAX(0.,(PO(ISL)-ST(ISL))/DZA)
- 	X1=0.90+.001*CLA(ISL)
-  	X2=(1.0001-AIRV)/X1
-  	IF(X2<.8)RETURN
-	H2O_F=1./(1.+X2**(-60))
-! compute nitrate factor
-	ONO3_C=MAX(1.E-5,1000.*WNO3(ISL)/WT(ISL)) ! g/Mg or ppm
- 	ONO3_F = ONO3_C / (ONO3_C + 60.)
-	! compute respiration factor
-	X3 = 1.E+3* RSPC(ISL) / WT(ISL) ! units mg/kg
-	C_F = MIN(1., X3/50.)
-	D_F=ONO3_F*H2O_F*C_F
-	DNITMX =32.
-	!units g N / Mg soil / day (32 x 10-6 kg N kg-1 soil day-1)
-	WDN = D_F * DNITMX * WT(ISL) / 1000. ! kg N /ha
-	IF(WDN.GT.WNO3(ISL))WDN=WNO3(ISL)
-	!compute N2O as a fraction of WDN
-	X1=ONO3_F*(1.-SQRT(H2O_F))*(1.-C_F**.25)
-  	DN2G=MAX(X1,PARM(80))*WDN
-	WNO3(ISL)=WNO3(ISL)-WDN
+
+      ! COMPUTE WATER FACTOR
+        AIRV=MAX(0.,(PO(ISL)-ST(ISL))/DZA)
+        X1=0.90+.001*CLA(ISL)
+        X2=(1.0001-AIRV)/X1
+        IF(X2<.8)RETURN
+        H2O_F=1./(1.+X2**(-60))
+      ! COMPUTE NITRATE FACTOR
+        ONO3_C=MAX(1.E-5,1000.*WNO3(ISL)/WT(ISL))
+        ONO3_F=ONO3_C/(ONO3_C+60.)
+      ! COMPUTE RESPIRATION FACTOR
+        X3=1000.*RSPC(ISL)/WT(ISL)
+        C_F=MIN(1.,X3/50.)
+        D_F=ONO3_F*H2O_F*C_F
+        DNITMX=32.
+        WDN=D_F*DNITMX*WT(ISL)/1000.
+      !WDN=MIN(PARM(80),D_F*DNITMX*WT(ISL)/1000.)
+        IF(WDN>WNO3(ISL))WDN=WNO3(ISL)
+        !compute N2O as a fraction of WDN
+        X1=MAX(PARM(80),ONO3_F*(1.-SQRT(H2O_F))*(1.-C_F**.25))
+        DN2G=X1*WDN
+        WNO3(ISL)=WNO3(ISL)-WDN
   	RETURN
 	END
 C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-*
@@ -10016,7 +10096,7 @@ C  UNC
 
 C    set HU percent of maturity to stop fertilization
       STOP_HUI = 0.5
-      IF ( CROPNUM_N==15 .OR. CROPNUM_N==16 ) STOP_HUI = 0.4
+      IF ( CROPNUM_N>=17 .AND. CROPNUM_N<=18 ) STOP_HUI = 0.4
 
 C      write(*,*)  "CROPNUM_N =", CROPNUM_N, " STOP_HUI =",STOP_HUI
 
@@ -10366,40 +10446,36 @@ C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-*
       SSFK=0.
       SSST=0.
       V=PKRZ(ISL)+SSF(ISL)+1.E-10
-      IF(V<1.E-5)RETURN
-      VP=V/(STFR(ISL)*PO(ISL))
-      IF(VP>5.)THEN
-          X2=.99
-      ELSE
-          X2=1.-EXP(-VP)
-      END IF
-      X1=WNO3(ISL)-.001*WT(ISL)*PARM(27)
-      IF(X1>0.)THEN
-          VNO3=X1*X2
-          VV=VNO3/V
-          WNO3(ISL)=WNO3(ISL)-VNO3
-          SSO3(ISL)=VV*PKRZ(ISL)
-          SSFN=VV*SSF(ISL)
-          VMN=SSO3(ISL)
-      END IF
-      IF(SOLK(ISL)>0.)THEN
-          X3=SOLK(ISL)*X2
-          SOLK(ISL)=SOLK(ISL)-X3
-          VSK=X3*PKRZ(ISL)/V
-          SSFK=X3-VSK
-      END IF
-      IF(WSLT(ISL)>1.E-5)THEN
-          X3=WSLT(ISL)*X2
-          WSLT(ISL)=WSLT(ISL)-X3
-          VSLT=X3*PKRZ(ISL)/V
-          SSST=X3-VSLT
-      END IF
-      IF(AP(ISL)>1.E-5)THEN
-          XX=MIN(.75,(PKRZ(ISL)+SSF(ISL))/WT(ISL))
-          X3=XX*AP(ISL)
-          AP(ISL)=AP(ISL)-X3
-          VAP=X3*PKRZ(ISL)/V
-          SSFP=X3*SSF(ISL)/V
+      IF(V>0.)THEN
+          X2=1.-EXP(-V/(STFR(ISL)*PO(ISL)))
+          X1=WNO3(ISL)-.001*WT(ISL)*PARM(27)
+          IF(X1>0.)THEN
+              X3=X1*X2
+              VV=X3/V
+              WNO3(ISL)=WNO3(ISL)-X3
+              SSO3(ISL)=VV*PKRZ(ISL)
+              SSFN=VV*SSF(ISL)
+              VMN=SSO3(ISL)
+          END IF
+          IF(SOLK(ISL)>0.)THEN
+              X3=SOLK(ISL)*X2
+              SOLK(ISL)=SOLK(ISL)-X3
+              VSK=X3*PKRZ(ISL)/V
+              SSFK=X3-VSK
+          END IF
+          IF(WSLT(ISL)>0.)THEN
+              X3=WSLT(ISL)*X2
+              WSLT(ISL)=WSLT(ISL)-X3
+              VSLT=X3*PKRZ(ISL)/V
+              SSST=X3-VSLT
+          END IF
+          IF(AP(ISL)>0.)THEN
+              XX=MIN(.75,(PKRZ(ISL)+SSF(ISL))/WT(ISL))
+              X3=XX*AP(ISL)
+              AP(ISL)=AP(ISL)-X3
+              VAP=X3*PKRZ(ISL)/V
+              SSFP=X3*SSF(ISL)/V
+          END IF
       END IF
       RETURN
       END
@@ -10567,12 +10643,13 @@ C     LAYER.
       TSFP=TSFP+SSFP
       TSFK=TSFK+SSFK
       TSFS=TSFS+SSST
-      IF(ISL.NE.IDR)GO TO 1
-      SMM(53,MO)=SMM(53,MO)+SSFN
-      VAR(53)=SSFN
-      SMM(114,MO)=SMM(114,MO)+SSFP
-      VAR(114)=SSFP
-    1 Z5=500.*(Z(ISL)+XX)
+      IF(ISL==IDR)THEN
+          SMM(53,MO)=SMM(53,MO)+SSFN
+          VAR(53)=SSFN
+          SMM(114,MO)=SMM(114,MO)+SSFP
+          VAR(114)=SSFP
+      END IF
+      Z5=500.*(Z(ISL)+XX)
       IF(WNH3(ISL).GT..01)CALL NITVOL(Z5)
       IF(STMP(ISL).LE.0.)GO TO 5
       CDG=STMP(ISL)/(STMP(ISL)+EXP(SCRP(14,1)-SCRP(14,2)*STMP(ISL)))
@@ -10584,15 +10661,17 @@ C     IF(RZ.LT.XX)GO TO 4
 	SMNIM=SMNIM+WNO3(ISL)
       CALL NPMN(CS)
       SMP=SMP+WMP
-	IF(IDN.EQ.0)GO TO 4
- 
-  	DZA=2.*Z5
-	CALL NDNITAK(DZA)
-	GO TO 8 
-    4 IF(SUT.LT.PARM(30))GO TO 5
-      CALL NDNIT
-    8 SDN=SDN+WDN
-	SN2=SN2+DN2G
+
+C     Jimmy bug fix on 20180319
+      DZA=1000.*(Z(ISL)-XX)
+
+      IF(IDN==0)THEN
+          CALL NDNIT(DZA)
+      ELSE
+          CALL NDNITAK(DZA)
+      END IF
+      SDN=SDN+WDN
+      SN2=SN2+DN2G
     5 XX=Z(ISL)
       SMM(57,MO)=SMM(57,MO)+VAP
       VAR(57)=VAP
@@ -10828,17 +10907,23 @@ C     USE PARM
       FIXK(LD1)=FIXK(LD1)-X3
       VAR(78)=X1+X3
       SMM(78,MO)=SMM(78,MO)+X1+X3
-      V=QD+PKRZ(LD1)
-      X1=AMAX1(5.*V,WT(LD1)*PARM(8))
-      IF(QD.LT.1.E-10)GO TO 1
-      IF(LBP.GT.0)GO TO 2
-      QAP=X2*QD/X1
-      GO TO 4
-    2 RTO=(10.*WP(LD1)/WT(LD1))**PARM(34)
-      QAP=MIN(.5*X2,X2*QD*RTO/X1)
-    4 X2=X2-QAP
-    1 VAP=MIN(.5*X2,X2*PKRZ(LD1)/X1)
-      AP(LD1)=X2-VAP
+      V=QD+PKRZ(LD1)+SSF(LD1)
+      IF(V>0.)THEN
+          X1=MAX(5.*V,WT(LD1)*PARM(8))
+          IF(QD>0.)THEN
+              IF(LBP>0)THEN
+                  RTO=(10.*WP(LD1)/WT(LD1))**PARM(34)
+                  QAP=MIN(.5*X2,X2*QD*RTO/X1)
+              ELSE
+                  QAP=X2*QD/X1
+              END IF
+              X2=X2-QAP
+          END IF
+          X3=MIN(.5*X2,X2*(PKRZ(LD1)+SSF(LD1))/X1)
+          AP(LD1)=X2-X3
+          VAP=X3*PKRZ(LD1)/V
+          SSFP=X3*SSF(LD1)/V
+      END IF
       YMP=PMN(LD1)*YEW
       PMN(LD1)=PMN(LD1)-YMP
       YP=YP+YMP+YAP
@@ -12339,7 +12424,7 @@ C     HARVESTING, AND AUTOMATIC FERTILIZER APPLICATIONS AT PLANTING.
       CALL HCNSLP(CND(IRO,KT),X3)
       CN0=CND(IRO,KT)
 	SCI=MAX(3.,SMX*(1.-RZSW/PAW))
-      IF(Z(LID(NBSL)).LT.1.)SMX=SMX*SQRT(Z(LID(NBSL)))
+C      IF(Z(LID(NBSL)).LT.1.)SMX=SMX*SQRT(Z(LID(NBSL)))
     2 IF(II.EQ.NHC(1).OR.II.EQ.NHC(2).OR.II.EQ.NHC(3).OR.II.EQ.NHC(19)
      1.OR.II.EQ.NHC(22))GO TO 10
     	IF(II.EQ.NHC(5))GO TO 61
@@ -12513,12 +12598,12 @@ C     HARVESTING, AND AUTOMATIC FERTILIZER APPLICATIONS AT PLANTING.
       STDL=CLG*XX
       RLR=MIN(.8,STDL/(STD+1.E-5))
       IF(ORHI(JT1).GT.0.)GO TO 14
-	IF(IDC(JJK)==NDC(8))THEN
-	F=1.
-	ELSE
-      XX=100.*SWH(JJK)/(SWP(JJK)+1.E-5)
-	F=XX/(XX+EXP(SCRP(10,1)-SCRP(10,2)*XX))
-	END IF
+        IF(IDC(JJK)==NDC(8))THEN
+            F=1.
+        ELSE
+                XX=100.*SWH(JJK)/(SWP(JJK)+1.E-5)
+                F=XX/(XX+EXP(SCRP(10,1)-SCRP(10,2)*XX))
+        END IF
       XX=AMAX1(AJHI(JJK)-WSYF(JJK),0.)
 
 C     UNC: based on Modilar EPIC Williams TLOP module for CO2 trend
@@ -12530,10 +12615,11 @@ C       X1=MIN(F*XX+WSYF(JJK),.9*DM(JJK)/(STL(JJK)+1.E-10))*FT
         X1=(F*XX+WSYF(JJK))*FT
 C     UNC
 
-	IF(IDC(JJK)==NDC(8))THEN
-	X2=PARM(76)/AWC
-	X1=MIN(HI(JJK),X1*X2)
-	END IF
+        IF(IDC(JJK)==NDC(8))THEN
+                X2=PARM(76)/AWC
+                X1=MIN(HI(JJK),X1*X2)
+        END IF
+
 C     WRITE(KW(1),31)SWH(JJK),SWP(JJK),AJHI(JJK),F,XX,X1
       X2=1000.*CNY(JJK)*(X7/BN(3,JJK))**.1
       X3=1000.*CPY(JJK)*(.001*X3/BP(3,JJK))**.1
@@ -12731,6 +12817,10 @@ C     ACCORDING TO THE MIXING EFFICIENCY OF THE IMPLEMENT, CALCULATES
 C     THE CHANGE IN BULK DENSITY, CONVERTS STANDING RESIDUE TO FLAT
 C     RESIDUE, AND ESTIMATES THE IMPLEMENT'S EFFECT ON RIDGE HEIGHT AND
 C     INTERVAL.
+
+C     Updated the subprogram with new version from EPIC1102 from J. Williams
+C     2017-12-05,  LR
+
       INCLUDE 'EPCM0509_app.for'
       DIMENSION TST(58),DUM(15),XTP(8),YTP(8)
       DATA ISM/58/
@@ -12841,13 +12931,13 @@ C     CALL NCONT(VAR(77),VAR(75),VAR(76),VAR(65),VAR(73))
 C     EXTRACT THE FRACTION OF MATERIAL TO BE MIXED AND PLACE IN TST
 C     STORAGE
       TST(1)=EAJL(WNO3(ISL),EE)+TST(1)
-C     TST(2)=EAJL(WHPN(ISL),EE)+TST(2)
-C     TST(3)=EAJL(WHSN(ISL),EE)+TST(3)
+      TST(2)=EAJL(WHPN(ISL),EE)+TST(2)
+      TST(3)=EAJL(WHSN(ISL),EE)+TST(3)
       TST(4)=EAJL(WBMN(ISL),EE)+TST(4)
       TST(5)=EAJL(WLSN(ISL),EE)+TST(5)
       TST(6)=EAJL(WLMN(ISL),EE)+TST(6)
-C     TST(7)=EAJL(WHPC(ISL),EE)+TST(7)
-C     TST(8)=EAJL(WHSC(ISL),EE)+TST(8)
+      TST(7)=EAJL(WHPC(ISL),EE)+TST(7)
+      TST(8)=EAJL(WHSC(ISL),EE)+TST(8)
       TST(9)=EAJL(WBMC(ISL),EE)+TST(9)
       TST(14)=EAJL(WLS(ISL),EE)+TST(14)
       TST(15)=EAJL(WLM(ISL),EE)+TST(15)
@@ -12896,13 +12986,13 @@ C     TST(8)=EAJL(WHSC(ISL),EE)+TST(8)
       DUM(ISL)=PSP(ISL)*PMA
       UP(ISL)=PMA-DUM(ISL)
       TST(1)=EAJL(WNO3(ISL),RE)+TST(1)
-C     TST(2)=EAJL(WHPN(ISL),RE)+TST(2)
-C     TST(3)=EAJL(WHSN(ISL),RE)+TST(3)
+      TST(2)=EAJL(WHPN(ISL),RE)+TST(2)
+      TST(3)=EAJL(WHSN(ISL),RE)+TST(3)
       TST(4)=EAJL(WBMN(ISL),RE)+TST(4)
       TST(5)=EAJL(WLSN(ISL),RE)+TST(5)
       TST(6)=EAJL(WLMN(ISL),RE)+TST(6)
-C     TST(7)=EAJL(WHPC(ISL),RE)+TST(7)
-C     TST(8)=EAJL(WHSC(ISL),RE)+TST(8)
+      TST(7)=EAJL(WHPC(ISL),RE)+TST(7)
+      TST(8)=EAJL(WHSC(ISL),RE)+TST(8)
       TST(9)=EAJL(WBMC(ISL),RE)+TST(9)
       TST(10)=EAJL(WLSC(ISL),RE)+TST(10)
       TST(11)=EAJL(WLMC(ISL),RE)+TST(11)
@@ -12937,13 +13027,13 @@ C     COMPUTE MATERIAL PER DEPTH (KG/HA/M)
       ZZ=Z(LL)-XX
 C     DISTRIBUTE MIXED MATERIAL UNIFORMLY THRU PLOW DEPTH
       WNO3(LL)=TST(1)*ZZ+WNO3(LL)
-C     WHPN(LL)=TST(2)*ZZ+WHPN(LL)
-C     WHSN(LL)=TST(3)*ZZ+WHSN(LL)
+      WHPN(LL)=TST(2)*ZZ+WHPN(LL)
+      WHSN(LL)=TST(3)*ZZ+WHSN(LL)
       WBMN(LL)=TST(4)*ZZ+WBMN(LL)
       WLSN(LL)=TST(5)*ZZ+WLSN(LL)
       WLMN(LL)=TST(6)*ZZ+WLMN(LL)
-C     WHPC(LL)=TST(7)*ZZ+WHPC(LL)
-C     WHSC(LL)=TST(8)*ZZ+WHSC(LL)
+      WHPC(LL)=TST(7)*ZZ+WHPC(LL)
+      WHSC(LL)=TST(8)*ZZ+WHSC(LL)
       WBMC(LL)=TST(9)*ZZ+WBMC(LL)
       WLSC(LL)=TST(10)*ZZ+WLSC(LL)
       WLMC(LL)=TST(11)*ZZ+WLMC(LL)
@@ -12996,13 +13086,13 @@ C     WHSC(LL)=TST(8)*ZZ+WHSC(LL)
    10 CONTINUE
       XX=DMX-Z(LID(J1))
       WNO3(ISL)=WNO3(ISL)+TST(1)*XX
-C     WHPN(ISL)=WHPN(ISL)+TST(2)*XX
-C     WHSN(ISL)=WHSN(ISL)+TST(3)*XX
+      WHPN(ISL)=WHPN(ISL)+TST(2)*XX
+      WHSN(ISL)=WHSN(ISL)+TST(3)*XX
       WBMN(ISL)=WBMN(ISL)+TST(4)*XX
       WLSN(ISL)=WLSN(ISL)+TST(5)*XX
       WLMN(ISL)=WLMN(ISL)+TST(6)*XX
-C     WHPC(ISL)=WHPC(ISL)+TST(7)*XX
-C     WHSC(ISL)=WHSC(ISL)+TST(8)*XX
+      WHPC(ISL)=WHPC(ISL)+TST(7)*XX
+      WHSC(ISL)=WHSC(ISL)+TST(8)*XX
       WBMC(ISL)=WBMC(ISL)+TST(9)*XX
       WLSC(ISL)=WLSC(ISL)+TST(10)*XX
       WLMC(ISL)=WLMC(ISL)+TST(11)*XX
@@ -13168,6 +13258,7 @@ C	            PAUSE
 	    END DO
 	END IF	
       REWIND KR(27)
+C     WRITE(*,*) "FWTH: ", TRIM(FWTH)
       CALL OPENV(KR(7),FWTH, DIR, 'R')
 	CALL WREAD
       RETURN
@@ -13180,8 +13271,8 @@ C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-*
 !     SPECIFIED STATION (IWTH) OR THE NEAREST STATION IF IWTH=0.
       CHARACTER(*), INTENT  (IN) ::DIR
       INCLUDE 'EPCM0509_app.for'
-!     write(*,*) "IWTH:", IWTH
-      IF(IWTH==0)THEN
+!     write(*,*) "Reading deposition file. ", FNLST
+!     IF(IWTH==0)THEN
           D0=1.E20
           DO
               READ(KR(30),*,IOSTAT=NFL)II,NDEPFILE,Y,X
@@ -13193,22 +13284,21 @@ C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-*
               D0=D
               FNTH=NDEPFILE
           END DO
-      ELSE
-          II=-1
-          DO WHILE(II/=IWTH)
-              READ(KR(30),*,IOSTAT=NFL)II,FNTH
-              IF(NFL/=0)THEN
-                  WRITE(*,*)'FNTH NO = ',IWTH,' NOT IN DAILY',
-     &                  ' NDEP LIST FILE'
-C                   PAUSE
-                    STOP
-                END IF
-            END DO
-        END IF
+!     ELSE
+!         II=-1
+!         DO WHILE(II/=IWTH)
+!             READ(KR(30),*,IOSTAT=NFL)II,FNTH
+!             IF(NFL/=0)THEN
+!                 WRITE(*,*)'FNTH NO = ',IWTH,' NOT IN DAILY',
+!    &                  ' NDEP LIST FILE'
+!                   PAUSE
+!                   STOP
+!               END IF
+!           END DO
+!       END IF
       REWIND KR(30)
-C     WRITE(*,*) "FNTH: ", TRIM(FNTH)
+!     WRITE(*,*) "FNTH: ", TRIM(FNTH)
       CALL OPENV(KR(31),FNTH, DIR, 'R')
-C     CALL WREADNDEP
       RETURN
       END
 
