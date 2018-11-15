@@ -1,0 +1,31 @@
+Sender: LSF System <lsfadmin@c-183-39>
+Subject: Job 228248: </proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/scenariosInfo/logs/createScenario_test_36km_leap.csh> in cluster <killdevil> Done
+
+Job </proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/scenariosInfo/logs/createScenario_test_36km_leap.csh> was submitted from host <killdevil-login1> by user <dyang> in cluster <killdevil>.
+Job was executed on host(s) <c-183-39>, in queue <week>, as user <dyang> in cluster <killdevil>.
+</nas02/home/d/y/dyang> was used as the home directory.
+</proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/scenariosInfo/logs> was used as the working directory.
+Started at Fri Sep  7 14:53:53 2018
+Results reported on Fri Sep  7 14:53:56 2018
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+/proj/ie/proj/staff/dyang/festc/festc1.4/epic/scenarios/scenariosInfo/logs/createScenario_test_36km_leap.csh
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   0.03 sec.
+    Total Requested Memory :                     -
+    Delta Memory :                               -
+    Max Processes :                              1
+    Max Threads :                                1
+    Run time :                                   3 sec.
+    Turnaround time :                            8 sec.
+
+The output (if any) follows:
+

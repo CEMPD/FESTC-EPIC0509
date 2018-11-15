@@ -1,0 +1,1 @@
+/proj/ie/apps/longleaf/sallocator/festc1.4/epic/common_data/EPIC_model/ndep_5yrAver_20080101_to_20081231.nc
